@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Strip Manager</title>
     <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
 </head>
 <body>
     <header>
@@ -12,30 +13,66 @@
     </header>
 
     <main>
+        <!-- About Section -->
         <section>
-            <h2>About the Website</h2>
+            <h2>About Us</h2>
             <p>
                 Welcome to the Flight Strip Manager! This website is designed to help pilots manage their flight strips,
-                track flight details, and ensure their flight plans are well-organized. Whether you’re planning your next
-                aviation adventure or just need to keep your records in order, we’ve got you covered.
+                track flight details, and ensure their flight plans are well-organized.
             </p>
             <p>
                 Our goal is to provide a seamless experience for pilots to organize their flight details, helping them
                 keep track of routes, times, and important data. Fly smart, fly safe, and let us handle the planning.
             </p>
-            <p> We want to help pilots in flight simulators like Xplane and Microsoft Flight Simulator getting their flight
-                plans done easily and efficiently. We will have a section with various airports, charts and METARS from all
-                over the world.
+            <p>
+                We want to help pilots in flight simulators like Xplane and Microsoft Flight Simulator getting their flight 
+                plans done easily and efficiently. We will have a section with various airports, charts and METARS from all over the world.
             </p>
         </section>
 
-        <!-- You can add other sections as needed, like contact info or features -->
+        <!-- Flight Planner Section -->
+        <section>
+            <h2>Flight Planner</h2>
+            <form id="flight-form">
+                <label for="flight-number">Flight Number:</label>
+                <input type="text" id="flight-number" name="flight-number" required>
 
+                <label for="departure">Departure:</label>
+                <input type="text" id="departure" name="departure" required>
+
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" name="destination" required>
+
+                <label for="departure-time">Departure Time:</label>
+                <input type="time" id="departure-time" name="departure-time" required>
+
+                <label for="remarks">Remarks:</label>
+                <textarea id="remarks" name="remarks"></textarea>
+
+                <button type="submit">Add Flight Plan</button>
+            </form>
+
+            <h3>Flight Plans</h3>
+            <table id="flight-table">
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure</th>
+                        <th>Destination</th>
+                        <th>Time</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Flight plans will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
     </footer>
-    
 </body>
 </html>
