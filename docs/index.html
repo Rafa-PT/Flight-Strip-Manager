@@ -84,7 +84,7 @@
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 50%; /* Make it occupy 50% of the page */
+            width: 50%; /* Make the entire flight planner occupy 50% of the window width */
             margin-left: auto;
             margin-right: auto;
         }
@@ -252,8 +252,11 @@
 
             <section id="charts" class="chart-section">
                 <h2>Flight Charts</h2>
-                <img src="flight-chart.jpg" alt="Sample Flight Chart" class="flight-chart">
+                <p>Search our database for the latest flight charts and resources!</p>
+                <input type="text" id="chart-search" placeholder="Search flight charts...">
+                <button>Search</button>
             </section>
+
             <section id="contacts" class="contact-section">
                 <h2>Contact Us</h2>
                 <p>For inquiries, email us at <a href="mailto:contact@flightmanager.com">contact@flightmanager.com</a></p>
@@ -269,20 +272,23 @@
     </div>
 
     <script>
-        // JavaScript for handling tabs and visibility of sections
-        const tabLinks = document.querySelectorAll('.tab-link');
-        const sections = document.querySelectorAll('section');
+        // JavaScript to handle tab switching
+        const tabs = document.querySelectorAll('.tab-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to the clicked tab
+                this.classList.add('active');
 
-        tabLinks.forEach(link => {
-            link.addEventListener('click', (event) => {
-                tabLinks.forEach(tab => tab.classList.remove('active'));
-                event.target.classList.add('active');
-                
+                // Hide all sections
+                const sections = document.querySelectorAll('main section');
                 sections.forEach(section => {
                     section.classList.remove('active-section');
                 });
 
-                const activeTab = event.target.getAttribute('data-tab');
+                // Show the clicked section
+                const activeTab = this.getAttribute('data-tab');
                 document.getElementById(activeTab).classList.add('active-section');
             });
         });
