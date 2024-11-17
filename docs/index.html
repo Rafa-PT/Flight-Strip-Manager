@@ -249,6 +249,16 @@
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
+
+                <!-- Info Panel: This is the part with information on the right side -->
+                <section id="info-panel">
+                    <h2>Flight Information</h2>
+                    <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
+                    <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
+                    <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
+                    <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
+                    <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
+                </section>
             </div>
         </main>
         <footer>
@@ -260,26 +270,29 @@
         // JavaScript to handle tab switching
         const tabs = document.querySelectorAll('.tab-link');
         tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                // Add active class to the clicked tab
-                this.classList.add('active');
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedTab = e.target.dataset.tab;
 
                 // Hide all sections
-                const sections = document.querySelectorAll('main section');
-                sections.forEach(section => {
-                    section.classList.remove('active-section');
+                document.querySelectorAll('section').forEach(section => {
+                    section.style.display = 'none';
                 });
 
                 // Show the clicked section
-                const activeTab = this.getAttribute('data-tab');
-                document.getElementById(activeTab).classList.add('active-section');
+                document.getElementById(selectedTab).style.display = 'block';
+
+                // Update active tab
+                tabs.forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
             });
         });
 
-        // Flight Plan Form Submission
-        document.getElementById('flight-planner-form').addEventListener('submit', function(e) {
+        // Initialize default tab (Home)
+        document.getElementById('home').style.display = 'block';
+        
+        // Flight Planner Form Submission Logic
+        document.getElementById('flight-planner-form').addEventListener('submit', (e) => {
             e.preventDefault();
 
             const departure = document.getElementById('departure').value;
