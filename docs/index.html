@@ -90,7 +90,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         label {
@@ -99,7 +99,7 @@
         }
 
         input, textarea, button {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
@@ -153,6 +153,26 @@
             background: #c0392b;
         }
 
+        /* Submitted Flight Plans Section */
+        .submitted-plans {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .submitted-plans h3 {
+            margin-bottom: 15px;
+        }
+
+        .plan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -186,31 +206,39 @@
                     <h2>Flight Planner</h2>
                     <form id="flight-planner-form">
                         <div class="form-group">
-                            <label for="departure">Departure Airport:</label>
-                            <input type="text" id="departure" placeholder="Enter ICAO code">
+                            <label for="departure">Departure:</label>
+                            <input type="text" id="departure" placeholder="ICAO Code">
                         </div>
                         <div class="form-group">
-                            <label for="destination">Destination Airport:</label>
-                            <input type="text" id="destination" placeholder="Enter ICAO code">
+                            <label for="destination">Destination:</label>
+                            <input type="text" id="destination" placeholder="ICAO Code">
                         </div>
                         <div class="form-group">
-                            <label for="altitude">Cruising Altitude:</label>
-                            <input type="text" id="altitude" placeholder="Enter altitude in feet">
+                            <label for="altitude">Altitude (ft):</label>
+                            <input type="text" id="altitude" placeholder="Cruising Altitude">
                         </div>
                         <div class="form-group">
                             <label for="remarks">Remarks:</label>
-                            <textarea id="remarks" rows="3" placeholder="Add any additional remarks"></textarea>
+                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
                         </div>
                         <div class="form-group">
                             <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
                         </div>
                         <div class="waypoints" id="waypoints">
-                            <!-- Dynamic waypoints will appear here -->
+                            <!-- Waypoints will be dynamically added here -->
                         </div>
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </div>
+
+                <div class="submitted-plans">
+                    <h3>Submitted Flight Plans</h3>
+                    <div id="plans-list">
+                        <!-- Submitted flight plans will appear here -->
+                    </div>
+                </div>
             </section>
+
             <section id="charts" class="chart-section">
                 <h2>Flight Charts</h2>
                 <img src="flight-chart.jpg" alt="Sample Flight Chart" class="flight-chart">
@@ -228,8 +256,9 @@
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
+
     <script>
-        // JavaScript for adding dynamic waypoints
+        // JavaScript for adding dynamic waypoints and handling flight plan submission
         document.getElementById('add-waypoint').addEventListener('click', function () {
             const waypointsContainer = document.getElementById('waypoints');
             const waypointDiv = document.createElement('div');
@@ -245,7 +274,48 @@
                 waypointDiv.remove();
             });
         });
+
+        // Handle form submission
+        document.getElementById('flight-planner-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const departure = document.getElementById('departure').value;
+            const destination = document.getElementById('destination').value;
+            const altitude = document.getElementById('altitude').value;
+            const remarks = document.getElementById('remarks').value;
+            const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
+
+            const flightPlan = {
+                departure,
+                destination,
+                altitude,
+                remarks,
+                waypoints
+            };
+
+            // Add to the submitted plans list
+            const plansList = document.getElementById('plans-list');
+            const planItem = document.createElement('div');
+            planItem.classList.add('plan-item');
+            planItem.innerHTML = `
+                <div>
+                    <strong>${departure} ➔ ${destination}</strong><br>
+                    Altitude: ${altitude} ft | Remarks: ${remarks}<br>
+                    Waypoints: ${waypoints.join(' → ') || 'None'}
+                </div>
+                <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
+            `;
+            plansList.appendChild(planItem);
+
+            // Clear the form after submission
+            document.getElementById('flight-planner-form').reset();
+            document.getElementById('waypoints').innerHTML = '';
+        });
+
+        // Function to delete a flight plan
+        function deletePlan(button) {
+            button.parentElement.remove();
+        }
     </script>
 </body>
 </html>
-
