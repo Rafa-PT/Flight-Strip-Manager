@@ -89,6 +89,86 @@
             flex-direction: column;
         }
 
+        /* Flight Planner */
+        .flight-planner {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .flight-planner h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        .add-waypoint-btn {
+            background: #2196F3;
+            margin-top: 5px;
+        }
+
+        .add-waypoint-btn:hover {
+            background: #1976D2;
+        }
+
+        .waypoints {
+            margin-top: 20px;
+        }
+
+        .waypoint-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
         #charts-advisory {
             display: none; /* Initially hidden */
             font-size: 1.2rem;
@@ -127,33 +207,53 @@
         </nav>
         <!-- Main Content -->
         <main>
-            <!-- Home Content -->
-            <section id="home" class="tab-content">
-                <h2>Welcome to Flight Strip Manager</h2>
-                <p>Start planning your flights or explore other tools we offer.</p>
-            </section>
-            <!-- Charts Content -->
-            <section id="charts" class="tab-content">
-                <h2>Charts</h2>
-                <p>Search our database for essential flight charts.</p>
-            </section>
-            <!-- Contacts Content -->
-            <section id="contacts" class="tab-content">
-                <h2>Contacts</h2>
-                <p>Reach out to us for support or inquiries.</p>
-            </section>
-            <!-- More Content -->
-            <section id="more" class="tab-content">
-                <h2>More</h2>
-                <p>Discover additional tools and features.</p>
-            </section>
+            <div class="content-left">
+                <section id="flight-planner">
+                    <h2>Flight Planner</h2>
+                    <form id="flight-planner-form">
+                        <div class="form-group">
+                            <label for="departure">Departure:</label>
+                            <input type="text" id="departure" placeholder="ICAO Code">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destination:</label>
+                            <input type="text" id="destination" placeholder="ICAO Code">
+                        </div>
+                        <div class="form-group">
+                            <label for="altitude">Altitude (ft):</label>
+                            <input type="text" id="altitude" placeholder="Cruising Altitude">
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                        </div>
+                        <button type="submit">Submit Flight Plan</button>
+                    </form>
+                </section>
+            </div>
+            <div class="content-right">
+                <section id="home" class="tab-content">
+                    <h2>Welcome to Flight Strip Manager</h2>
+                    <p>Start planning your flights or explore other tools we offer.</p>
+                </section>
+                <section id="charts" class="tab-content">
+                    <h2>Charts</h2>
+                    <p>Search our database for essential flight charts.</p>
+                </section>
+                <section id="contacts" class="tab-content">
+                    <h2>Contacts</h2>
+                    <p>Reach out to us for support or inquiries.</p>
+                </section>
+                <section id="more" class="tab-content">
+                    <h2>More</h2>
+                    <p>Discover additional tools and features.</p>
+                </section>
+                <!-- Charts Advisory -->
+                <div id="charts-advisory">
+                    Hello, World! This advisory is specific to the Charts section.
+                </div>
+            </div>
         </main>
-
-        <!-- Charts Advisory -->
-        <div id="charts-advisory">
-            Hello, World! This advisory is specific to the Charts section.
-        </div>
-
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
