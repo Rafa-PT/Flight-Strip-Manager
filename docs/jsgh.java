@@ -1,37 +1,94 @@
-// script.js
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
 
-document.addEventListener('DOMContentLoaded', function () {
-    const flightForm = document.getElementById('flight-form');
-    const flightSummary = document.getElementById('flight-summary');
-    const summaryDeparture = document.getElementById('summary-departure');
-    const summaryDestination = document.getElementById('summary-destination');
-    const summaryFlightTime = document.getElementById('summary-flight-time');
-    const summaryFlightDate = document.getElementById('summary-flight-date');
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+}
 
-    // Form submit event listener
-    flightForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent form submission
+main {
+    padding: 20px;
+}
 
-        // Get input values
-        const departure = document.getElementById('departure').value;
-        const destination = document.getElementById('destination').value;
-        const flightTime = document.getElementById('flight-time').value;
-        const flightDate = document.getElementById('flight-date').value;
+h2 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
 
-        // Update the summary section with the entered data
-        summaryDeparture.textContent = `Departure Location: ${departure}`;
-        summaryDestination.textContent = `Destination Location: ${destination}`;
-        summaryFlightTime.textContent = `Flight Time: ${flightTime} hours`;
-        summaryFlightDate.textContent = `Flight Date: ${flightDate}`;
+section {
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        // Display the summary section
-        flightSummary.style.display = 'block';
-    });
+form {
+    display: grid;
+    gap: 10px;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
 
-    // Reset the form and hide the summary when the "Clear" button is clicked
-    flightForm.addEventListener('reset', function () {
-        flightSummary.style.display = 'none'; // Hide the summary section
-    });
-});
+label {
+    font-weight: bold;
+}
+
+input, textarea, button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+
 
 
