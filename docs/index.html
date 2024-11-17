@@ -79,16 +79,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .content-left {
-            flex: 1;
-        }
-
-        .content-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
         /* Flight Planner */
         .flight-planner {
             padding: 20px;
@@ -170,12 +160,19 @@
         }
 
         /* Info Panel (right side) */
-        .info-panel {
+        .content-right {
             padding: 20px;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             flex: 1;
+        }
+
+        .info-panel {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .info-panel h2 {
@@ -218,122 +215,91 @@
         </nav>
         <!-- Main Content -->
         <main>
-            <!-- Home Page Content (Flight Planner & Info Panel) -->
-            <div id="home" class="tab-content" style="display: block;">
-                <div class="content-left">
-                    <section id="flight-planner">
-                        <h2>Flight Planner</h2>
-                        <form id="flight-planner-form">
-                            <div class="form-group">
-                                <label for="departure">Departure:</label>
-                                <input type="text" id="departure" placeholder="ICAO Code">
-                            </div>
-                            <div class="form-group">
-                                <label for="destination">Destination:</label>
-                                <input type="text" id="destination" placeholder="ICAO Code">
-                            </div>
-                            <div class="form-group">
-                                <label for="altitude">Altitude (ft):</label>
-                                <input type="text" id="altitude" placeholder="Cruising Altitude">
-                            </div>
-                            <div class="form-group">
-                                <label for="remarks">Remarks:</label>
-                                <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                            </div>
-                            <div class="waypoints" id="waypoints">
-                                <!-- Waypoints will be dynamically added here -->
-                            </div>
-                            <button type="submit">Submit Flight Plan</button>
-                        </form>
-                    </section>
-                </div>
-
-                <!-- Right Side: Information Panel (only on Home tab) -->
-                <div class="content-right" id="info-panel">
-                    <section class="info-panel">
-                        <h2>Flight Planning Information</h2>
-                        <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-                        <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-                        <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                        <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                        <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
-                    </section>
-                </div>
+            <!-- Left Side: Flight Planner Form -->
+            <div class="content-left">
+                <section id="flight-planner">
+                    <h2>Flight Planner</h2>
+                    <form id="flight-planner-form">
+                        <div class="form-group">
+                            <label for="departure">Departure:</label>
+                            <input type="text" id="departure" placeholder="ICAO Code">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destination:</label>
+                            <input type="text" id="destination" placeholder="ICAO Code">
+                        </div>
+                        <div class="form-group">
+                            <label for="altitude">Altitude (ft):</label>
+                            <input type="text" id="altitude" placeholder="Cruising Altitude">
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                        </div>
+                        <div class="waypoints" id="waypoints">
+                            <!-- Waypoints will be dynamically added here -->
+                        </div>
+                        <button type="submit">Submit Flight Plan</button>
+                    </form>
+                </section>
             </div>
 
-            <!-- Charts Section -->
-            <div id="charts" class="tab-content" style="display: none;">
-                <h2>Hello World - Charts Section</h2>
-                <div class="left-side">
-                    <img src="your-image.png" alt="Charts" width="300">
-                </div>
-                <div class="right-side">
-                    <h3>Basic Concepts About Charts</h3>
-                    <p>Charts are essential tools for pilots. Here's some information about them.</p>
-                </div>
-            </div>
-
-            <!-- More Section -->
-            <div id="more" class="tab-content" style="display: none;">
-                <h2>Additional Information</h2>
-                <p>This section contains additional information for users.</p>
-            </div>
-
-            <!-- Contacts Section -->
-            <div id="contacts" class="tab-content" style="display: none;">
-                <h2>Contact Us</h2>
-                <p>If you need any help, you can reach us at the following contact details.</p>
+            <!-- Right Side: Information Panel (visible only on Home Tab)-->
+            <div class="content-right" id="info-panel">
+                <section class="info-panel">
+                    <h2>Flight Planning Information</h2>
+                    <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
+                    <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
+                    <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
+                    <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
+                    <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
+                </section>
             </div>
         </main>
-        <!-- Footer -->
         <footer>
-            <p>&copy; 2024 Flight Strip Manager | All Rights Reserved</p>
+            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // JavaScript to handle tab switching
-        document.querySelectorAll('.tab-link').forEach(tab => {
-            tab.addEventListener('click', function(event) {
-                const selectedTab = event.target.getAttribute('data-tab');
+        // JavaScript to handle flight planner form
+        document.getElementById('flight-planner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
 
-                // Hide all sections initially
-                document.querySelectorAll('.tab-content').forEach(section => {
-                    section.style.display = 'none';
-                });
+            const departure = document.getElementById('departure').value;
+            const destination = document.getElementById('destination').value;
+            const altitude = document.getElementById('altitude').value;
+            const remarks = document.getElementById('remarks').value;
+            const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
 
-                // Show the content of the clicked tab
-                const tabContent = document.getElementById(selectedTab);
-                if (tabContent) {
-                    tabContent.style.display = 'block';
-                }
+            const flightPlan = {
+                departure,
+                destination,
+                altitude,
+                remarks,
+                waypoints
+            };
 
-                // Manage the info panel visibility (only show on the 'home' tab)
-                const infoPanel = document.getElementById('info-panel');
-                if (selectedTab === 'home') {
-                    infoPanel.style.display = 'block'; // Show the info-panel on Home
-                } else {
-                    infoPanel.style.display = 'none'; // Hide the info-panel for other tabs
-                }
+            console.log('Flight Plan Submitted:', flightPlan);
+        });
 
-                // Add the 'active' class to the selected tab and remove it from others
-                document.querySelectorAll('.tab-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                event.target.classList.add('active');
+        // JavaScript to add waypoints dynamically
+        document.getElementById('add-waypoint').addEventListener('click', () => {
+            const waypointsContainer = document.getElementById('waypoints');
+            const waypointInput = document.createElement('div');
+            waypointInput.classList.add('waypoint-item');
+            waypointInput.innerHTML = `
+                <input type="text" class="waypoint-input" placeholder="Waypoint ICAO Code" />
+                <button type="button" class="delete-btn">Delete</button>
+            `;
+            waypointsContainer.appendChild(waypointInput);
+            waypointInput.querySelector('.delete-btn').addEventListener('click', () => {
+                waypointsContainer.removeChild(waypointInput);
             });
         });
-
-        // Initially hide all content sections except 'home' and show 'home' content
-        document.querySelectorAll('.tab-content').forEach(section => {
-            section.style.display = 'none';
-        });
-
-        document.getElementById('home').style.display = 'block'; // Show the home section by default
-        document.getElementById('info-panel').style.display = 'block'; // Show the info panel by default
     </script>
 </body>
 </html>
