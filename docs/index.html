@@ -10,64 +10,68 @@
 <body>
     <header>
         <h1>Flight Strip Manager</h1>
+        <p>Organize your flight plans with ease!</p>
     </header>
 
     <main>
         <!-- About Section -->
-        <section>
+        <section class="about">
             <h2>About Us</h2>
             <p>
-                Welcome to the Flight Strip Manager! This website is designed to help pilots manage their flight strips,
-                track flight details, and ensure their flight plans are well-organized.
-            </p>
-            <p>
-                Our goal is to provide a seamless experience for pilots to organize their flight details, helping them
-                keep track of routes, times, and important data. Fly smart, fly safe, and let us handle the planning.
-            </p>
-            <p>
-                We want to help pilots in flight simulators like Xplane and Microsoft Flight Simulator getting their flight 
-                plans done easily and efficiently. We will have a section with various airports, charts and METARS from all over the world.
+                Welcome to the Flight Strip Manager! Our platform helps pilots seamlessly manage their flight plans, track crucial details, and prepare for takeoff with confidence.
             </p>
         </section>
 
         <!-- Flight Planner Section -->
-        <section>
+        <section class="flight-planner">
             <h2>Flight Planner</h2>
-            <form id="flight-form">
-                <label for="flight-number">Flight Number:</label>
-                <input type="text" id="flight-number" name="flight-number" required>
+            <form id="flight-form" class="flight-form">
+                <div class="form-group">
+                    <label for="flight-number">Flight Number:</label>
+                    <input type="text" id="flight-number" name="flight-number" required>
+                </div>
 
-                <label for="departure">Departure:</label>
-                <input type="text" id="departure" name="departure" required>
+                <div class="form-group">
+                    <label for="departure">Departure:</label>
+                    <input type="text" id="departure" name="departure" required>
+                </div>
 
-                <label for="destination">Destination:</label>
-                <input type="text" id="destination" name="destination" required>
+                <div class="form-group">
+                    <label for="destination">Destination:</label>
+                    <input type="text" id="destination" name="destination" required>
+                </div>
 
-                <label for="departure-time">Departure Time:</label>
-                <input type="time" id="departure-time" name="departure-time" required>
+                <div class="form-group">
+                    <label for="departure-time">Departure Time:</label>
+                    <input type="time" id="departure-time" name="departure-time" required>
+                </div>
 
-                <label for="remarks">Remarks:</label>
-                <textarea id="remarks" name="remarks"></textarea>
+                <div class="form-group">
+                    <label for="remarks">Remarks:</label>
+                    <textarea id="remarks" name="remarks" rows="3"></textarea>
+                </div>
 
-                <button type="submit">Add Flight Plan</button>
+                <button type="submit" class="btn-primary">Add Flight Plan</button>
             </form>
 
             <h3>Flight Plans</h3>
-            <table id="flight-table">
-                <thead>
-                    <tr>
-                        <th>Flight Number</th>
-                        <th>Departure</th>
-                        <th>Destination</th>
-                        <th>Time</th>
-                        <th>Remarks</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Flight plans will be dynamically added here -->
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table id="flight-table">
+                    <thead>
+                        <tr>
+                            <th>Flight Number</th>
+                            <th>Departure</th>
+                            <th>Destination</th>
+                            <th>Time</th>
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic flight plans will appear here -->
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
