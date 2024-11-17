@@ -202,14 +202,30 @@
             margin: 0;
         }
 
-        /* Hidden Section */
-        .tab-content {
-            display: none;
+        /* Charts Section */
+        .charts-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        /* Show active tab content */
-        .tab-content.active {
-            display: block;
+        .charts-left {
+            width: 48%;
+        }
+
+        .charts-left img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .charts-info {
+            width: 48%;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -230,9 +246,8 @@
         <main>
             <!-- Left Side: Flight Planner Form -->
             <div class="content-left">
-                <section id="home" class="tab-content active">
+                <section id="flight-planner">
                     <h2>Flight Planner</h2>
-                    <!-- Flight Planner Form -->
                     <form id="flight-planner-form">
                         <div class="form-group">
                             <label for="departure">Departure:</label>
@@ -259,12 +274,6 @@
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
-
-                <!-- Charts Section -->
-                <section id="charts" class="tab-content">
-                    <h2>Charts</h2>
-                    <p>Hello, World! This is the charts section.</p>
-                </section>
             </div>
 
             <!-- Right Side: Information Panel -->
@@ -279,29 +288,81 @@
                 </section>
             </div>
         </main>
+        <!-- Charts Section -->
+        <div class="charts-section" id="charts">
+            <div class="charts-left">
+                <h2>Hello World</h2>
+                <img src="your-image.jpg" alt="Charts Example" />
+            </div>
+            <div class="charts-info">
+                <h2>Basic Concepts About Charts</h2>
+                <p>Charts are a visual representation of data. In aviation, charts can be used for navigation, airspace information, and much more. Some key concepts about charts include:</p>
+                <ul>
+                    <li><strong>Navigation Charts:</strong> These charts help pilots navigate during flight.</li>
+                    <li><strong>Terminal Area Charts:</strong> These charts provide detailed information about the airspace near an airport.</li>
+                    <li><strong>Standard Operating Procedures:</strong> Charts help standardize flight procedures.</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Footer -->
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // JavaScript to handle tab switching
-        const tabLinks = document.querySelectorAll('.tab-link');
-        const tabContents = document.querySelectorAll('.tab-content');
+        // JavaScript to handle flight planner form
+        document.getElementById('flight-planner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        tabLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
+            const departure = document.getElementById('departure').value;
+            const destination = document.getElementById('destination').value;
+            const altitude = document.getElementById('altitude').value;
+            const remarks = document.getElementById('remarks').value;
+            const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
 
-                // Remove active class from all tabs and content
-                tabLinks.forEach(link => link.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
+            const flightPlan = {
+                departure,
+                destination,
+                altitude,
+                remarks,
+                waypoints
+            };
 
-                // Add active class to the clicked tab and corresponding content
-                link.classList.add('active');
-                const activeTab = link.getAttribute('data-tab');
-                document.getElementById(activeTab).classList.add('active');
-            });
+            // Add to the submitted plans list
+            const plansList = document.getElementById('plans-list');
+            const planItem = document.createElement('div');
+            planItem.classList.add('plan-item');
+            planItem.innerHTML = `
+                <div>
+                    <strong>${departure} ➔ ${destination}</strong><br>
+                    Altitude: ${altitude} ft | Remarks: ${remarks}<br>
+                    Waypoints: ${waypoints.join(' → ') || 'None'}
+                </div>
+                <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
+            `;
+            plansList.appendChild(planItem);
+
+            // Clear the form after submission
+            document.getElementById('flight-planner-form').reset();
+            document.getElementById('waypoints').innerHTML = '';
+        });
+
+        // Function to delete a flight plan
+        function deletePlan(button) {
+            button.parentElement.remove();
+        }
+
+        // Add waypoint functionality
+        document.getElementById('add-waypoint').addEventListener('click', () => {
+            const waypointInput = document.createElement('input');
+            waypointInput.classList.add('waypoint-input');
+            waypointInput.type = 'text';
+            waypointInput.placeholder = 'Waypoint ICAO Code';
+            const waypointItem = document.createElement('div');
+            waypointItem.classList.add('waypoint-item');
+            waypointItem.appendChild(waypointInput);
+            document.getElementById('waypoints').appendChild(waypointItem);
         });
     </script>
 </body>
