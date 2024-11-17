@@ -4,108 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Strip Manager</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Center the page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
+        }
+
+        .container {
+            max-width: 800px;
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header, main, footer {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <h1>Welcome to the Flight Strip Manager</h1>
-        <p>Your essential tool for flight planning and management</p>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <!-- About Section -->
-        <div class="about">
-            <h2>About This Tool</h2>
-            <p>
-                The Flight Strip Manager helps pilots and aviation enthusiasts plan flights efficiently, ensuring safety and compliance. Use this tool to organize routes, calculate flight details, and optimize your flight experience.
-            </p>
-        </div>
-
-        <!-- Flight Planner Section -->
-        <div class="flight-planner">
-            <h2>Flight Planner</h2>
-            <form class="flight-form" id="flight-planner-form">
-                <div class="form-group">
-                    <label for="departure">Departure Airport</label>
-                    <input type="text" id="departure" name="departure" placeholder="Enter departure airport" required>
-                </div>
-                <div class="form-group">
-                    <label for="destination">Destination Airport</label>
-                    <input type="text" id="destination" name="destination" placeholder="Enter destination airport" required>
-                </div>
-                <div class="form-group">
-                    <label for="altitude">Cruising Altitude (feet)</label>
-                    <input type="number" id="altitude" name="altitude" placeholder="Enter cruising altitude" required>
-                </div>
-                <div class="form-group">
-                    <label for="speed">Airspeed (knots)</label>
-                    <input type="number" id="speed" name="speed" placeholder="Enter airspeed" required>
-                </div>
-                <button type="button" class="btn-primary" id="submit-plan">Submit Flight Plan</button>
-            </form>
-
-            <!-- Flight Plans Table -->
-            <div class="table-container">
-                <table id="flight-plans-table">
-                    <thead>
-                        <tr>
-                            <th>Departure</th>
-                            <th>Destination</th>
-                            <th>Altitude</th>
-                            <th>Speed</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Dynamically filled rows -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>© 2024 Flight Strip Manager | Your Flight Assistant</p>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Flight Planner Script
-        const flightPlannerForm = document.getElementById('flight-planner-form');
-        const flightPlansTable = document.getElementById('flight-plans-table').querySelector('tbody');
-
-        document.getElementById('submit-plan').addEventListener('click', function () {
-            const departure = document.getElementById('departure').value.trim();
-            const destination = document.getElementById('destination').value.trim();
-            const altitude = document.getElementById('altitude').value.trim();
-            const speed = document.getElementById('speed').value.trim();
-            const remarks = document.getElementById('remarks').value.trim();
-
-            if (departure && destination && altitude && speed) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${departure}</td>
-                    <td>${destination}</td>
-                    <td>${altitude}</td>
-                    <td>${speed}</td>
-                    <td><button class="delete-btn">Delete</button></td>
-                `;
-                flightPlansTable.appendChild(row);
-
-                // Clear the form
-                flightPlannerForm.reset();
-
-                // Add delete functionality
-                row.querySelector('.delete-btn').addEventListener('click', function () {
-                    row.remove();
-                });
-            } else {
-                alert('Please fill out all required fields!');
-            }
-        });
-    </script>
+    <div class="container">
+        <header>
+            <h1>Flight Strip Manager</h1>
+            <p>Your ultimate flight planning assistant</p>
+        </header>
+        <main>
+            <section class="about">
+                <h2>About</h2>
+                <p>Welcome to the Flight Strip Manager, a tool designed for pilots to streamline flight planning. Plan routes, manage schedules, and ensure compliance effortlessly.</p>
+            </section>
+            <section class="flight-planner">
+                <h2>Flight Planner</h2>
+                <form class="flight-form">
+                    <div class="form-group">
+                        <label for="flight-number">Flight Number</label>
+                        <input type="text" id="flight-number" name="flight-number" placeholder="Enter flight number">
+                    </div>
+                    <div class="form-group">
+                        <label for="departure">Departure</label>
+                        <input type="text" id="departure" name="departure" placeholder="Enter departure airport">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" name="destination" placeholder="Enter destination airport">
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <textarea id="remarks" name="remarks" rows="3" placeholder="Enter any additional remarks"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Submit Flight Plan</button>
+                </form>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
