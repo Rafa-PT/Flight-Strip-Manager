@@ -79,6 +79,16 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .content-left {
+            flex: 1;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* Flight Planner */
         .flight-planner {
             padding: 20px;
@@ -160,19 +170,12 @@
         }
 
         /* Info Panel (right side) */
-        .content-right {
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 1;
-        }
-
         .info-panel {
             padding: 20px;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
         }
 
         .info-panel h2 {
@@ -199,16 +202,19 @@
             margin: 0;
         }
 
-        /* Hide sections by default */
-        .tab-content {
+        /* Charts Section Styles */
+        #charts-content {
             display: none;
         }
 
-        /* Show active tab */
-        .active-tab {
-            display: block;
+        #charts-content h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
 
+        #myChart {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -228,7 +234,7 @@
         <main>
             <!-- Left Side: Flight Planner Form -->
             <div class="content-left">
-                <section id="home" class="tab-content active-tab">
+                <section id="flight-planner">
                     <h2>Flight Planner</h2>
                     <form id="flight-planner-form">
                         <div class="form-group">
@@ -256,61 +262,84 @@
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
-                <!-- Info Panel -->
-                <section id="info-panel" class="tab-content active-tab">
-                    <div class="info-panel">
-                        <h2>Flight Planning Information</h2>
-                        <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-                        <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-                        <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                        <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                        <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
-                    </div>
-                </section>
             </div>
 
-            <!-- Right Side: Placeholder for other sections -->
+            <!-- Right Side: Information Panel -->
             <div class="content-right">
-                <section id="charts" class="tab-content">
-                    <h2>Charts</h2>
-                    <p>Here you will find charts for navigation and flight planning.</p>
-                </section>
-                <section id="contacts" class="tab-content">
-                    <h2>Contacts</h2>
-                    <p>Here you can find contact details for support and coordination.</p>
-                </section>
-                <section id="more" class="tab-content">
-                    <h2>More</h2>
-                    <p>Additional information can go here.</p>
+                <section class="info-panel">
+                    <h2>Flight Planning Information</h2>
+                    <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
+                    <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
+                    <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
+                    <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
+                    <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
                 </section>
             </div>
         </main>
-        <!-- Footer -->
+
+        <!-- Charts Section -->
+        <div id="charts-content">
+            <h2>Charts Section</h2>
+            <p>Hello World! You clicked on Charts.</p>
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Tab switching logic
-        const tabLinks = document.querySelectorAll('.tab-link');
-        const tabContents = document.querySelectorAll('.tab-content');
+        // JavaScript for handling tabs
+        const tabs = document.querySelectorAll('.tab-link');
+        const chartsContent = document.getElementById('charts-content');
 
-        tabLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
                 e.preventDefault();
 
-                // Remove active class from all tab links
-                tabLinks.forEach(link => link.classList.remove('active'));
-                // Add active class to the clicked tab
-                link.classList.add('active');
+                // Hide all sections
+                document.querySelectorAll('main > div').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(tab.getAttribute('data-tab') + '-content').style.display = 'block';
 
-                // Hide all tab contents
-                tabContents.forEach(content => content.classList.remove('active-tab'));
-                // Show the content corresponding to the clicked tab
-                const activeTab = document.getElementById(link.getAttribute('data-tab'));
-                activeTab.classList.add('active-tab');
+                // Switch active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
             });
+        });
+
+        // Chart.js Example: Create a chart in the Charts section
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [65, 59, 80, 81, 56],
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return 'Value: ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
         });
     </script>
 </body>
