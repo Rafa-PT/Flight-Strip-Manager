@@ -89,103 +89,12 @@
             flex-direction: column;
         }
 
-        /* Flight Planner */
-        .flight-planner {
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        .flight-planner h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input, textarea, button {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #2e7d32;
-        }
-
-        .add-waypoint-btn {
-            background: #2196F3;
-            margin-top: 5px;
-        }
-
-        .add-waypoint-btn:hover {
-            background: #1976D2;
-        }
-
-        .waypoints {
+        #charts-advisory {
+            display: none; /* Initially hidden */
+            font-size: 1.2rem;
+            text-align: center;
             margin-top: 20px;
-        }
-
-        .waypoint-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .delete-btn:hover {
-            background: #c0392b;
-        }
-
-        /* Info Panel (right side) */
-        .info-panel {
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 1;
-        }
-
-        .info-panel h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .info-panel p {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            color: #555;
         }
 
         /* Footer */
@@ -200,16 +109,6 @@
 
         footer p {
             margin: 0;
-        }
-
-        /* Hidden Section */
-        .tab-content {
-            display: none;
-        }
-
-        /* Show active tab content */
-        .tab-content.active {
-            display: block;
         }
     </style>
 </head>
@@ -228,81 +127,68 @@
         </nav>
         <!-- Main Content -->
         <main>
-            <!-- Left Side: Flight Planner Form -->
-            <div class="content-left">
-                <section id="home" class="tab-content active">
-                    <h2>Flight Planner</h2>
-                    <!-- Flight Planner Form -->
-                    <form id="flight-planner-form">
-                        <div class="form-group">
-                            <label for="departure">Departure:</label>
-                            <input type="text" id="departure" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <input type="text" id="destination" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="altitude">Altitude (ft):</label>
-                            <input type="text" id="altitude" placeholder="Cruising Altitude">
-                        </div>
-                        <div class="form-group">
-                            <label for="remarks">Remarks:</label>
-                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                        </div>
-                        <div class="waypoints" id="waypoints">
-                            <!-- Waypoints will be dynamically added here -->
-                        </div>
-                        <button type="submit">Submit Flight Plan</button>
-                    </form>
-                </section>
-
-                <!-- Charts Section -->
-                <section id="charts" class="tab-content">
-                    <h2>Charts</h2>
-                    <p>Hello, World! This is the charts section.</p>
-                </section>
-            </div>
-
-            <!-- Right Side: Information Panel -->
-            <div class="content-right">
-                <section class="info-panel">
-                    <h2>Flight Planning Information</h2>
-                    <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-                    <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-                    <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                    <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                    <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
-                </section>
-            </div>
+            <!-- Home Content -->
+            <section id="home" class="tab-content">
+                <h2>Welcome to Flight Strip Manager</h2>
+                <p>Start planning your flights or explore other tools we offer.</p>
+            </section>
+            <!-- Charts Content -->
+            <section id="charts" class="tab-content">
+                <h2>Charts</h2>
+                <p>Search our database for essential flight charts.</p>
+            </section>
+            <!-- Contacts Content -->
+            <section id="contacts" class="tab-content">
+                <h2>Contacts</h2>
+                <p>Reach out to us for support or inquiries.</p>
+            </section>
+            <!-- More Content -->
+            <section id="more" class="tab-content">
+                <h2>More</h2>
+                <p>Discover additional tools and features.</p>
+            </section>
         </main>
+
+        <!-- Charts Advisory -->
+        <div id="charts-advisory">
+            Hello, World! This advisory is specific to the Charts section.
+        </div>
+
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // JavaScript to handle tab switching
-        const tabLinks = document.querySelectorAll('.tab-link');
+        // JavaScript for Tab Switching
+        const tabs = document.querySelectorAll('.tab-link');
         const tabContents = document.querySelectorAll('.tab-content');
+        const chartsAdvisory = document.getElementById('charts-advisory');
 
-        tabLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
                 e.preventDefault();
+                const targetTab = e.target.getAttribute('data-tab');
 
-                // Remove active class from all tabs and content
-                tabLinks.forEach(link => link.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
+                // Remove active class from all tabs and hide all contents
+                tabs.forEach(tab => tab.classList.remove('active'));
+                tabContents.forEach(content => content.style.display = 'none');
 
-                // Add active class to the clicked tab and corresponding content
-                link.classList.add('active');
-                const activeTab = link.getAttribute('data-tab');
-                document.getElementById(activeTab).classList.add('active');
+                // Add active class to clicked tab and show the corresponding content
+                e.target.classList.add('active');
+                document.getElementById(targetTab).style.display = 'block';
+
+                // Handle the Charts Advisory
+                if (targetTab === 'charts') {
+                    chartsAdvisory.style.display = 'block';
+                } else {
+                    chartsAdvisory.style.display = 'none';
+                }
             });
         });
+
+        // Set the default tab to Home
+        document.getElementById('home').style.display = 'block';
     </script>
 </body>
 </html>
