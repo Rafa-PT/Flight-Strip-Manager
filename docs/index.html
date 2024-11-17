@@ -72,7 +72,7 @@
         }
 
         .content-left, .content-right {
-            width: 48%; /* Each takes up about half of the window */
+            width: 48%;
             padding: 20px;
             background: #ffffff;
             border-radius: 10px;
@@ -114,7 +114,7 @@
             margin-bottom: 5px;
         }
 
-        input, textarea, button {
+        input, select, textarea, button {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -270,29 +270,38 @@
                             <label for="arrival">Arrival Airport</label>
                             <input type="text" id="arrival" name="arrival" required>
                         </div>
+                        <div class="form-group">
+                            <label for="aircraft-type">Aircraft Type</label>
+                            <select id="aircraft-type" name="aircraft-type" required>
+                                <option value="airliner">Airliner</option>
+                                <option value="general-aviation">General Aviation</option>
+                                <option value="helicopter">Helicopter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="altitude">Cruise Altitude (ft)</label>
+                            <input type="number" id="altitude" name="altitude" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                        </div>
+                        <div class="waypoints" id="waypoints-container">
+                            <!-- Waypoints will appear here -->
+                        </div>
                         <button type="submit">Create Flight Plan</button>
                     </form>
                 </section>
             </div>
 
-            <!-- Charts Section -->
+            <!-- Charts Content (Right side) -->
             <div id="charts" class="charts-content">
-                <!-- Left side with image -->
                 <div class="charts-left">
-                    <h2>Hello, welcome to the charts section!</h2>
-                    <img src="path_to_your_image.jpg" alt="Flight Charts Example">
+                    <img src="path_to_your_image.jpg" alt="Charts Image">
                 </div>
-
-                <!-- Right side with basic chart info -->
                 <div class="charts-right">
-                    <h3>Basic Concepts of Flight Charts</h3>
-                    <p>Flight charts are essential tools for pilots, providing detailed information on the airspace, weather, navigation aids, and flight routes. They typically include:</p>
-                    <ul>
-                        <li><strong>Airways:</strong> Designated routes for air traffic.</li>
-                        <li><strong>Waypoints:</strong> Coordinates used to define routes.</li>
-                        <li><strong>Airport Diagrams:</strong> Layout of airport runways, taxiways, etc.</li>
-                        <li><strong>Weather Information:</strong> Provides current and forecast weather data.</li>
-                    </ul>
+                    <h3>Basic Concepts about Charts</h3>
+                    <p>Charts are used in aviation to represent maps, routes, altitudes, and airspace information for flight planning.</p>
+                    <p>They help pilots navigate and ensure safe operations by providing crucial data for various phases of flight.</p>
                 </div>
             </div>
         </main>
@@ -304,6 +313,7 @@
 
     <!-- JavaScript -->
     <script>
+        // Tabs logic
         const tabs = document.querySelectorAll('.tab-link');
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
@@ -330,6 +340,30 @@
 
         // Initially show the Home tab content
         document.getElementById('home').style.display = 'block';
+
+        // Waypoint addition logic
+        const addWaypointBtn = document.getElementById('add-waypoint');
+        const waypointsContainer = document.getElementById('waypoints-container');
+
+        addWaypointBtn.addEventListener('click', () => {
+            const waypointItem = document.createElement('div');
+            waypointItem.classList.add('waypoint-item');
+
+            waypointItem.innerHTML = `
+                <input type="text" placeholder="Waypoint Name" class="waypoint-name">
+                <input type="text" placeholder="Latitude" class="waypoint-latitude">
+                <input type="text" placeholder="Longitude" class="waypoint-longitude">
+                <button class="delete-btn">Delete</button>
+            `;
+
+            const deleteBtn = waypointItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                waypointsContainer.removeChild(waypointItem);
+            });
+
+            waypointsContainer.appendChild(waypointItem);
+        });
     </script>
 </body>
 </html>
+
