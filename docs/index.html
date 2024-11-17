@@ -6,6 +6,125 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Flight Strip Manager</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(to right, #4CAF50, #2e7d32);
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .tab-link {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .tab-link:hover {
+            background: #2e7d32;
+        }
+
+        /* Content Sections */
+        .content {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .flight-planner {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-container, .flight-info {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 48%;
+        }
+
+        .flight-info p {
+            margin-top: 20px;
+        }
+
+        /* Form Styles */
+        .flight-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #4CAF50;
+            color: white;
+            margin-top: 30px;
+            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -20,7 +139,7 @@
         <button class="tab-link" onclick="showContent('more')">More</button>
     </div>
 
-    <div class="content" id="home">
+    <div class="content" id="home" class="active">
         <h2>Flight Planner</h2>
         <div class="flight-planner">
             <div class="form-container">
@@ -52,17 +171,17 @@
         </div>
     </div>
 
-    <div class="content" id="charts" style="display:none;">
+    <div class="content" id="charts">
         <h2>Charts</h2>
         <p>WORK IN PROGRESS</p>
     </div>
 
-    <div class="content" id="contacts" style="display:none;">
+    <div class="content" id="contacts">
         <h2>Contact Us</h2>
         <p>For inquiries, please reach out to us at support@flightstripmanager.com</p>
     </div>
 
-    <div class="content" id="more" style="display:none;">
+    <div class="content" id="more">
         <h2>More</h2>
         <p>Additional features coming soon!</p>
     </div>
@@ -75,10 +194,10 @@
         function showContent(tabName) {
             const contentSections = document.querySelectorAll('.content');
             contentSections.forEach(section => {
-                section.style.display = 'none';
+                section.classList.remove('active');
             });
 
-            document.getElementById(tabName).style.display = 'block';
+            document.getElementById(tabName).classList.add('active');
         }
 
         // Display flight info after submitting the flight plan
