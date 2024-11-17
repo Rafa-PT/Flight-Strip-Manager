@@ -88,7 +88,3 @@ table th {
 .delete-btn:hover {
     background-color: #c0392b;
 }
-
-
-
-

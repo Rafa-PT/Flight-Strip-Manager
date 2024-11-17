@@ -3,72 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Strip Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Flight Planner</title>
+    <link rel="stylesheet" href="assets/style.css"> <!-- Link to the CSS file -->
 </head>
 <body>
-    <!-- Header Section -->
     <header>
-        <h1>Flight Strip Manager</h1>
-        <p>Welcome to the flight Strip Manager. Your tool for managing flights efficiently.</p>
+        <h1>Welcome to Flight Planner</h1>
+        <p>Your tool for efficient and detailed flight planning</p>
     </header>
 
-    <!-- Main Content Section -->
     <main>
-        <form id="flight-form">
-            <div class="form-group">
-                <label for="departure">Departure Airport:</label>
-                <input type="text" id="departure" placeholder="Enter departure airport" required>
-            </div>
-            <div class="form-group">
-                <label for="destination">Destination Airport:</label>
-                <input type="text" id="destination" placeholder="Enter destination airport" required>
-            </div>
-            <div class="form-group">
-                <label for="departure-date">Departure Date:</label>
-                <input type="date" id="departure-date" required>
-            </div>
-            <div class="form-group">
-                <label for="return-date">Return Date (Optional):</label>
-                <input type="date" id="return-date">
-            </div>
-            <div class="form-group">
-                <label for="class">Class:</label>
-                <select id="class">
-                    <option value="economy">Economy</option>
-                    <option value="business">Business</option>
-                    <option value="first">First Class</option>
-                </select>
-            </div>
-            <button type="submit">Plan Flight</button>
-        </form>
-
-        <!-- Flight Summary Section -->
-        <section id="flight-summary">
-            <h2>Flight Summary</h2>
-            <div id="summary-output"></div>
+        <!-- About Section -->
+        <section class="about">
+            <h2>About</h2>
+            <p>
+                Flight Planner is your all-in-one solution for creating, managing, and organizing flight plans. 
+                Designed for both professional and hobbyist pilots, our tool simplifies flight planning with a clean 
+                and user-friendly interface.
+            </p>
         </section>
 
-        <!-- About Section -->
-        <section id="about">
-            <h2>About the Flight Strip Manager</h2>
-            <p>Welcome to the **Flight Strip Manager**! This web-based tool is designed to help airline operators, pilots and ATC while managing airplanes in the sky. The fligh Planner can:</p>
-            <ul>
-                <li>Track flight schedules and statuses</li>
-                <li>Manage flight details such as origin, destination, and dates</li>
-                <li>Save and organize flight plans</li>
-                <li>Access flight information from anywhere, anytime</li>
-            </ul>
-            <p>Whether you're planning a single flight or managing multiple routes, **Flight Strip Manager** is here to simplify the process. Start managing your flights today!</p>
+        <!-- Flight Planner Section -->
+        <section class="flight-planner">
+            <h2>Flight Planner</h2>
+            <form id="flight-form" class="flight-form">
+                <div class="form-group">
+                    <label for="flight-number">Flight Number:</label>
+                    <input type="text" id="flight-number" placeholder="Enter Flight Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="departure-airport">Departure Airport:</label>
+                    <input type="text" id="departure-airport" placeholder="Enter Departure Airport" required>
+                </div>
+                <div class="form-group">
+                    <label for="arrival-airport">Arrival Airport:</label>
+                    <input type="text" id="arrival-airport" placeholder="Enter Arrival Airport" required>
+                </div>
+                <div class="form-group">
+                    <label for="departure-time">Departure Time:</label>
+                    <input type="time" id="departure-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="arrival-time">Arrival Time:</label>
+                    <input type="time" id="arrival-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="remarks">Remarks:</label>
+                    <textarea id="remarks" rows="3" placeholder="Additional remarks..."></textarea>
+                </div>
+                <button type="button" class="btn-primary" id="add-flight">Add Flight</button>
+            </form>
+
+            <div class="table-container">
+                <table id="flights-table">
+                    <thead>
+                        <tr>
+                            <th>Flight Number</th>
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Dep. Time</th>
+                            <th>Arr. Time</th>
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
-    <!-- Footer Section -->
     <footer>
-        <p>&copy; 2024 Flight Strip Manager</p>
+        <p>© 2024 Flight Planner. All rights reserved.</p>
     </footer>
 
-    <!-- Link to External JavaScript File -->
-    <script src="script.js"></script>
+    <script src="assets/script.js"></script> <!-- Link to the JavaScript file -->
 </body>
 </html>
