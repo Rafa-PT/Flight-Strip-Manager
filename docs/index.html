@@ -43,10 +43,6 @@
                     <label for="speed">Airspeed (knots)</label>
                     <input type="number" id="speed" name="speed" placeholder="Enter airspeed" required>
                 </div>
-                <div class="form-group">
-                    <label for="remarks">Remarks</label>
-                    <textarea id="remarks" name="remarks" rows="4" placeholder="Enter any additional information"></textarea>
-                </div>
                 <button type="button" class="btn-primary" id="submit-plan">Submit Flight Plan</button>
             </form>
 
@@ -59,7 +55,6 @@
                             <th>Destination</th>
                             <th>Altitude</th>
                             <th>Speed</th>
-                            <th>Remarks</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -96,7 +91,6 @@
                     <td>${destination}</td>
                     <td>${altitude}</td>
                     <td>${speed}</td>
-                    <td>${remarks}</td>
                     <td><button class="delete-btn">Delete</button></td>
                 `;
                 flightPlansTable.appendChild(row);
