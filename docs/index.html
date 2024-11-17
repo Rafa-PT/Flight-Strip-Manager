@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Plan Manager</title>
+    <title>Flight Strip Manager</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* General Styles */
@@ -65,28 +65,26 @@
 
         /* Main Content */
         main {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .about, .chart-section, .contact-section, .more-section {
-            display: none;
-        }
-
-        .active-section {
-            display: block;
+        .content-left, .content-right {
+            width: 48%; /* Make each side take up half of the page */
+            padding: 20px;
         }
 
         /* Flight Planner */
         .flight-planner {
             text-align: left;
-            margin: 20px 0;
+            margin-top: 20px;
             padding: 20px;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 150%; /* Make the entire flight planner occupy 50% of the window width */
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%; /* Make it take up full width in the right section */
         }
 
         .flight-planner h2 {
@@ -210,10 +208,20 @@
         </nav>
         <!-- Main Content -->
         <main>
-            <section id="home" class="active-section">
-                <h2>Welcome to Flight Strip Manager</h2>
-                <p>This tool simplifies flight planning for pilots.</p>
-                <div class="flight-planner">
+            <div class="content-left">
+                <section id="home">
+                    <h2>Welcome to Flight Strip Manager</h2>
+                    <p>This tool simplifies flight planning for pilots. Enter your departure, destination, and waypoints to generate flight plans.</p>
+                    <div class="submitted-plans">
+                        <h3>Submitted Flight Plans</h3>
+                        <div id="plans-list">
+                            <!-- Submitted flight plans will appear here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="content-right">
+                <section id="flight-planner">
                     <h2>Flight Planner</h2>
                     <form id="flight-planner-form">
                         <div class="form-group">
@@ -240,31 +248,8 @@
                         </div>
                         <button type="submit">Submit Flight Plan</button>
                     </form>
-                </div>
-
-                <div class="submitted-plans">
-                    <h3>Submitted Flight Plans</h3>
-                    <div id="plans-list">
-                        <!-- Submitted flight plans will appear here -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="charts" class="chart-section">
-                <h2>Flight Charts</h2>
-                <p>Search our database for the latest flight charts and resources!</p>
-                <input type="text" id="chart-search" placeholder="Search flight charts...">
-                <button>Search</button>
-            </section>
-
-            <section id="contacts" class="contact-section">
-                <h2>Contact Us</h2>
-                <p>For inquiries, email us at <a href="mailto:contact@flightmanager.com">contact@flightmanager.com</a></p>
-            </section>
-            <section id="more" class="more-section">
-                <h2>More Features</h2>
-                <p>Stay tuned for upcoming updates and features!</p>
-            </section>
+                </section>
+            </div>
         </main>
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
