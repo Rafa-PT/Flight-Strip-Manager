@@ -3,323 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Flight Strip Manager</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* General Styles */
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
-            font-family: 'Arial', sans-serif;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-        }
-
-        header p {
-            font-size: 1.2rem;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background: #4CAF50;
-            padding: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-
-        .navbar a:hover {
-            background: #2e7d32;
-            border-radius: 5px;
-        }
-
-        /* Main Content */
-        main {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .content-left, .content-right {
-            width: 48%; /* Each takes up about half of the window */
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .content-left {
-            flex: 1;
-        }
-
-        .content-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Flight Planner */
-        .flight-planner {
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        .flight-planner h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input, textarea, button {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #2e7d32;
-        }
-
-        .add-waypoint-btn {
-            background: #2196F3;
-            margin-top: 5px;
-        }
-
-        .add-waypoint-btn:hover {
-            background: #1976D2;
-        }
-
-        .waypoints {
-            margin-top: 20px;
-        }
-
-        .waypoint-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .delete-btn:hover {
-            background: #c0392b;
-        }
-
-        /* Info Panel (right side) */
-        .info-panel {
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 1;
-        }
-
-        .info-panel h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .info-panel p {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #4CAF50;
-            color: white;
-            margin-top: 30px;
-            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        footer p {
-            margin: 0;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Flight Strip Manager</h1>
-            <p>Your ultimate flight planning assistant</p>
-        </header>
-        <!-- Navigation Bar -->
-        <nav class="navbar">
-            <a href="#" class="tab-link active" data-tab="home">Home</a>
-            <a href="#" class="tab-link" data-tab="charts">Charts</a>
-            <a href="#" class="tab-link" data-tab="contacts">Contacts</a>
-            <a href="#" class="tab-link" data-tab="more">More</a>
-        </nav>
-        <!-- Main Content -->
-        <main>
-            <!-- Left Side: Flight Planner Form -->
-            <div class="content-left">
-                <section id="flight-planner">
-                    <h2>Flight Planner</h2>
-                    <form id="flight-planner-form">
-                        <div class="form-group">
-                            <label for="departure">Departure:</label>
-                            <input type="text" id="departure" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <input type="text" id="destination" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="altitude">Altitude (ft):</label>
-                            <input type="text" id="altitude" placeholder="Cruising Altitude">
-                        </div>
-                        <div class="form-group">
-                            <label for="remarks">Remarks:</label>
-                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                        </div>
-                        <div class="waypoints" id="waypoints">
-                            <!-- Waypoints will be dynamically added here -->
-                        </div>
-                        <button type="submit">Submit Flight Plan</button>
-                    </form>
-                </section>
-            </div>
+    <header>
+        <h1>Flight Strip Manager</h1>
+        <p>Your Flight Plan Companion</p>
+    </header>
 
-            <!-- Right Side: Information Panel -->
-            <div class="content-right">
-                <section class="info-panel">
-                    <h2>Flight Planning Information</h2>
-                    <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-                    <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-                    <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                    <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                    <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
-                </section>
-            </div>
-        </main>
-        <footer>
-            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
-        </footer>
+    <div class="tabs">
+        <button class="tab-link" onclick="showContent('home')">Home</button>
+        <button class="tab-link" onclick="showContent('charts')">Charts</button>
+        <button class="tab-link" onclick="showContent('contacts')">Contacts</button>
+        <button class="tab-link" onclick="showContent('more')">More</button>
     </div>
 
+    <div class="content" id="home">
+        <h2>Flight Planner</h2>
+        <div class="flight-planner">
+            <div class="form-container">
+                <h3>Enter Flight Details</h3>
+                <form id="flightForm">
+                    <label for="flightNumber">Flight Number:</label>
+                    <input type="text" id="flightNumber" name="flightNumber" required>
+
+                    <label for="departureAirport">Departure Airport:</label>
+                    <input type="text" id="departureAirport" name="departureAirport" required>
+
+                    <label for="arrivalAirport">Arrival Airport:</label>
+                    <input type="text" id="arrivalAirport" name="arrivalAirport" required>
+
+                    <label for="departureTime">Departure Time:</label>
+                    <input type="datetime-local" id="departureTime" name="departureTime" required>
+
+                    <label for="flightRoute">Flight Route:</label>
+                    <textarea id="flightRoute" name="flightRoute" rows="4" required></textarea>
+
+                    <button type="submit">Submit Flight Plan</button>
+                </form>
+            </div>
+
+            <div class="flight-info">
+                <h3>Flight Plan Information</h3>
+                <p id="flightInfoDisplay">Once you submit a flight, it will be displayed here.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" id="charts" style="display:none;">
+        <h2>Charts</h2>
+        <p>WORK IN PROGRESS</p>
+    </div>
+
+    <div class="content" id="contacts" style="display:none;">
+        <h2>Contact Us</h2>
+        <p>For inquiries, please reach out to us at support@flightstripmanager.com</p>
+    </div>
+
+    <div class="content" id="more" style="display:none;">
+        <h2>More</h2>
+        <p>Additional features coming soon!</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Flight Strip Manager. All Rights Reserved.</p>
+    </footer>
+
     <script>
-        // JavaScript to handle flight planner form
-        document.getElementById('flight-planner-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+        function showContent(tabName) {
+            const contentSections = document.querySelectorAll('.content');
+            contentSections.forEach(section => {
+                section.style.display = 'none';
+            });
 
-            const departure = document.getElementById('departure').value;
-            const destination = document.getElementById('destination').value;
-            const altitude = document.getElementById('altitude').value;
-            const remarks = document.getElementById('remarks').value;
-            const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
-
-            const flightPlan = {
-                departure,
-                destination,
-                altitude,
-                remarks,
-                waypoints
-            };
-
-            // Add to the submitted plans list
-            const plansList = document.getElementById('plans-list');
-            const planItem = document.createElement('div');
-            planItem.classList.add('plan-item');
-            planItem.innerHTML = `
-                <div>
-                    <strong>${departure} ➔ ${destination}</strong><br>
-                    Altitude: ${altitude} ft | Remarks: ${remarks}<br>
-                    Waypoints: ${waypoints.join(' → ') || 'None'}
-                </div>
-                <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
-            `;
-            plansList.appendChild(planItem);
-
-            // Clear the form after submission
-            document.getElementById('flight-planner-form').reset();
-            document.getElementById('waypoints').innerHTML = '';
-        });
-
-        // Function to delete a flight plan
-        function deletePlan(button) {
-            button.parentElement.remove();
+            document.getElementById(tabName).style.display = 'block';
         }
 
-        // Add waypoint functionality
-        document.getElementById('add-waypoint').addEventListener('click', () => {
-            const waypointInput = document.createElement('input');
-            waypointInput.classList.add('waypoint-input');
-            waypointInput.type = 'text';
-            waypointInput.placeholder = 'Waypoint ICAO Code';
-            const waypointItem = document.createElement('div');
-            waypointItem.classList.add('waypoint-item');
-            waypointItem.appendChild(waypointInput);
-            document.getElementById('waypoints').appendChild(waypointItem);
+        // Display flight info after submitting the flight plan
+        const flightForm = document.getElementById('flightForm');
+        flightForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const flightNumber = document.getElementById('flightNumber').value;
+            const departureAirport = document.getElementById('departureAirport').value;
+            const arrivalAirport = document.getElementById('arrivalAirport').value;
+            const departureTime = document.getElementById('departureTime').value;
+            const flightRoute = document.getElementById('flightRoute').value;
+
+            const flightInfo = `
+                <strong>Flight Number:</strong> ${flightNumber}<br>
+                <strong>Departure Airport:</strong> ${departureAirport}<br>
+                <strong>Arrival Airport:</strong> ${arrivalAirport}<br>
+                <strong>Departure Time:</strong> ${departureTime}<br>
+                <strong>Flight Route:</strong> ${flightRoute}<br>
+            `;
+
+            document.getElementById('flightInfoDisplay').innerHTML = flightInfo;
         });
     </script>
 </body>
