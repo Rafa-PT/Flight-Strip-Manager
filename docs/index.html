@@ -351,6 +351,9 @@
 
             waypointItem.innerHTML = `
                 <input type="text" placeholder="Waypoint Name" class="waypoint-name">
+                <button class="delete-btn">Delete</button>
+            `;
+
 
             const deleteBtn = waypointItem.querySelector('.delete-btn');
             deleteBtn.addEventListener('click', () => {
