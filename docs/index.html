@@ -80,10 +80,14 @@
         .flight-planner {
             text-align: left;
             margin: 20px 0;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .flight-planner h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 10px;
         }
 
@@ -182,6 +186,10 @@
             margin-top: 30px;
             box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        footer p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -258,26 +266,27 @@
     </div>
 
     <script>
-        // JavaScript for adding dynamic waypoints and handling flight plan submission
-        document.getElementById('add-waypoint').addEventListener('click', function () {
-            const waypointsContainer = document.getElementById('waypoints');
-            const waypointDiv = document.createElement('div');
-            waypointDiv.classList.add('waypoint-item');
-            waypointDiv.innerHTML = `
-                <input type="text" placeholder="Enter waypoint" class="waypoint-input">
-                <button type="button" class="delete-btn">Remove</button>
-            `;
-            waypointsContainer.appendChild(waypointDiv);
+        // JavaScript for handling tabs and visibility of sections
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const sections = document.querySelectorAll('section');
 
-            // Add event listener to remove button
-            waypointDiv.querySelector('.delete-btn').addEventListener('click', function () {
-                waypointDiv.remove();
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                tabLinks.forEach(tab => tab.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                sections.forEach(section => {
+                    section.classList.remove('active-section');
+                });
+
+                const activeTab = event.target.getAttribute('data-tab');
+                document.getElementById(activeTab).classList.add('active-section');
             });
         });
 
-        // Handle form submission
-        document.getElementById('flight-planner-form').addEventListener('submit', function (event) {
-            event.preventDefault();
+        // Flight Plan Form Submission
+        document.getElementById('flight-planner-form').addEventListener('submit', function(e) {
+            e.preventDefault();
 
             const departure = document.getElementById('departure').value;
             const destination = document.getElementById('destination').value;
@@ -316,6 +325,19 @@
         function deletePlan(button) {
             button.parentElement.remove();
         }
+
+        // Add waypoint functionality
+        document.getElementById('add-waypoint').addEventListener('click', () => {
+            const waypointInput = document.createElement('input');
+            waypointInput.classList.add('waypoint-input');
+            waypointInput.type = 'text';
+            waypointInput.placeholder = 'Waypoint ICAO Code';
+            const waypointItem = document.createElement('div');
+            waypointItem.classList.add('waypoint-item');
+            waypointItem.appendChild(waypointInput);
+            document.getElementById('waypoints').appendChild(waypointItem);
+        });
     </script>
 </body>
 </html>
+
