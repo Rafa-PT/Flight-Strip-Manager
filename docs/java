@@ -1,29 +1,34 @@
 <script>
-    function showHome() {
-        document.getElementById("home-content").style.display = "block";
-        document.getElementById("charts-content").style.display = "none";
-        document.getElementById("contacts-content").style.display = "none";
-        document.getElementById("more-content").style.display = "none";
-    }
+    // Tabs logic
+    const tabs = document.querySelectorAll('.tab-link');
+    
+    // Initial state: hide all sections except the Home
+    document.getElementById('home').style.display = 'block'; // Ensure Home is shown initially
+    document.getElementById('charts').style.display = 'none'; // Hide Charts by default
 
-    function showCharts() {
-        document.getElementById("home-content").style.display = "none";
-        document.getElementById("charts-content").style.display = "block";
-        document.getElementById("contacts-content").style.display = "none";
-        document.getElementById("more-content").style.display = "none";
-    }
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const selectedTab = e.target.dataset.tab;
 
-    function showContacts() {
-        document.getElementById("home-content").style.display = "none";
-        document.getElementById("charts-content").style.display = "none";
-        document.getElementById("contacts-content").style.display = "block";
-        document.getElementById("more-content").style.display = "none";
-    }
+            // Hide all content sections
+            document.querySelectorAll('.content-left, .charts-content').forEach(section => {
+                section.style.display = 'none';
+            });
 
-    function showMore() {
-        document.getElementById("home-content").style.display = "none";
-        document.getElementById("charts-content").style.display = "none";
-        document.getElementById("contacts-content").style.display = "none";
-        document.getElementById("more-content").style.display = "block";
-    }
+            // Show the clicked tab's corresponding section
+            if (selectedTab === 'charts') {
+                document.getElementById('charts').style.display = 'flex';
+            } else if (selectedTab === 'home') {
+                document.getElementById('home').style.display = 'block';
+            }
+
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('active'));
+            e.target.classList.add('active');
+        });
+    });
+
+    // Ensure Home tab is active on initial load
+    document.querySelector('.tab-link[data-tab="home"]').classList.add('active');
 </script>
