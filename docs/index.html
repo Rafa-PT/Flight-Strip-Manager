@@ -6,7 +6,7 @@
     <title>Flight Strip Manager</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Center the page */
+        /* General Styles */
         body {
             margin: 0;
             padding: 0;
@@ -16,7 +16,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             background: #ffffff;
             padding: 20px;
@@ -76,6 +76,83 @@
             display: block;
         }
 
+        /* Flight Planner */
+        .flight-planner {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .flight-planner h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        .add-waypoint-btn {
+            background: #2196F3;
+            margin-top: 5px;
+        }
+
+        .add-waypoint-btn:hover {
+            background: #1976D2;
+        }
+
+        .waypoints {
+            margin-top: 20px;
+        }
+
+        .waypoint-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -105,6 +182,34 @@
             <section id="home" class="active-section">
                 <h2>Welcome to Flight Strip Manager</h2>
                 <p>This tool simplifies flight planning for pilots.</p>
+                <div class="flight-planner">
+                    <h2>Flight Planner</h2>
+                    <form id="flight-planner-form">
+                        <div class="form-group">
+                            <label for="departure">Departure Airport:</label>
+                            <input type="text" id="departure" placeholder="Enter ICAO code">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destination Airport:</label>
+                            <input type="text" id="destination" placeholder="Enter ICAO code">
+                        </div>
+                        <div class="form-group">
+                            <label for="altitude">Cruising Altitude:</label>
+                            <input type="text" id="altitude" placeholder="Enter altitude in feet">
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" rows="3" placeholder="Add any additional remarks"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                        </div>
+                        <div class="waypoints" id="waypoints">
+                            <!-- Dynamic waypoints will appear here -->
+                        </div>
+                        <button type="submit">Submit Flight Plan</button>
+                    </form>
+                </div>
             </section>
             <section id="charts" class="chart-section">
                 <h2>Flight Charts</h2>
@@ -124,21 +229,23 @@
         </footer>
     </div>
     <script>
-        // JavaScript to handle tab switching
-        document.querySelectorAll('.tab-link').forEach(tab => {
-            tab.addEventListener('click', function (event) {
-                event.preventDefault();
-                // Remove active class from all tabs
-                document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
-                // Add active class to the clicked tab
-                this.classList.add('active');
-                // Hide all sections
-                document.querySelectorAll('main section').forEach(section => section.classList.remove('active-section'));
-                // Show the selected section
-                const tabContentId = this.getAttribute('data-tab');
-                document.getElementById(tabContentId).classList.add('active-section');
+        // JavaScript for adding dynamic waypoints
+        document.getElementById('add-waypoint').addEventListener('click', function () {
+            const waypointsContainer = document.getElementById('waypoints');
+            const waypointDiv = document.createElement('div');
+            waypointDiv.classList.add('waypoint-item');
+            waypointDiv.innerHTML = `
+                <input type="text" placeholder="Enter waypoint" class="waypoint-input">
+                <button type="button" class="delete-btn">Remove</button>
+            `;
+            waypointsContainer.appendChild(waypointDiv);
+
+            // Add event listener to remove button
+            waypointDiv.querySelector('.delete-btn').addEventListener('click', function () {
+                waypointDiv.remove();
             });
         });
     </script>
 </body>
 </html>
+
