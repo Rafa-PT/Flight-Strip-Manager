@@ -218,7 +218,7 @@
         </nav>
         <!-- Main Content -->
         <main>
-            <!-- Left Side: Flight Planner Form -->
+            <!-- Home Page Content (Flight Planner & Info Panel) -->
             <div id="home" class="tab-content" style="display: block;">
                 <div class="content-left">
                     <section id="flight-planner">
@@ -251,9 +251,9 @@
                     </section>
                 </div>
 
-                <!-- Right Side: Information Panel -->
-                <div class="content-right">
-                    <section class="info-panel" id="info-panel">
+                <!-- Right Side: Information Panel (only on Home tab) -->
+                <div class="content-right" id="info-panel">
+                    <section class="info-panel">
                         <h2>Flight Planning Information</h2>
                         <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
                         <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
@@ -298,9 +298,8 @@
         // JavaScript to handle tab switching
         document.querySelectorAll('.tab-link').forEach(tab => {
             tab.addEventListener('click', function(event) {
-                // Get the data-tab of the clicked tab
                 const selectedTab = event.target.getAttribute('data-tab');
-                
+
                 // Hide all sections initially
                 document.querySelectorAll('.tab-content').forEach(section => {
                     section.style.display = 'none';
