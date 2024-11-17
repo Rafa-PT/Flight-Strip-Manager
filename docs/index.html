@@ -208,6 +208,7 @@
             justify-content: space-between;
             gap: 20px;
             padding: 20px;
+            display: none;
         }
 
         .charts-left {
@@ -261,13 +262,21 @@
                 <section id="flight-planner">
                     <h2>Flight Planner</h2>
                     <form id="flight-planner-form">
-                        <!-- Flight Plan form fields here... -->
+                        <div class="form-group">
+                            <label for="departure">Departure Airport</label>
+                            <input type="text" id="departure" name="departure" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival">Arrival Airport</label>
+                            <input type="text" id="arrival" name="arrival" required>
+                        </div>
+                        <button type="submit">Create Flight Plan</button>
                     </form>
                 </section>
             </div>
-            
+
             <!-- Charts Section -->
-            <div id="charts" class="charts-content" style="display: none;">
+            <div id="charts" class="charts-content">
                 <!-- Left side with image -->
                 <div class="charts-left">
                     <h2>Hello, welcome to the charts section!</h2>
@@ -282,19 +291,19 @@
                         <li><strong>Airways:</strong> Designated routes for air traffic.</li>
                         <li><strong>Waypoints:</strong> Coordinates used to define routes.</li>
                         <li><strong>Airport Diagrams:</strong> Layout of airport runways, taxiways, etc.</li>
-                        <li><strong>Weather Patterns:</strong> Current and forecasted weather data.</li>
+                        <li><strong>Weather Information:</strong> Provides current and forecast weather data.</li>
                     </ul>
                 </div>
             </div>
-
         </main>
+        <!-- Footer -->
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
+    <!-- JavaScript -->
     <script>
-        // JavaScript for tab switching
         const tabs = document.querySelectorAll('.tab-link');
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
