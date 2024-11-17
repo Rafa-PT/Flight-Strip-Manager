@@ -3,82 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Planner</title>
-    <link rel="stylesheet" href="assets/style.css"> <!-- Link to the CSS file -->
+    <title>Flight Strip Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2rem;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: #4CAF50;
+            padding: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background: #2e7d32;
+            border-radius: 5px;
+        }
+
+        /* Main Content */
+        main {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .content-left, .content-right {
+            width: 48%; /* Each takes up about half of the window */
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-left {
+            flex: 1;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Flight Planner */
+        .flight-planner {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .flight-planner h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        .add-waypoint-btn {
+            background: #2196F3;
+            margin-top: 5px;
+        }
+
+        .add-waypoint-btn:hover {
+            background: #1976D2;
+        }
+
+        .waypoints {
+            margin-top: 20px;
+        }
+
+        .waypoint-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Info Panel (right side) */
+        .info-panel {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        .info-panel h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .info-panel p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #4CAF50;
+            color: white;
+            margin-top: 30px;
+            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Chart Section */
+        .charts-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .charts-left {
+            flex: 1;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .charts-right {
+            flex: 1;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .charts-left img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .charts-right h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .charts-right p {
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Flight Planner</h1>
-        <p>Your tool for efficient and detailed flight planning</p>
-    </header>
-
-    <main>
-        <!-- About Section -->
-        <section class="about">
-            <h2>About</h2>
-            <p>
-                Flight Planner is your all-in-one solution for creating, managing, and organizing flight plans. 
-                Designed for both professional and hobbyist pilots, our tool simplifies flight planning with a clean 
-                and user-friendly interface.
-            </p>
-        </section>
-
-        <!-- Flight Planner Section -->
-        <section class="flight-planner">
-            <h2>Flight Planner</h2>
-            <form id="flight-form" class="flight-form">
-                <div class="form-group">
-                    <label for="flight-number">Flight Number:</label>
-                    <input type="text" id="flight-number" placeholder="Enter Flight Number" required>
-                </div>
-                <div class="form-group">
-                    <label for="departure-airport">Departure Airport:</label>
-                    <input type="text" id="departure-airport" placeholder="Enter Departure Airport" required>
-                </div>
-                <div class="form-group">
-                    <label for="arrival-airport">Arrival Airport:</label>
-                    <input type="text" id="arrival-airport" placeholder="Enter Arrival Airport" required>
-                </div>
-                <div class="form-group">
-                    <label for="departure-time">Departure Time:</label>
-                    <input type="time" id="departure-time" required>
-                </div>
-                <div class="form-group">
-                    <label for="arrival-time">Arrival Time:</label>
-                    <input type="time" id="arrival-time" required>
-                </div>
-                <div class="form-group">
-                    <label for="remarks">Remarks:</label>
-                    <textarea id="remarks" rows="3" placeholder="Additional remarks..."></textarea>
-                </div>
-                <button type="button" class="btn-primary" id="add-flight">Add Flight</button>
-            </form>
-
-            <div class="table-container">
-                <table id="flights-table">
-                    <thead>
-                        <tr>
-                            <th>Flight Number</th>
-                            <th>Departure</th>
-                            <th>Arrival</th>
-                            <th>Dep. Time</th>
-                            <th>Arr. Time</th>
-                            <th>Remarks</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Dynamic rows will be added here -->
-                    </tbody>
-                </table>
+    <div class="container">
+        <header>
+            <h1>Flight Strip Manager</h1>
+            <p>Your ultimate flight planning assistant</p>
+        </header>
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="#" class="tab-link active" data-tab="home">Home</a>
+            <a href="#" class="tab-link" data-tab="charts">Charts</a>
+            <a href="#" class="tab-link" data-tab="contacts">Contacts</a>
+            <a href="#" class="tab-link" data-tab="more">More</a>
+        </nav>
+        <!-- Main Content -->
+        <main>
+            <!-- Flight Planner (Home) -->
+            <div id="home" class="content-left">
+                <section id="flight-planner">
+                    <h2>Flight Planner</h2>
+                    <form id="flight-planner-form">
+                        <!-- Flight Plan form fields here... -->
+                    </form>
+                </section>
             </div>
-        </section>
-    </main>
+            
+            <!-- Charts Section -->
+            <div id="charts" class="charts-content" style="display: none;">
+                <!-- Left side with image -->
+                <div class="charts-left">
+                    <h2>Hello, welcome to the charts section!</h2>
+                    <img src="path_to_your_image.jpg" alt="Flight Charts Example">
+                </div>
 
-    <footer>
-        <p>© 2024 Flight Planner. All rights reserved.</p>
-    </footer>
+                <!-- Right side with basic chart info -->
+                <div class="charts-right">
+                    <h3>Basic Concepts of Flight Charts</h3>
+                    <p>Flight charts are essential tools for pilots, providing detailed information on the airspace, weather, navigation aids, and flight routes. They typically include:</p>
+                    <ul>
+                        <li><strong>Airways:</strong> Designated routes for air traffic.</li>
+                        <li><strong>Waypoints:</strong> Coordinates used to define routes.</li>
+                        <li><strong>Airport Diagrams:</strong> Layout of airport runways, taxiways, etc.</li>
+                        <li><strong>Weather Patterns:</strong> Current and forecasted weather data.</li>
+                    </ul>
+                </div>
+            </div>
 
-    <script src="assets/script.js"></script> <!-- Link to the JavaScript file -->
+        </main>
+        <footer>
+            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript for tab switching
+        const tabs = document.querySelectorAll('.tab-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedTab = e.target.dataset.tab;
+
+                // Hide all content sections
+                document.querySelectorAll('.content-left, .charts-content').forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Show the clicked tab's corresponding section
+                if (selectedTab === 'charts') {
+                    document.getElementById('charts').style.display = 'flex';
+                } else {
+                    document.getElementById(selectedTab).style.display = 'block';
+                }
+
+                // Update active tab
+                tabs.forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // Initially show the Home tab content
+        document.getElementById('home').style.display = 'block';
+    </script>
 </body>
 </html>

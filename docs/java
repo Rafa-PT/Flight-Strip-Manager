@@ -1,0 +1,29 @@
+<script>
+    function showHome() {
+        document.getElementById("home-content").style.display = "block";
+        document.getElementById("charts-content").style.display = "none";
+        document.getElementById("contacts-content").style.display = "none";
+        document.getElementById("more-content").style.display = "none";
+    }
+
+    function showCharts() {
+        document.getElementById("home-content").style.display = "none";
+        document.getElementById("charts-content").style.display = "block";
+        document.getElementById("contacts-content").style.display = "none";
+        document.getElementById("more-content").style.display = "none";
+    }
+
+    function showContacts() {
+        document.getElementById("home-content").style.display = "none";
+        document.getElementById("charts-content").style.display = "none";
+        document.getElementById("contacts-content").style.display = "block";
+        document.getElementById("more-content").style.display = "none";
+    }
+
+    function showMore() {
+        document.getElementById("home-content").style.display = "none";
+        document.getElementById("charts-content").style.display = "none";
+        document.getElementById("contacts-content").style.display = "none";
+        document.getElementById("more-content").style.display = "block";
+    }
+</script>
