@@ -72,19 +72,30 @@
         }
 
         .content-left, .content-right {
-            width: 48%; /* Make each side take up half of the page */
-            padding: 20px;
-        }
-
-        /* Flight Planner */
-        .flight-planner {
-            text-align: left;
-            margin-top: 20px;
+            width: 48%; /* Each takes up about half of the window */
             padding: 20px;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Make it take up full width in the right section */
+        }
+
+        .content-left {
+            flex: 1;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Flight Planner */
+        .flight-planner {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .flight-planner h2 {
@@ -158,23 +169,22 @@
             background: #c0392b;
         }
 
-        /* Submitted Flight Plans Section */
-        .submitted-plans {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f4f4f4;
-            border-radius: 5px;
+        /* Info Panel (right side) */
+        .info-panel {
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
         }
 
-        .submitted-plans h3 {
+        .info-panel h2 {
+            font-size: 1.8rem;
             margin-bottom: 15px;
         }
 
-        .plan-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .info-panel p {
+            font-size: 1.1rem;
             margin-bottom: 10px;
         }
 
@@ -208,19 +218,8 @@
         </nav>
         <!-- Main Content -->
         <main>
+            <!-- Left Side: Flight Planner Form -->
             <div class="content-left">
-                <section id="home">
-                    <h2>Welcome to Flight Strip Manager</h2>
-                    <p>This tool simplifies flight planning for pilots. Enter your departure, destination, and waypoints to generate flight plans.</p>
-                    <div class="submitted-plans">
-                        <h3>Submitted Flight Plans</h3>
-                        <div id="plans-list">
-                            <!-- Submitted flight plans will appear here -->
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="content-right">
                 <section id="flight-planner">
                     <h2>Flight Planner</h2>
                     <form id="flight-planner-form">
@@ -249,10 +248,12 @@
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
+            </div>
 
-                <!-- Info Panel: This is the part with information on the right side -->
-                <section id="info-panel">
-                    <h2>Flight Information</h2>
+            <!-- Right Side: Information Panel -->
+            <div class="content-right">
+                <section class="info-panel">
+                    <h2>Flight Planning Information</h2>
                     <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
                     <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
                     <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
@@ -267,31 +268,7 @@
     </div>
 
     <script>
-        // JavaScript to handle tab switching
-        const tabs = document.querySelectorAll('.tab-link');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                e.preventDefault();
-                const selectedTab = e.target.dataset.tab;
-
-                // Hide all sections
-                document.querySelectorAll('section').forEach(section => {
-                    section.style.display = 'none';
-                });
-
-                // Show the clicked section
-                document.getElementById(selectedTab).style.display = 'block';
-
-                // Update active tab
-                tabs.forEach(tab => tab.classList.remove('active'));
-                e.target.classList.add('active');
-            });
-        });
-
-        // Initialize default tab (Home)
-        document.getElementById('home').style.display = 'block';
-        
-        // Flight Planner Form Submission Logic
+        // JavaScript to handle flight planner form
         document.getElementById('flight-planner-form').addEventListener('submit', (e) => {
             e.preventDefault();
 
