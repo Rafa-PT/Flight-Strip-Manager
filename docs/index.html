@@ -188,11 +188,6 @@
             margin-bottom: 10px;
         }
 
-        /* Charts Section */
-        #charts {
-            display: none;
-        }
-
         /* Footer */
         footer {
             text-align: center;
@@ -224,103 +219,123 @@
         <!-- Main Content -->
         <main>
             <!-- Left Side: Flight Planner Form -->
-            <div id="home" class="content-left">
-                <section id="flight-planner">
-                    <h2>Flight Planner</h2>
-                    <form id="flight-planner-form">
-                        <div class="form-group">
-                            <label for="departure">Departure:</label>
-                            <input type="text" id="departure" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <input type="text" id="destination" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="altitude">Altitude (ft):</label>
-                            <input type="text" id="altitude" placeholder="Cruising Altitude">
-                        </div>
-                        <div class="form-group">
-                            <label for="remarks">Remarks:</label>
-                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                        </div>
-                        <div class="waypoints" id="waypoints">
-                            <!-- Waypoints will be dynamically added here -->
-                        </div>
-                        <button type="submit">Submit Flight Plan</button>
-                    </form>
-                </section>
-            </div>
+            <div id="home" class="tab-content" style="display: block;">
+                <div class="content-left">
+                    <section id="flight-planner">
+                        <h2>Flight Planner</h2>
+                        <form id="flight-planner-form">
+                            <div class="form-group">
+                                <label for="departure">Departure:</label>
+                                <input type="text" id="departure" placeholder="ICAO Code">
+                            </div>
+                            <div class="form-group">
+                                <label for="destination">Destination:</label>
+                                <input type="text" id="destination" placeholder="ICAO Code">
+                            </div>
+                            <div class="form-group">
+                                <label for="altitude">Altitude (ft):</label>
+                                <input type="text" id="altitude" placeholder="Cruising Altitude">
+                            </div>
+                            <div class="form-group">
+                                <label for="remarks">Remarks:</label>
+                                <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                            </div>
+                            <div class="waypoints" id="waypoints">
+                                <!-- Waypoints will be dynamically added here -->
+                            </div>
+                            <button type="submit">Submit Flight Plan</button>
+                        </form>
+                    </section>
+                </div>
 
-        <!-- Charts Section -->
-        <div id="charts">
-            <h2>Hello, World!</h2>
-            <div style="display: flex;">
-                <img src="charts1.pdf" alt="Flight Charts" style="width: 50%; padding-right: 20px;">
-                <div>
-                    <h3>Basic Concepts About Charts</h3>
-                    <p>Charts are used to visualize data. They help pilots, controllers, and planners understand flight patterns, route planning, and more.</p>
+                <!-- Right Side: Information Panel -->
+                <div class="content-right">
+                    <section class="info-panel" id="info-panel">
+                        <h2>Flight Planning Information</h2>
+                        <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
+                        <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
+                        <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
+                        <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
+                        <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
+                    </section>
                 </div>
             </div>
-        </div>
 
+            <!-- Charts Section -->
+            <div id="charts" class="tab-content" style="display: none;">
+                <h2>Hello World - Charts Section</h2>
+                <div class="left-side">
+                    <img src="your-image.png" alt="Charts" width="300">
+                </div>
+                <div class="right-side">
+                    <h3>Basic Concepts About Charts</h3>
+                    <p>Charts are essential tools for pilots. Here's some information about them.</p>
+                </div>
+            </div>
+
+            <!-- More Section -->
+            <div id="more" class="tab-content" style="display: none;">
+                <h2>More Information</h2>
+                <p>Details about more features will go here.</p>
+            </div>
+
+            <!-- Contacts Section -->
+            <div id="contacts" class="tab-content" style="display: none;">
+                <h2>Contact Us</h2>
+                <p>If you need any help, you can reach us at the following contact details.</p>
+            </div>
+        </main>
         <!-- Footer -->
         <footer>
-            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
+            <p>&copy; 2024 Flight Strip Manager | All Rights Reserved</p>
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
-        const tabs = document.querySelectorAll('.tab-link');
-        const homeTab = document.getElementById('home');
-        const chartsTab = document.getElementById('charts');
-        const flightPlannerForm = document.getElementById('flight-planner-form');
+        // JavaScript to handle tab switching
+        document.querySelectorAll('.tab-link').forEach(tab => {
+            tab.addEventListener('click', function(event) {
+                // Get the data-tab of the clicked tab
+                const selectedTab = event.target.getAttribute('data-tab');
+                
+                // Hide all sections initially
+                document.querySelectorAll('.tab-content').forEach(section => {
+                    section.style.display = 'none';
+                });
 
-        // Default tab to show Home
-        homeTab.style.display = 'block';
-        chartsTab.style.display = 'none';
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                e.preventDefault();
-                const selectedTab = e.target.dataset.tab;
-
-                // Hide all content
-                homeTab.style.display = 'none';
-                chartsTab.style.display = 'none';
-
-                // Show selected tab content
-                if (selectedTab === 'home') {
-                    homeTab.style.display = 'block';
-                } else if (selectedTab === 'charts') {
-                    chartsTab.style.display = 'block';
+                // Show the content of the clicked tab
+                const tabContent = document.getElementById(selectedTab);
+                if (tabContent) {
+                    tabContent.style.display = 'block';
                 }
 
-                // Update active tab class
-                tabs.forEach(tab => tab.classList.remove('active'));
-                e.target.classList.add('active');
+                // Manage the info panel visibility (only show on the 'home' tab)
+                const infoPanel = document.getElementById('info-panel');
+                if (selectedTab === 'home') {
+                    infoPanel.style.display = 'block'; // Show the info-panel on Home
+                } else {
+                    infoPanel.style.display = 'none'; // Hide the info-panel for other tabs
+                }
+
+                // Add the 'active' class to the selected tab and remove it from others
+                document.querySelectorAll('.tab-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.target.classList.add('active');
             });
         });
 
-        // Form submission and waypoint handling (example functionality)
-        document.getElementById('add-waypoint').addEventListener('click', function() {
-            const waypointInput = document.createElement('div');
-            waypointInput.classList.add('waypoint-item');
-            waypointInput.innerHTML = `
-                <span>Waypoint: <input type="text" placeholder="Waypoint ICAO"></span>
-                <button class="delete-btn">Delete</button>
-            `;
-            document.getElementById('waypoints').appendChild(waypointInput);
-
-            // Add delete button functionality
-            waypointInput.querySelector('.delete-btn').addEventListener('click', function() {
-                waypointInput.remove();
-            });
+        // Initially hide all content sections except 'home' and show 'home' content
+        document.querySelectorAll('.tab-content').forEach(section => {
+            section.style.display = 'none';
         });
+
+        document.getElementById('home').style.display = 'block'; // Show the home section by default
+        document.getElementById('info-panel').style.display = 'block'; // Show the info panel by default
     </script>
 </body>
 </html>
+
