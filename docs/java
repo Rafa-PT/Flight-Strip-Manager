@@ -8,6 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
         more: document.getElementById('more')
     };
 
+    const infoPanel = document.getElementById('info-panel');  // Home info panel
+    const chartsAdvisory = document.getElementById('charts-advisory');  // Charts section advisory
+
+    // Initially hide all content sections except Home
+    contentSections.home.style.display = 'block';
+    contentSections.charts.style.display = 'none';
+    contentSections.contacts.style.display = 'none';
+    contentSections.more.style.display = 'none';
+    infoPanel.style.display = 'block';  // Display the info panel only on home tab
+    chartsAdvisory.style.display = 'none'; // Hide the charts advisory initially
+
+    // Tab switching logic
     tabLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             // Hide all content sections
@@ -15,25 +27,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 section.style.display = 'none';
             });
 
+            // Hide the info-panel (only show on home tab)
+            infoPanel.style.display = 'none';
+
+            // Hide the charts advisory (only show on charts tab)
+            chartsAdvisory.style.display = 'none';
+
             // Remove active class from all links
             tabLinks.forEach(tab => {
                 tab.classList.remove('active');
             });
 
-            // Display the clicked tab's content
+            // Show the appropriate content based on clicked tab
             const targetTab = event.target.dataset.tab;
             contentSections[targetTab].style.display = 'block';
+
+            if (targetTab === 'home') {
+                infoPanel.style.display = 'block'; // Show info panel on Home tab
+            } else if (targetTab === 'charts') {
+                chartsAdvisory.style.display = 'block'; // Show charts advisory on Charts tab
+            }
 
             // Add active class to the clicked tab
             event.target.classList.add('active');
         });
     });
 
-    // Set the initial display when the page loads
-    contentSections.home.style.display = 'block';  // Show the home section by default
+    // Set the initial display when the page loads (ensuring the home tab is visible by default)
+    contentSections.home.style.display = 'block'; // Show home section by default
     contentSections.charts.style.display = 'none'; // Hide charts section
     contentSections.contacts.style.display = 'none'; // Hide contacts section
     contentSections.more.style.display = 'none'; // Hide more section
+    infoPanel.style.display = 'block'; // Show info panel for home tab
+    chartsAdvisory.style.display = 'none'; // Hide charts advisory initially
 
     // Handle the flight planner form submission
     const flightPlannerForm = document.getElementById('flight-planner-form');
