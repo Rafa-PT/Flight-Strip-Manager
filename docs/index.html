@@ -3,78 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Planner</title>
-    <link rel="stylesheet" href="assets/style.css"> <!-- Link to the CSS file -->
+    <title>Flight Strip Manager</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <!-- Header Section -->
     <header>
-        <h1>Welcome to Flight Planner</h1>
-        <p>Your tool for efficient and detailed flight planning</p>
+        <h1>Welcome to the Flight Strip Manager</h1>
+        <p>Your essential tool for flight planning and management</p>
     </header>
 
+    <!-- Main Content -->
     <main>
         <!-- About Section -->
-        <section class="about">
-            <h2>About</h2>
+        <div class="about">
+            <h2>About This Tool</h2>
             <p>
-                Flight Planner is your all-in-one solution for creating, managing, and organizing flight plans. 
-                Designed for both professional and hobbyist pilots, our tool simplifies flight planning with a clean 
-                and user-friendly interface.
+                The Flight Strip Manager helps pilots and aviation enthusiasts plan flights efficiently, ensuring safety and compliance. Use this tool to organize routes, calculate flight details, and optimize your flight experience.
             </p>
-        </section>
+        </div>
 
         <!-- Flight Planner Section -->
-        <section class="flight-planner">
+        <div class="flight-planner">
             <h2>Flight Planner</h2>
-            <form id="flight-form" class="flight-form">
+            <form class="flight-form" id="flight-planner-form">
                 <div class="form-group">
-                    <label for="flight-number">Flight Number:</label>
-                    <input type="text" id="flight-number" placeholder="Enter Flight Number" required>
+                    <label for="departure">Departure Airport</label>
+                    <input type="text" id="departure" name="departure" placeholder="Enter departure airport" required>
                 </div>
                 <div class="form-group">
-                    <label for="departure-airport">Departure Airport:</label>
-                    <input type="text" id="departure-airport" placeholder="Enter Departure Airport" required>
+                    <label for="destination">Destination Airport</label>
+                    <input type="text" id="destination" name="destination" placeholder="Enter destination airport" required>
                 </div>
                 <div class="form-group">
-                    <label for="arrival-airport">Arrival Airport:</label>
-                    <input type="text" id="arrival-airport" placeholder="Enter Arrival Airport" required>
+                    <label for="altitude">Cruising Altitude (feet)</label>
+                    <input type="number" id="altitude" name="altitude" placeholder="Enter cruising altitude" required>
                 </div>
                 <div class="form-group">
-                    <label for="departure-time">Departure Time:</label>
-                    <input type="time" id="departure-time" required>
+                    <label for="speed">Airspeed (knots)</label>
+                    <input type="number" id="speed" name="speed" placeholder="Enter airspeed" required>
                 </div>
                 <div class="form-group">
-                    <label for="arrival-time">Arrival Time:</label>
-                    <input type="time" id="arrival-time" required>
+                    <label for="remarks">Remarks</label>
+                    <textarea id="remarks" name="remarks" rows="4" placeholder="Enter any additional information"></textarea>
                 </div>
-                <button type="button" class="btn-primary" id="add-flight">Add Flight</button>
+                <button type="button" class="btn-primary" id="submit-plan">Submit Flight Plan</button>
             </form>
 
+            <!-- Flight Plans Table -->
             <div class="table-container">
-                <table id="flights-table">
+                <table id="flight-plans-table">
                     <thead>
                         <tr>
-                            <th>Flight Number</th>
                             <th>Departure</th>
-                            <th>Arrival</th>
-                            <th>Dep. Time</th>
-                            <th>Arr. Time</th>
+                            <th>Destination</th>
+                            <th>Altitude</th>
+                            <th>Speed</th>
                             <th>Remarks</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Dynamic rows will be added here -->
+                        <!-- Dynamically filled rows -->
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
     </main>
 
+    <!-- Footer Section -->
     <footer>
-        <p>© 2024 Flight Planner. All rights reserved.</p>
+        <p>© 2024 Flight Strip Manager | Your Flight Assistant</p>
     </footer>
 
-    <script src="assets/script.js"></script> <!-- Link to the JavaScript file -->
+    <!-- JavaScript -->
+    <script>
+        // Flight Planner Script
+        const flightPlannerForm = document.getElementById('flight-planner-form');
+        const flightPlansTable = document.getElementById('flight-plans-table').querySelector('tbody');
+
+        document.getElementById('submit-plan').addEventListener('click', function () {
+            const departure = document.getElementById('departure').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            const altitude = document.getElementById('altitude').value.trim();
+            const speed = document.getElementById('speed').value.trim();
+            const remarks = document.getElementById('remarks').value.trim();
+
+            if (departure && destination && altitude && speed) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${departure}</td>
+                    <td>${destination}</td>
+                    <td>${altitude}</td>
+                    <td>${speed}</td>
+                    <td>${remarks}</td>
+                    <td><button class="delete-btn">Delete</button></td>
+                `;
+                flightPlansTable.appendChild(row);
+
+                // Clear the form
+                flightPlannerForm.reset();
+
+                // Add delete functionality
+                row.querySelector('.delete-btn').addEventListener('click', function () {
+                    row.remove();
+                });
+            } else {
+                alert('Please fill out all required fields!');
+            }
+        });
+    </script>
 </body>
 </html>
