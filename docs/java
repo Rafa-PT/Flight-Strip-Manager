@@ -1,34 +1,72 @@
-<script>
-    // Tabs logic
-    const tabs = document.querySelectorAll('.tab-link');
-    
-    // Initial state: hide all sections except the Home
-    document.getElementById('home').style.display = 'block'; // Ensure Home is shown initially
-    document.getElementById('charts').style.display = 'none'; // Hide Charts by default
+// Get all the tab links and content sections
+const tabs = document.querySelectorAll('.tab-link');
+const homeTab = document.getElementById('home');
+const chartsTab = document.getElementById('charts');
+const flightPlannerForm = document.getElementById('flight-planner-form');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            const selectedTab = e.target.dataset.tab;
+// Set the initial tab visibility (Home is visible by default)
+homeTab.style.display = 'block';
+chartsTab.style.display = 'none';
 
-            // Hide all content sections
-            document.querySelectorAll('.content-left, .charts-content').forEach(section => {
-                section.style.display = 'none';
-            });
+// Add event listener for tab clicks to toggle sections
+tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default link behavior
 
-            // Show the clicked tab's corresponding section
-            if (selectedTab === 'charts') {
-                document.getElementById('charts').style.display = 'flex';
-            } else if (selectedTab === 'home') {
-                document.getElementById('home').style.display = 'block';
-            }
+        // Get the data-tab value of the clicked tab
+        const selectedTab = e.target.dataset.tab;
 
-            // Update active tab
-            tabs.forEach(tab => tab.classList.remove('active'));
-            e.target.classList.add('active');
-        });
+        // Hide all content sections first
+        homeTab.style.display = 'none';
+        chartsTab.style.display = 'none';
+
+        // Show the selected tab content
+        if (selectedTab === 'home') {
+            homeTab.style.display = 'block';
+        } else if (selectedTab === 'charts') {
+            chartsTab.style.display = 'block';
+        }
+
+        // Update active tab styling
+        tabs.forEach(tab => tab.classList.remove('active'));
+        e.target.classList.add('active');
     });
+});
 
-    // Ensure Home tab is active on initial load
-    document.querySelector('.tab-link[data-tab="home"]').classList.add('active');
-</script>
+// Handle adding and removing waypoints dynamically in the flight planner
+document.getElementById('add-waypoint').addEventListener('click', function() {
+    // Create a new waypoint input field
+    const waypointInput = document.createElement('div');
+    waypointInput.classList.add('waypoint-item');
+    waypointInput.innerHTML = `
+        <span>Waypoint: <input type="text" placeholder="Waypoint ICAO"></span>
+        <button class="delete-btn">Delete</button>
+    `;
+    // Append the new waypoint to the waypoint container
+    document.getElementById('waypoints').appendChild(waypointInput);
+
+    // Add delete functionality to the new waypoint
+    waypointInput.querySelector('.delete-btn').addEventListener('click', function() {
+        waypointInput.remove();
+    });
+});
+
+// Handle flight planner form submission (basic example, no real API call)
+flightPlannerForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const departure = document.getElementById('departure').value;
+    const destination = document.getElementById('destination').value;
+    const altitude = document.getElementById('altitude').value;
+    const remarks = document.getElementById('remarks').value;
+    
+    // Handle the form data (you can integrate your backend/API here)
+    console.log('Flight Plan Submitted:');
+    console.log('Departure:', departure);
+    console.log('Destination:', destination);
+    console.log('Altitude:', altitude);
+    console.log('Remarks:', remarks);
+
+    // Optionally, you can display the submitted data somewhere on the page
+    alert('Flight Plan Submitted');
+});
