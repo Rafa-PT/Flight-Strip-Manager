@@ -202,18 +202,14 @@
             margin: 0;
         }
 
-        /* Charts Section Styles */
-        #charts-content {
+        /* Hidden Section */
+        .tab-content {
             display: none;
         }
 
-        #charts-content h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        #myChart {
-            margin-top: 20px;
+        /* Show active tab content */
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
@@ -234,8 +230,9 @@
         <main>
             <!-- Left Side: Flight Planner Form -->
             <div class="content-left">
-                <section id="flight-planner">
+                <section id="home" class="tab-content active">
                     <h2>Flight Planner</h2>
+                    <!-- Flight Planner Form -->
                     <form id="flight-planner-form">
                         <div class="form-group">
                             <label for="departure">Departure:</label>
@@ -262,6 +259,12 @@
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
+
+                <!-- Charts Section -->
+                <section id="charts" class="tab-content">
+                    <h2>Charts</h2>
+                    <p>Hello, World! This is the charts section.</p>
+                </section>
             </div>
 
             <!-- Right Side: Information Panel -->
@@ -276,70 +279,29 @@
                 </section>
             </div>
         </main>
-
-        <!-- Charts Section -->
-        <div id="charts-content">
-            <h2>Charts Section</h2>
-            <p>Hello World! You clicked on Charts.</p>
-            <canvas id="myChart" width="400" height="200"></canvas>
-        </div>
-
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // JavaScript for handling tabs
-        const tabs = document.querySelectorAll('.tab-link');
-        const chartsContent = document.getElementById('charts-content');
+        // JavaScript to handle tab switching
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
 
-                // Hide all sections
-                document.querySelectorAll('main > div').forEach(content => {
-                    content.style.display = 'none';
-                });
-                document.getElementById(tab.getAttribute('data-tab') + '-content').style.display = 'block';
+                // Remove active class from all tabs and content
+                tabLinks.forEach(link => link.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
 
-                // Switch active tab
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
+                // Add active class to the clicked tab and corresponding content
+                link.classList.add('active');
+                const activeTab = link.getAttribute('data-tab');
+                document.getElementById(activeTab).classList.add('active');
             });
-        });
-
-        // Chart.js Example: Create a chart in the Charts section
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: [65, 59, 80, 81, 56],
-                    fill: false,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return 'Value: ' + tooltipItem.raw;
-                            }
-                        }
-                    }
-                }
-            }
         });
     </script>
 </body>
