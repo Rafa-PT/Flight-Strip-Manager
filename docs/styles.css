@@ -201,10 +201,9 @@ button:hover {
 .chart-container img {
     width: 100%;
     height: auto;
-    max-width: 600px;  /* Limits the width of the chart */
-    max-height: 400px; /* Limits the height of the chart */
+    max-width: 600px;
+    max-height: 500px;
 }
-
 
 /* Footer */
 footer {
