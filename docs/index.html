@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Planner</title>
 
-    <!-- Leaflet.js CSS -->
+    <!-- Leaflet.js CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
     <!-- Google Fonts for a modern look -->
@@ -144,6 +144,18 @@
         button.clear-btn:hover {
             background-color: #d32f2f;
         }
+        .chart-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 600px;
+        }
     </style>
 </head>
 <body>
@@ -213,6 +225,16 @@
         </div>
     </div>
 
+    <!-- Charts Section -->
+    <div class="container">
+        <div class="chart-container">
+            <h2>Charts</h2>
+            <img src="https://www.example.com/chart1.png" alt="Flight Chart 1">
+            <img src="https://www.example.com/chart2.png" alt="Flight Chart 2">
+            <p>Additional flight charts can be added here. Customize your flight planning experience.</p>
+        </div>
+    </div>
+
     <!-- Leaflet.js and Custom Script -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
@@ -224,25 +246,25 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Array to store waypoints
+        // Waypoints Array
         var waypoints = [];
 
-        // Add waypoint on map click
+        // Add waypoints when the user clicks on the map
         map.on('click', function(e) {
-            var latlng = e.latlng;
-            var marker = L.marker(latlng).addTo(map);
-            waypoints.push(latlng);
+            var latLng = e.latlng;
+            waypoints.push(latLng);
+            L.marker(latLng).addTo(map);
             updateWaypointList();
         });
 
-        // Update the list of waypoints
+        // Update waypoint list below the map
         function updateWaypointList() {
-            const waypointList = document.getElementById('waypoints-list');
-            waypointList.innerHTML = '';
-            waypoints.forEach(function(waypoint, index) {
-                const li = document.createElement('li');
-                li.textContent = `Waypoint ${index + 1}: ${waypoint.lat.toFixed(4)}, ${waypoint.lng.toFixed(4)}`;
-                waypointList.appendChild(li);
+            var list = document.getElementById('waypoints-list');
+            list.innerHTML = '';
+            waypoints.forEach(function(latLng, index) {
+                var li = document.createElement('li');
+                li.textContent = 'Waypoint ' + (index + 1) + ': ' + latLng.toString();
+                list.appendChild(li);
             });
         }
 
@@ -256,8 +278,24 @@
             });
             updateWaypointList();
         }
-    </script>
 
+        // Switch tabs functionality
+        document.querySelectorAll('.tab-link').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab-link').forEach(function(link) {
+                    link.classList.remove('active');
+                });
+                tab.classList.add('active');
+
+                var activeTab = tab.getAttribute('data-tab');
+                document.querySelectorAll('.content-left, .content-right').forEach(function(content) {
+                    content.style.display = 'none';
+                });
+                document.getElementById(activeTab).style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
+
 
