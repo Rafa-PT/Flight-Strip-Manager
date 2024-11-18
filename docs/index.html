@@ -144,6 +144,22 @@
         button.clear-btn:hover {
             background-color: #d32f2f;
         }
+
+        /* Flight Plan Preview Styles */
+        .flight-plan-preview {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .flight-plan-preview h3 {
+            margin-top: 0;
+        }
+        .flight-plan-preview p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -166,19 +182,19 @@
                 <form id="flight-planner-form">
                     <div class="form-group">
                         <label for="departure">Departure:</label>
-                        <input type="text" id="departure" placeholder="ICAO Code">
+                        <input type="text" id="departure" placeholder="ICAO Code" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
                         <label for="destination">Destination:</label>
-                        <input type="text" id="destination" placeholder="ICAO Code">
+                        <input type="text" id="destination" placeholder="ICAO Code" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
                         <label for="altitude">Altitude (ft):</label>
-                        <input type="text" id="altitude" placeholder="Cruising Altitude">
+                        <input type="text" id="altitude" placeholder="Cruising Altitude" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
-                        <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                        <textarea id="remarks" rows="3" placeholder="Additional Remarks" oninput="updateFlightPlan()"></textarea>
                     </div>
                     <div class="form-group">
                         <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
@@ -207,6 +223,15 @@
                 <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
                 <p><strong>Remarks:</strong> Any additional remarks you want to add for the flight.</p>
             </section>
+
+            <!-- Flight Plan Preview -->
+            <section class="flight-plan-preview">
+                <h3>Flight Plan Preview</h3>
+                <p><strong>Departure:</strong> <span id="preview-departure">N/A</span></p>
+                <p><strong>Destination:</strong> <span id="preview-destination">N/A</span></p>
+                <p><strong>Altitude:</strong> <span id="preview-altitude">N/A</span> feet</p>
+                <p><strong>Remarks:</strong> <span id="preview-remarks">N/A</span></p>
+            </section>
         </div>
     </div>
 
@@ -214,11 +239,11 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         // Initialize the map
-        var map = L.map('map').setView([51.505, -0.09], 6);  // Default coordinates (latitude, longitude)
+        var map = L.map('map').setView([51.505, -0.09], 5);  // Default coordinates (latitude, longitude)
 
         // Add a tile layer (background of the map)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
         // Waypoints Array
@@ -254,11 +279,32 @@
             updateWaypointList();
         }
 
+        // Update the flight plan preview
+        function updateFlightPlan() {
+            var departure = document.getElementById('departure').value;
+            var destination = document.getElementById('destination').value;
+            var altitude = document.getElementById('altitude').value;
+            var remarks = document.getElementById('remarks').value;
+
+            document.getElementById('preview-departure').textContent = departure || 'N/A';
+            document.getElementById('preview-destination').textContent = destination || 'N/A';
+            document.getElementById('preview-altitude').textContent = altitude || 'N/A';
+            document.getElementById('preview-remarks').textContent = remarks || 'N/A';
+        }
+
         // Switch tabs functionality
         document.querySelectorAll('.tab-link').forEach(function(tab) {
             tab.addEventListener('click', function() {
-                document.querySelector('.tab-link.active').classList.remove('active');
+                document.querySelectorAll('.tab-link').forEach(function(link) {
+                    link.classList.remove('active');
+                });
                 tab.classList.add('active');
+
+                var activeTab = tab.getAttribute('data-tab');
+                document.querySelectorAll('.content-left, .content-right').forEach(function(content) {
+                    content.style.display = 'none';
+                });
+                document.getElementById(activeTab).style.display = 'block';
             });
         });
     </script>
