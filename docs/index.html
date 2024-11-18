@@ -1,287 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flight Strip Manager</title>
-  <style>
-    /* General Styles */
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #e8f5ff, #ffffff);
-      font-family: 'Arial', sans-serif;
-      color: #333;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Planner</title>
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    <!-- Google Fonts for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
-
-    header p {
-      font-size: 1.2rem;
-    }
-
-    /* Tab Styles */
-    .tabs {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .tab-links {
-      display: flex;
-      justify-content: space-around;
-      background-color: #007bff; /* Active tab color */
-      padding: 10px;
-      border-radius: 5px;
-    }
-
-    .tab-link {
-      background-color: #f4f7fc;
-      border: none;
-      padding: 10px 20px;
-      color: #333333;
-      font-size: 1.1rem;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-
-    .tab-link:hover {
-      background-color: #0056b3; /* Hover effect */
-    }
-
-    .tab-link.active {
-      background-color: #ffffff; /* Active tab is white */
-      color: #007bff; /* Active tab text color */
-    }
-
-    .tab-content {
-      padding: 20px;
-    }
-
-    .tab-pane {
-      display: none;
-    }
-
-    .tab-pane.active {
-      display: block; /* Only the active tab's content is shown */
-    }
-
-    /* Main Content */
-    main {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .content-left, .content-right {
-      width: 48%; /* Each takes up about half of the window */
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .flight-planner h2 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 10px;
-    }
-
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    input, textarea, button {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-
-    button {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s ease;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #2e7d32;
-    }
-
-    /* Info Panel (right side) */
-    .info-panel {
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .info-panel h2 {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #4CAF50;
-      color: white;
-      margin-top: 30px;
-      box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    footer p {
-      margin: 0;
-    }
-
-    /* Chart container */
-    .chart-container {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .chart-container img {
-      width: 100%;
-      max-height: 600px;
-      object-fit: contain;
-    }
-
-  </style>
+    <!-- Main Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 36px;
+            margin: 0;
+        }
+        header p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+            gap: 20px;
+        }
+        .navbar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .tab-link {
+            text-decoration: none;
+            color: #495057;
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .tab-link:hover, .tab-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .content-left, .content-right {
+            flex: 1;
+            min-width: 300px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        #waypoints-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #waypoints-container h3 {
+            margin-top: 0;
+        }
+        #waypoints-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #waypoints-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .info-panel {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .info-panel h2 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        .info-panel p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        button.clear-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button.clear-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
+
     <header>
-      <h1>Flight Strip Manager</h1>
-      <p>Your ultimate flight planning assistant</p>
+        <h1>Flight Planner</h1>
+        <p>Plan your flight with ease and precision</p>
     </header>
 
-    <!-- Tab Section -->
-    <div class="tabs">
-      <div class="tab-links">
-        <button class="tab-link active" data-tab="home">Home</button>
-        <button class="tab-link" data-tab="flight-planner">Flight Planner</button>
-        <button class="tab-link" data-tab="charts">Charts</button>
-      </div>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="#" class="tab-link active" data-tab="home">Home</a>
+            <a href="#" class="tab-link" data-tab="charts">Charts</a>
+            <a href="#" class="tab-link" data-tab="contacts">Contacts</a>
+            <a href="#" class="tab-link" data-tab="more">More</a>
+        </nav>
 
-      <div class="tab-content">
-        <!-- Home Section -->
-        <div id="home" class="tab-pane active">
-          <h2>Welcome to the Home Page</h2>
-          <p>Content for the Home tab.</p>
-        </div>
-
-        <!-- Flight Planner Section -->
-        <div id="flight-planner" class="tab-pane">
-          <div class="content-left">
+        <!-- Main Content -->
+        <div class="content-left">
             <section id="flight-planner">
-              <h2>Flight Planner</h2>
-              <form id="flight-planner-form">
-                <div class="form-group">
-                  <label for="departure">Departure:</label>
-                  <input type="text" id="departure" placeholder="ICAO Code">
+                <h2>Flight Planner</h2>
+                <form id="flight-planner-form">
+                    <div class="form-group">
+                        <label for="departure">Departure:</label>
+                        <input type="text" id="departure" placeholder="ICAO Code">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination:</label>
+                        <input type="text" id="destination" placeholder="ICAO Code">
+                    </div>
+                    <div class="form-group">
+                        <label for="altitude">Altitude (ft):</label>
+                        <input type="text" id="altitude" placeholder="Cruising Altitude">
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks:</label>
+                        <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                    </div>
+                </form>
+
+                <!-- Map Container -->
+                <div id="map"></div>
+
+                <!-- Waypoints List -->
+                <div id="waypoints-container">
+                    <h3>Waypoints</h3>
+                    <ul id="waypoints-list"></ul>
+                    <button class="clear-btn" onclick="clearWaypoints()">Clear All Waypoints</button>
                 </div>
-                <div class="form-group">
-                  <label for="destination">Destination:</label>
-                  <input type="text" id="destination" placeholder="ICAO Code">
-                </div>
-                <div class="form-group">
-                  <label for="altitude">Altitude (ft):</label>
-                  <input type="text" id="altitude" placeholder="Cruising Altitude">
-                </div>
-                <div class="form-group">
-                  <label for="remarks">Remarks:</label>
-                  <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                </div>
-                <div class="form-group">
-                  <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                </div>
-                <div class="waypoints" id="waypoints">
-                  <!-- Waypoints will be dynamically added here -->
-                </div>
-                <button type="submit">Submit Flight Plan</button>
-              </form>
             </section>
-          </div>
-          <div class="content-right">
+        </div>
+
+        <!-- Right Side: Information Panel -->
+        <div class="content-right">
             <section class="info-panel">
-              <h2>Flight Planning Information</h2>
-              <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-              <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-              <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-              <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-              <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
+                <h2>Flight Planning Information</h2>
+                <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
+                <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
+                <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
+                <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
+                <p><strong>Remarks:</strong> Any additional remarks you want to add for the flight.</p>
             </section>
-          </div>
         </div>
-
-        <!-- Charts Section -->
-        <div id="charts" class="tab-pane">
-          <h2>Charts</h2>
-          <p>Content for the Charts tab.</p>
-
-          <!-- Example Chart Image -->
-          <div class="chart-container">
-            <h3>Example Chart</h3>
-            <img src="https://html.scribdassets.com/5llma4c2yo5hlfxj/images/1-ba73b11348.png" alt="Example Chart">
-          </div>
-        </div>
-      </div>
     </div>
 
-    <footer>
-      <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
-    </footer>
-  </div>
+    <!-- Leaflet.js and Custom Script -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([51.505, -0.09], 5);  // Default coordinates (latitude, longitude)
 
-  <script>
-    // JavaScript to handle tab switching
-    const tabLinks = document.querySelectorAll('.tab-link');
-    const tabPanes = document.querySelectorAll('.tab-pane');
+        // Add a tile layer (background of the map)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-    tabLinks.forEach(tabLink => {
-      tabLink.addEventListener('click', () => {
-        tabLinks.forEach(link => link.classList.remove('active'));
-        tabPanes.forEach(pane => pane.classList.remove('active'));
+        // Array to store waypoints
+        var waypoints = [];
 
-        tabLink.classList.add('active');
-        const tabId = tabLink.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
-      });
-    });
-  </script>
+        // Add waypoint on map click
+        map.on('click', function(e) {
+            var latlng = e.latlng;
+            var marker = L.marker(latlng).addTo(map);
+            waypoints.push(latlng);
+            updateWaypointList();
+        });
+
+        // Update the list of waypoints
+        function updateWaypointList() {
+            const waypointList = document.getElementById('waypoints-list');
+            waypointList.innerHTML = '';
+            waypoints.forEach(function(waypoint, index) {
+                const li = document.createElement('li');
+                li.textContent = `Waypoint ${index + 1}: ${waypoint.lat.toFixed(4)}, ${waypoint.lng.toFixed(4)}`;
+                waypointList.appendChild(li);
+            });
+        }
+
+        // Clear all waypoints
+        function clearWaypoints() {
+            waypoints = [];
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            updateWaypointList();
+        }
+    </script>
+
 </body>
 </html>
-
 
