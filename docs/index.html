@@ -4,53 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Strip Manager</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         /* General Styles */
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
-            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
+            font-family: 'Arial', sans-serif;
             color: #333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .container {
             max-width: 1200px;
-            margin: 30px auto;
-            background: #fff;
+            margin: auto;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         header h1 {
             font-size: 2.5rem;
             margin: 0;
-            color: #333;
+            color: #2e7d32;
         }
 
         header p {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 5px;
+            font-size: 1.2rem;
+            color: #555;
         }
 
         /* Navigation Bar */
         .navbar {
             display: flex;
             justify-content: center;
-            gap: 15px;
             background: #4CAF50;
-            padding: 10px;
+            padding: 10px 0;
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
@@ -60,138 +55,180 @@
             color: white;
             text-decoration: none;
             padding: 10px 20px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
-        .navbar a.active,
         .navbar a:hover {
             background: #2e7d32;
+            border-radius: 5px;
+        }
+
+        .navbar .active {
+            background: #2e7d32;
+            border-radius: 5px;
         }
 
         /* Main Content */
         main {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
             gap: 20px;
         }
 
         .content-left, .content-right {
-            flex: 1;
-            min-width: 300px;
-            background: #f9f9f9;
-            border-radius: 15px;
+            width: 48%;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Flight Planner */
-        #flight-planner {
             background: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #flight-planner h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #4CAF50;
+        .content-left {
+            flex: 1;
+        }
+
+        .content-right {
+            flex: 1;
+        }
+
+        /* Flight Planner */
+        .flight-planner h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #2e7d32;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
         }
 
         label {
             font-weight: bold;
             margin-bottom: 5px;
-            display: inline-block;
-            color: #555;
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
+        input, textarea, button {
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #4CAF50;
         }
 
         button {
-            display: block;
-            width: 100%;
-            padding: 10px;
             background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            margin-top: 10px;
             transition: background 0.3s ease;
+            margin-top: 10px;
         }
 
         button:hover {
             background: #2e7d32;
         }
 
-        .waypoints {
-            margin-top: 15px;
+        .add-waypoint-btn {
+            background: #2196F3;
+            margin-top: 5px;
         }
 
-        /* Right Section */
-        .info-panel, .tab-content {
-            background: #ffffff;
+        .add-waypoint-btn:hover {
+            background: #1976D2;
+        }
+
+        .waypoints {
+            margin-top: 20px;
+        }
+
+        .waypoint-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Charts Section */
+        #charts {
             padding: 20px;
-            border-radius: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .info-panel h2, .tab-content h2 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            color: #4CAF50;
-        }
-
-        .info-panel p, .tab-content p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #666;
-        }
-
-        #charts-advisory {
-            display: none;
-            background: #f0f0f0;
-            padding: 15px;
-            border: 1px dashed #4CAF50;
-            border-radius: 10px;
+        #charts h2 {
             text-align: center;
-            font-style: italic;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #charts .intro-text {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .chart-container h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .chart-container img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .chart-container p {
+            font-size: 1rem;
             color: #555;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             background: #4CAF50;
             color: white;
-            margin-top: auto;
-            border-radius: 0 0 15px 15px;
+            margin-top: 30px;
+            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
         }
 
         footer p {
             margin: 0;
-            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -210,6 +247,7 @@
         </nav>
         <!-- Main Content -->
         <main>
+            <!-- Left Side: Flight Planner Form -->
             <div class="content-left">
                 <section id="flight-planner">
                     <h2>Flight Planner</h2>
@@ -230,57 +268,40 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
                         </div>
+                        <div class="form-group">
+                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                        </div>
+                        <div class="waypoints" id="waypoints">
+                            <!-- Waypoints will be dynamically added here -->
+                        </div>
                         <button type="submit">Submit Flight Plan</button>
                     </form>
                 </section>
             </div>
+
+            <!-- Right Side: Charts Section -->
             <div class="content-right">
-                <section id="home" class="tab-content">
-                    <h2>Welcome to Flight Strip Manager</h2>
-                    <p>Start planning your flights or explore other tools we offer.</p>
-                </section>
                 <section id="charts" class="tab-content">
                     <h2>Charts</h2>
-                    <p>Search our database for essential flight charts.</p>
+                    <p class="intro-text">Search our database for essential flight charts.</p>
+                    <!-- First Chart -->
+                    <div class="chart-container">
+                        <h3>Chart 1: Traffic Analysis</h3>
+                        <img src="https://via.placeholder.com/600x400" alt="Traffic Analysis Chart" class="responsive-chart" />
+                        <p>This chart illustrates flight traffic patterns for efficient planning.</p>
+                    </div>
+                    <!-- Second Chart -->
+                    <div class="chart-container">
+                        <h3>Chart 2: Airspace Map</h3>
+                        <img src="https://via.placeholder.com/600x400" alt="Airspace Map" class="responsive-chart" />
+                        <p>Detailed airspace structure for enhanced navigation and safety.</p>
+                    </div>
                 </section>
-                <section id="contacts" class="tab-content">
-                    <h2>Contacts</h2>
-                    <p>Reach out to us for support or inquiries.</p>
-                </section>
-                <section id="more" class="tab-content">
-                    <h2>More</h2>
-                    <p>Discover additional tools and features.</p>
-                </section>
-                <div id="charts-advisory">Hello, World! This advisory is specific to the Charts section.</div>
             </div>
         </main>
         <footer>
             <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
         </footer>
     </div>
-
-    <script>
-        // JavaScript for Tabs and Charts Advisory
-        const tabs = document.querySelectorAll('.tab-link');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const chartsAdvisory = document.getElementById('charts-advisory');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetTab = e.target.getAttribute('data-tab');
-
-                tabs.forEach(tab => tab.classList.remove('active'));
-                tabContents.forEach(content => content.style.display = 'none');
-
-                e.target.classList.add('active');
-                document.getElementById(targetTab).style.display = 'block';
-
-                chartsAdvisory.style.display = targetTab === 'charts' ? 'block' : 'none';
-            });
-        });
-
-        document.getElementById('home').style.display = 'block';
-    </script>
 </body>
 </html>
