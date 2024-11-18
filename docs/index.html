@@ -206,6 +206,21 @@
         .tab-content.active {
             display: block;
         }
+
+        /* Charts Section */
+        #charts .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -264,17 +279,42 @@
                 <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
                 <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
                 <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                <p><strong>Remarks:</strong> Any additional remarks about the flight (optional).</p>
+                <p><strong>Remarks:</strong> Add any additional information for your flight (optional).</p>
             </div>
         </main>
 
+        <!-- Tabs Content -->
+        <div id="home" class="tab-content active">
+            <!-- Home Tab Content -->
+        </div>
+
+        <div id="charts" class="tab-content">
+            <section id="chart-section">
+                <h2>Charts</h2>
+                <div class="chart-container">
+                    <img src="https://example.com/chart1.png" alt="Chart 1">
+                    <img src="https://example.com/chart2.png" alt="Chart 2">
+                    <!-- Add more charts as needed -->
+                </div>
+            </section>
+        </div>
+
+        <div id="contacts" class="tab-content">
+            <!-- Contacts Tab Content -->
+        </div>
+
+        <div id="more" class="tab-content">
+            <!-- More Tab Content -->
+        </div>
+
+        <!-- Footer -->
         <footer>
-            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
+            <p>&copy; 2024 Flight Strip Manager</p>
         </footer>
     </div>
 
     <script>
-        // JavaScript to handle tab switching
+        // Tab Switching Logic
         const tabs = document.querySelectorAll('.tab-link');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -282,7 +322,7 @@
             tab.addEventListener('click', (e) => {
                 e.preventDefault();
                 const targetTab = e.target.getAttribute('data-tab');
-                
+
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
 
@@ -293,3 +333,4 @@
     </script>
 </body>
 </html>
+
