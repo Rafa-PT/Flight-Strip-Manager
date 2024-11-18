@@ -238,16 +238,16 @@
                 <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
                 <p><strong>Remarks:</strong> Additional remarks for your flight (e.g., special instructions, considerations).</p>
             </section>
-        </div>
-    </div>
 
-    <!-- Flight Plan Preview -->
-    <div class="flight-plan-preview" id="flight-plan-preview">
-        <h3>Flight Plan Preview</h3>
-        <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
-        <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
-        <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
-        <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
+            <!-- Flight Plan Preview (Now below the Info Panel) -->
+            <div class="flight-plan-preview" id="flight-plan-preview">
+                <h3>Flight Plan Preview</h3>
+                <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
+                <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
+                <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
+                <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
+            </div>
+        </div>
     </div>
 
     <!-- Leaflet.js and Custom Script -->
@@ -306,22 +306,6 @@
             document.getElementById('preview-altitude').textContent = altitude || 'N/A';
             document.getElementById('preview-remarks').textContent = remarks || 'N/A';
         }
-
-        // Switch tabs functionality
-        document.querySelectorAll('.tab-link').forEach(function(tab) {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab-link').forEach(function(link) {
-                    link.classList.remove('active');
-                });
-                tab.classList.add('active');
-
-                var activeTab = tab.getAttribute('data-tab');
-                document.querySelectorAll('.content-left, .content-right').forEach(function(content) {
-                    content.style.display = 'none';
-                });
-                document.getElementById(activeTab).style.display = 'block';
-            });
-        });
     </script>
 
 </body>
