@@ -149,16 +149,32 @@
         .flight-plan-preview {
             background-color: #ffffff;
             padding: 20px;
+            border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+            font-family: "Courier New", Courier, monospace;
+            width: 100%;
+            max-width: 600px;
+            line-height: 1.6;
+            white-space: pre-wrap; /* Ensure text wraps properly */
+            margin: 20px auto;
+            font-size: 16px;
+            background: #f4f4f4;
+            border-radius: 12px;
         }
         .flight-plan-preview h3 {
             margin-top: 0;
+            text-align: center;
         }
         .flight-plan-preview p {
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+        .flight-plan-preview .section-title {
+            font-weight: bold;
+            margin-top: 12px;
         }
     </style>
 </head>
@@ -220,19 +236,18 @@
                 <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
                 <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
                 <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                <p><strong>Waypoints:</strong> Add waypoints along your route (optional).</p>
-                <p><strong>Remarks:</strong> Any additional remarks you want to add for the flight.</p>
-            </section>
-
-            <!-- Flight Plan Preview -->
-            <section class="flight-plan-preview">
-                <h3>Flight Plan Preview</h3>
-                <p><strong>Departure:</strong> <span id="preview-departure">N/A</span></p>
-                <p><strong>Destination:</strong> <span id="preview-destination">N/A</span></p>
-                <p><strong>Altitude:</strong> <span id="preview-altitude">N/A</span> feet</p>
-                <p><strong>Remarks:</strong> <span id="preview-remarks">N/A</span></p>
+                <p><strong>Remarks:</strong> Additional remarks for your flight (e.g., special instructions, considerations).</p>
             </section>
         </div>
+    </div>
+
+    <!-- Flight Plan Preview -->
+    <div class="flight-plan-preview" id="flight-plan-preview">
+        <h3>Flight Plan Preview</h3>
+        <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
+        <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
+        <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
+        <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
     </div>
 
     <!-- Leaflet.js and Custom Script -->
@@ -308,5 +323,6 @@
             });
         });
     </script>
+
 </body>
 </html>
