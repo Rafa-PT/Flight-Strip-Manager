@@ -119,20 +119,29 @@
             border-radius: 6px;
             border: 1px solid #e0e0e0;
         }
+        /* Smaller Info Panel */
         .info-panel {
             background-color: #ffffff;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 15px; /* Reduced padding for a more compact look */
+            margin: 10px;  /* Reduced margin */
+            border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 300px; /* Limiting the width to make it smaller */
+            font-size: 14px;  /* Smaller font size */
         }
+
+/* Heading inside the info panel */
         .info-panel h2 {
-            font-size: 20px;
+            font-size: 20px;  /* Smaller font size for the header */
             margin-top: 0;
         }
+
+/* Paragraphs inside the info panel */
         .info-panel p {
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 14px;  /* Smaller font size for text */
+            line-height: 1.4;  /* Adjust line height for better readability */
         }
+
         button.clear-btn {
             background-color: #f44336;
             color: white;
@@ -157,7 +166,7 @@
             margin-top: 15px;
             font-family: "Courier New", Courier, monospace;
             width: 100%;
-            max-width: 300px;
+            max-width: 515px;
             line-height: 1.4;
             white-space: pre-wrap;
             margin: 15px auto;
