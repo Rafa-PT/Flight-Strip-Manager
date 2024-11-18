@@ -63,20 +63,23 @@ main {
     gap: 20px;
 }
 
-.content-left {
-    width: 100%;
+/* Flight Planner & Info Panel */
+.content-left, .content-right {
+    width: 48%; /* Each takes up about half of the window */
     padding: 20px;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.tab-content {
-    display: none;
+.content-left {
+    flex: 1;
 }
 
-.tab-content.active {
-    display: block;
+.content-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Flight Planner */
@@ -85,6 +88,7 @@ main {
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .flight-planner h2 {
@@ -141,67 +145,86 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
 }
 
-.waypoint-input {
-    flex: 1;
-    margin-right: 10px;
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
-/* Charts Section */
-#charts {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 20px;
+.delete-btn:hover {
+    background: #c0392b;
 }
 
-.chart-image {
-    flex: 1;
-    max-width: 60%;
-}
-
-.chart-img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.chart-info {
-    flex: 1;
-    max-width: 35%;
+/* Info Panel (right side) */
+.info-panel {
     padding: 20px;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
-.chart-info h3 {
+.info-panel h2 {
     font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.info-panel p {
+    font-size: 1.1rem;
     margin-bottom: 10px;
 }
 
-.chart-info p {
-    font-size: 1rem;
+/* Charts Section */
+#charts {
+    display: none;
+    text-align: center;
+}
+
+#charts h2 {
+    font-size: 2rem;
     margin-bottom: 10px;
 }
 
-.chart-info ul {
-    font-size: 1rem;
-    list-style-type: disc;
-    padding-left: 20px;
+.chart-container {
+    display: inline-block;
+    text-align: center;
+    max-width: 100%;
 }
 
-.chart-info li {
-    margin-bottom: 5px;
+.chart-container img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    max-height: 500px;
 }
 
 /* Footer */
 footer {
     text-align: center;
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #555;
+    padding: 20px;
+    background: #4CAF50;
+    color: white;
+    margin-top: 30px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Tab Styling */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
 }
 
