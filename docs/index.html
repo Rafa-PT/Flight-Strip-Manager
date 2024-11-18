@@ -210,6 +210,14 @@
                         <input type="text" id="altitude" placeholder="Cruising Altitude" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
+                        <label for="acfttype">ACFT Type:</label>
+                        <input type="text" id="acfttype" placeholder="ACFT Type" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="sidstar">SID/STAR:</label>
+                        <input type="text" id="sidstar" placeholder="SID/STAR" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
                         <label for="remarks">Remarks:</label>
                         <textarea id="remarks" rows="2" placeholder="Additional Remarks" oninput="updateFlightPlan()"></textarea>
                     </div>
@@ -246,6 +254,8 @@
                 <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
                 <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
                 <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
+                <p class="section-title">ACFT Type: <span id="preview-acfttype">N/A</span></p>
+                <p class="section-title">SID/STAR <span id="preview-sidstar">N/A</span></p>
                 <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
             </div>
         </div>
@@ -300,11 +310,15 @@
             var departure = document.getElementById('departure').value;
             var destination = document.getElementById('destination').value;
             var altitude = document.getElementById('altitude').value;
+            var acfttype = document.getElementById('acfttype').value;
+            var sidstar = document.getElementById('sidstar').value;
             var remarks = document.getElementById('remarks').value;
 
             document.getElementById('preview-departure').textContent = departure || 'N/A';
             document.getElementById('preview-destination').textContent = destination || 'N/A';
             document.getElementById('preview-altitude').textContent = altitude || 'N/A';
+            document.getElementById('preview-acfttype').textContent = acfttype || 'N/A';
+            document.getElementById('preview-sidstar').textContent = sidstar || 'N/A';
             document.getElementById('preview-remarks').textContent = remarks || 'N/A';
         }
     </script>
