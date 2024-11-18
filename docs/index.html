@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Strip Manager</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         /* General Styles */
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #e8f5ff, #ffffff);
+            background: linear-gradient(to bottom, #e8f5ff, #ffffff); /* Restored gradient */
             font-family: 'Arial', sans-serif;
             color: #333;
         }
@@ -60,12 +59,7 @@
             transition: background 0.3s ease;
         }
 
-        .navbar a:hover {
-            background: #2e7d32;
-            border-radius: 5px;
-        }
-
-        .navbar .active {
+        .navbar a:hover, .navbar a.active {
             background: #2e7d32;
             border-radius: 5px;
         }
@@ -85,85 +79,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .content-left {
-            flex: 1;
-        }
-
-        .content-right {
-            flex: 1;
-        }
-
-        /* Flight Planner */
-        .flight-planner h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #2e7d32;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input, textarea, button {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #2e7d32;
-        }
-
-        .add-waypoint-btn {
-            background: #2196F3;
-            margin-top: 5px;
-        }
-
-        .add-waypoint-btn:hover {
-            background: #1976D2;
-        }
-
-        .waypoints {
-            margin-top: 20px;
-        }
-
-        .waypoint-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .delete-btn:hover {
-            background: #c0392b;
+        .hidden {
+            display: none;
         }
 
         /* Charts Section */
@@ -179,13 +96,6 @@
             font-size: 2rem;
             color: #333;
             margin-bottom: 10px;
-        }
-
-        #charts .intro-text {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 20px;
         }
 
         .chart-container {
@@ -211,25 +121,6 @@
             border-radius: 8px;
             margin-bottom: 10px;
         }
-
-        .chart-container p {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #4CAF50;
-            color: white;
-            margin-top: 30px;
-            box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        footer p {
-            margin: 0;
-        }
     </style>
 </head>
 <body>
@@ -243,65 +134,79 @@
             <a href="#" class="tab-link active" data-tab="home">Home</a>
             <a href="#" class="tab-link" data-tab="charts">Charts</a>
             <a href="#" class="tab-link" data-tab="contacts">Contacts</a>
-            <a href="#" class="tab-link" data-tab="more">More</a>
         </nav>
         <!-- Main Content -->
         <main>
-            <!-- Left Side: Flight Planner Form -->
-            <div class="content-left">
-                <section id="flight-planner">
-                    <h2>Flight Planner</h2>
-                    <form id="flight-planner-form">
-                        <div class="form-group">
-                            <label for="departure">Departure:</label>
-                            <input type="text" id="departure" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <input type="text" id="destination" placeholder="ICAO Code">
-                        </div>
-                        <div class="form-group">
-                            <label for="altitude">Altitude (ft):</label>
-                            <input type="text" id="altitude" placeholder="Cruising Altitude">
-                        </div>
-                        <div class="form-group">
-                            <label for="remarks">Remarks:</label>
-                            <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
-                        </div>
-                        <div class="waypoints" id="waypoints">
-                            <!-- Waypoints will be dynamically added here -->
-                        </div>
-                        <button type="submit">Submit Flight Plan</button>
-                    </form>
-                </section>
+            <!-- Home Section -->
+            <div id="home" class="tab-content">
+                <div class="content-left">
+                    <section id="flight-planner">
+                        <h2>Flight Planner</h2>
+                        <form id="flight-planner-form">
+                            <div class="form-group">
+                                <label for="departure">Departure:</label>
+                                <input type="text" id="departure" placeholder="ICAO Code">
+                            </div>
+                            <div class="form-group">
+                                <label for="destination">Destination:</label>
+                                <input type="text" id="destination" placeholder="ICAO Code">
+                            </div>
+                            <div class="form-group">
+                                <label for="altitude">Altitude (ft):</label>
+                                <input type="text" id="altitude" placeholder="Cruising Altitude">
+                            </div>
+                            <div class="form-group">
+                                <label for="remarks">Remarks:</label>
+                                <textarea id="remarks" rows="3" placeholder="Additional Remarks"></textarea>
+                            </div>
+                            <button type="submit">Submit Flight Plan</button>
+                        </form>
+                    </section>
+                </div>
             </div>
 
-            <!-- Right Side: Charts Section -->
-            <div class="content-right">
-                <section id="charts" class="tab-content">
-                    <h2>Charts</h2>
-                    <p class="intro-text">Search our database for essential flight charts.</p>
-                    <!-- First Chart -->
-                    <div class="chart-container">
-                        <h3>Chart 1: Traffic Analysis</h3>
-                        <img src="https://via.placeholder.com/600x400" alt="Traffic Analysis Chart" class="responsive-chart" />
-                        <p>This chart illustrates flight traffic patterns for efficient planning.</p>
-                    </div>
-                    <!-- Second Chart -->
-                    <div class="chart-container">
-                        <h3>Chart 2: Airspace Map</h3>
-                        <img src="https://via.placeholder.com/600x400" alt="Airspace Map" class="responsive-chart" />
-                        <p>Detailed airspace structure for enhanced navigation and safety.</p>
-                    </div>
-                </section>
+            <!-- Charts Section -->
+            <div id="charts" class="tab-content hidden">
+                <h2>Charts</h2>
+                <div class="chart-container">
+                    <h3>Chart 1: Traffic Analysis</h3>
+                    <img src="https://via.placeholder.com/600x400" alt="Traffic Analysis Chart">
+                    <p>This chart illustrates flight traffic patterns for efficient planning.</p>
+                </div>
+                <div class="chart-container">
+                    <h3>Chart 2: Airspace Map</h3>
+                    <img src="https://via.placeholder.com/600x400" alt="Airspace Map">
+                    <p>Detailed airspace structure for enhanced navigation and safety.</p>
+                </div>
+            </div>
+
+            <!-- Contacts Section -->
+            <div id="contacts" class="tab-content hidden">
+                <h2>Contacts</h2>
+                <p>Get in touch with us for support or inquiries.</p>
             </div>
         </main>
-        <footer>
-            <p>&copy; 2024 Flight Strip Manager. All rights reserved.</p>
-        </footer>
     </div>
+
+    <script>
+        // Tab Navigation Script
+        const tabs = document.querySelectorAll('.tab-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', event => {
+                event.preventDefault();
+
+                // Remove active class from all tabs and hide all content
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(content => content.classList.add('hidden'));
+
+                // Add active class to clicked tab and show corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+    </script>
 </body>
 </html>
