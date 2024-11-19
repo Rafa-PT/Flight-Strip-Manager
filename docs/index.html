@@ -202,7 +202,7 @@
                 <form id="flight-planner-form">
                     <div class="form-group">
                         <label for="callsign"> Callsign:</label>
-                        <input type="text" id="callsign" placeholder="callsign" oninput="updateFlightPlan()">
+                        <input type="text" id="callsign" placeholder="Callsign" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
                         <label for="departure">Departure:</label>
@@ -258,6 +258,7 @@
             <!-- Flight Plan Preview (Now below the Info Panel) -->
             <div class="flight-plan-preview" id="flight-plan-preview">
                 <h3>Flight Plan Preview</h3>
+                <p class="section-title">Callsign: <span id="preview-callsign">N/A</span></p>
                 <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
                 <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
                 <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
