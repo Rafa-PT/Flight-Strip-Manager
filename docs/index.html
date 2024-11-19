@@ -159,7 +159,7 @@
             font-family: "Courier New", Courier, monospace;
             width: 100%;
             max-width: 550px;
-            line-height: 0.5;
+            line-height: 0.2;
             white-space: pre-wrap;
             margin: 15px auto;
             font-size: 14px;
@@ -217,8 +217,8 @@
                         <input type="text" id="acft" placeholder="ACFT Type" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
-                        <label for="rules">IFR/VFR:</label>
-                        <input type="text" id="rules" placeholder="Rules" oninput="updateFlightPlan()">
+                        <label for="sidstar"> SID/STAR:</label>
+                        <input type="text" id="sidstar" placeholder="SID/STAR" oninput="updateFlightPlan()">
                     </div>
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
@@ -259,6 +259,7 @@
                 <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
                 <p class="section-title">ACFT Type: <span id="preview-acft">N/A</span></p>
                 <p class="section-title">VFR/IFR: <span id="preview-rules">N/A</span></p>
+                <p class="section-title">SID/STAR: <span id="preview-sidstar">N/A</span></p>
                 <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
             </div>
         </div>
@@ -315,6 +316,7 @@
             var altitude = document.getElementById('altitude').value;
             var acft = document.getElementById('acft').value;
             var rules = document.getElementById('rules').value;
+            var rules = document.getElementById('sidstar').value;
             var remarks = document.getElementById('remarks').value;
 
             document.getElementById('preview-departure').textContent = departure || 'N/A';
@@ -322,6 +324,7 @@
             document.getElementById('preview-altitude').textContent = altitude || 'N/A';
             document.getElementById('preview-acft').textContent = acft || 'N/A';
             document.getElementById('preview-rules').textContent = rules || 'N/A';
+            document.getElementById('preview-sidstar').textContent = sidstar || 'N/A'
             document.getElementById('preview-remarks').textContent = remarks || 'N/A';
         }
     </script>
