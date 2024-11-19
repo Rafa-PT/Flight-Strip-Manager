@@ -42,13 +42,15 @@
         gap: 15px;
     }
     .content-left {
-        flex: 1;
-        max-width: 270px; /* Compact width */
-        margin-right: 15px; /* Adjust spacing */
-        min-width: 270px;
+        flex: none; /* Prevents flex grow */
+        width: 300px; /* Fixed width for left section */
+    }
+    .content-right {
+        flex: 1; /* Allows the right section to take remaining space */
+        min-width: 300px;
     }
     .form-group {
-        margin-bottom: 8px; /* Reduce spacing between form groups */
+        margin-bottom: 12px;
     }
     .form-group label {
         font-weight: 500;
@@ -58,8 +60,8 @@
     .form-group textarea,
     .form-group button {
         width: 100%;
-        padding: 8px; /* Reduced padding for compactness */
-        font-size: 12px; /* Smaller font size */
+        padding: 10px;
+        font-size: 14px;
         border: 1px solid #ced4da;
         border-radius: 6px;
         box-sizing: border-box;
@@ -104,8 +106,7 @@
     }
     .info-panel {
         background-color: #ffffff;
-        padding: 10px; /* Compact padding */
-        max-width: 250px; /* Narrower width */
+        padding: 15px;
         border-radius: 6px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -114,17 +115,17 @@
         margin-top: 0;
     }
     .info-panel p {
-        font-size: 12px; /* Smaller font size */
+        font-size: 14px;
         line-height: 1.4;
     }
     button.clear-btn {
         background-color: #f44336;
         color: white;
         border: none;
-        padding: 8px 12px; /* Reduced padding */
+        padding: 10px 15px;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 12px; /* Smaller font size */
+        font-size: 14px;
         transition: background-color 0.3s;
     }
     button.clear-btn:hover {
@@ -134,34 +135,35 @@
     /* Flight Plan Preview Styles */
     .flight-plan-preview {
         background-color: #ffffff;
-        padding: 10px; /* Compact padding */
+        padding: 15px;
         border: 1px solid #ccc;
         border-radius: 6px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-top: 15px;
         font-family: "Courier New", Courier, monospace;
         width: 100%;
-        max-width: 400px; /* Compact width */
+        max-width: 550px;
         line-height: 1.4;
         white-space: pre-wrap;
         margin: 15px auto;
-        font-size: 12px; /* Smaller font size */
+        font-size: 14px;
         background: #f4f4f4;
     }
     .flight-plan-preview h3 {
         margin-top: 0;
         text-align: center;
-        font-size: 16px;
+        font-size: 18px;
     }
     .flight-plan-preview p {
-        font-size: 12px;
-        margin: 4px 0;
+        font-size: 14px;
+        margin: 6px 0;
     }
     .flight-plan-preview .section-title {
         font-weight: bold;
         margin-top: 10px;
     }
 </style>
+
 
 </head>
 <body>
