@@ -316,24 +316,23 @@
 
         // Update the flight plan preview
         function updateFlightPlan() {
-            var departure = document.getElementById('callsign').value;
-            var departure = document.getElementById('departure').value;
-            var destination = document.getElementById('destination').value;
-            var altitude = document.getElementById('altitude').value;
-            var acft = document.getElementById('acft').value;
-            var rules = document.getElementById('rules').value;
-            var rules = document.getElementById('sidstar').value;
-            var remarks = document.getElementById('remarks').value;
+        var callsign = document.getElementById('callsign').value;
+        var departure = document.getElementById('departure').value;
+        var destination = document.getElementById('destination').value;
+        var altitude = document.getElementById('altitude').value;
+        var acft = document.getElementById('acft').value;
+        var sidstar = document.getElementById('sidstar').value;
+        var remarks = document.getElementById('remarks').value;
 
-            document.getElementById('preview-callsign').textContent = callsign || 'N/A'; 
-            document.getElementById('preview-departure').textContent = departure || 'N/A';
-            document.getElementById('preview-destination').textContent = destination || 'N/A';
-            document.getElementById('preview-altitude').textContent = altitude || 'N/A';
-            document.getElementById('preview-acft').textContent = acft || 'N/A';
-            document.getElementById('preview-rules').textContent = rules || 'N/A';
-            document.getElementById('preview-sidstar').textContent = sidstar || 'N/A'
-            document.getElementById('preview-remarks').textContent = remarks || 'N/A';
-        }
+        document.getElementById('preview-callsign').textContent = callsign || 'N/A';
+        document.getElementById('preview-departure').textContent = departure || 'N/A';
+        document.getElementById('preview-destination').textContent = destination || 'N/A';
+        document.getElementById('preview-altitude').textContent = altitude || 'N/A';
+        document.getElementById('preview-acft').textContent = acft || 'N/A';
+        document.getElementById('preview-sidstar').textContent = sidstar || 'N/A';
+        document.getElementById('preview-remarks').textContent = remarks || 'N/A';
+    }
+
     </script>
 
 </body>
