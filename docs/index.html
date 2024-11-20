@@ -179,8 +179,6 @@
             margin-top: 10px;
         }
     </style>
-
-
 </head>
 <body>
 
@@ -200,147 +198,189 @@
             <section id="flight-planner">
                 <h2>Flight Planner</h2>
                 <form id="flight-planner-form">
+                    <!-- Basic Information -->
                     <div class="form-group">
-                        <label for="callsign"> Callsign:</label>
-                        <input type="text" id="callsign" placeholder="Callsign" oninput="updateFlightPlan()">
+                        <label for="flight-rules">Flight Rules:</label>
+                        <select id="flight-rules" oninput="updateFlightPlan()">
+                            <option value="IFR">IFR</option>
+                            <option value="VFR">VFR</option>
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="aircraft-id">Aircraft ID:</label>
+                        <input type="text" id="aircraft-id" placeholder="N10SV" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aircraft-type">Aircraft Type:</label>
+                        <input type="text" id="aircraft-type" placeholder="DA40" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <!-- Departure, Destination, and Altitude -->
                     <div class="form-group">
                         <label for="departure">Departure:</label>
-                        <input type="text" id="departure" placeholder="ICAO Code" oninput="updateFlightPlan()">
+                        <input type="text" id="departure" placeholder="KOMA" oninput="updateFlightPlan()" />
                     </div>
+
                     <div class="form-group">
                         <label for="destination">Destination:</label>
-                        <input type="text" id="destination" placeholder="ICAO Code" oninput="updateFlightPlan()">
+                        <input type="text" id="destination" placeholder="KOSH" oninput="updateFlightPlan()" />
                     </div>
+
                     <div class="form-group">
-                        <label for="altitude">Altitude (ft):</label>
-                        <input type="text" id="altitude" placeholder="Cruising Altitude" oninput="updateFlightPlan()">
+                        <label for="altitude">Level (ft):</label>
+                        <input type="text" id="altitude" placeholder="050" oninput="updateFlightPlan()" />
                     </div>
+
+                    <!-- Route of Flight -->
                     <div class="form-group">
-                        <label for="acft">ACFT Type:</label>
-                        <input type="text" id="acft" placeholder="ACFT Type" oninput="updateFlightPlan()">
+                        <label for="route">Route of Flight:</label>
+                        <textarea id="route" rows="2" placeholder="OVR V172 CID V341 BADAN" oninput="updateFlightPlan()"></textarea>
                     </div>
+
+                    <!-- Alternate Fields -->
                     <div class="form-group">
-                        <label for="sidstar"> SID/STAR:</label>
-                        <input type="text" id="sidstar" placeholder="SID/STAR" oninput="updateFlightPlan()">
+                        <label for="ete">ETE (HHMM):</label>
+                        <input type="text" id="ete" placeholder="0249" oninput="updateFlightPlan()" />
                     </div>
+
                     <div class="form-group">
-                        <label for="route"> SID/STAR:</label>
-                        <input type="text" id="route" placeholder="Route" oninput="updateFlightPlan()">
+                        <label for="alternate1">1st Alternate:</label>
+                        <input type="text" id="alternate1" placeholder="KFLD" oninput="updateFlightPlan()" />
                     </div>
+
+                    <div class="form-group">
+                        <label for="alternate2">2nd Alternate:</label>
+                        <input type="text" id="alternate2" placeholder="KPCZ" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <!-- Remarks -->
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
-                        <textarea id="remarks" rows="2" placeholder="Additional Remarks" oninput="updateFlightPlan()"></textarea>
+                        <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
                     </div>
+
+                    <!-- Submit Button -->
                     <div class="form-group">
-                        <button type="button" id="add-waypoint" class="add-waypoint-btn">Add Waypoint</button>
+                        <button type="submit">Submit Flight Plan</button>
                     </div>
                 </form>
-
-                <!-- Map Container -->
-                <div id="map"></div>
-
-                <!-- Waypoints List -->
-                <div id="waypoints-container">
-                    <h3>Waypoints</h3>
-                    <ul id="waypoints-list"></ul>
-                    <button class="clear-btn" onclick="clearWaypoints()">Clear All Waypoints</button>
-                </div>
             </section>
+
+            <!-- Waypoints -->
+            <div id="waypoints-container">
+                <h3>Waypoints</h3>
+                <ul id="waypoints-list">
+                    <!-- Waypoints will be listed here -->
+                </ul>
+                <button type="button" id="add-waypoint">Add Waypoint</button>
+                <button type="button" class="clear-btn" onclick="clearWaypoints()">Clear Waypoints</button>
+            </div>
         </div>
 
-        <!-- Right Side: Information Panel -->
+        <!-- Flight Plan Preview -->
         <div class="content-right">
-            <section class="info-panel">
-                <h2>Flight Planning Information</h2>
-                <p><strong>Departure:</strong> Enter the ICAO code of your departure airport.</p>
-                <p><strong>Destination:</strong> Enter the ICAO code of your destination airport.</p>
-                <p><strong>Altitude:</strong> Specify the cruising altitude for your flight.</p>
-                <p><strong>Remarks:</strong> Additional remarks for your flight (e.g., special instructions, considerations).</p>
-            </section>
-
-            <!-- Flight Plan Preview (Now below the Info Panel) -->
-            <div class="flight-plan-preview" id="flight-plan-preview">
+            <div id="flight-plan-preview" class="flight-plan-preview">
                 <h3>Flight Plan Preview</h3>
-                <p class="section-title">Callsign: <span id="preview-callsign">N/A</span></p>
-                <p class="section-title">Departure: <span id="preview-departure">N/A</span></p>
-                <p class="section-title">Destination: <span id="preview-destination">N/A</span></p>
-                <p class="section-title">Altitude: <span id="preview-altitude">N/A</span> ft</p>
-                <p class="section-title">ACFT Type: <span id="preview-acft">N/A</span></p>
-                <p class="section-title">VFR/IFR: <span id="preview-rules">N/A</span></p>
-                <p class="section-title">SID/STAR: <span id="preview-sidstar">N/A</span></p>
-                <p class="section-title">Route: <span id="preview-route">N/A</span></p>
-                <p class="section-title">Remarks: <span id="preview-remarks">N/A</span></p>
+                <p class="section-title">Flight Rules:</p>
+                <p id="preview-flight-rules">N/A</p>
+
+                <p class="section-title">Aircraft ID:</p>
+                <p id="preview-aircraft-id">N/A</p>
+
+                <p class="section-title">Aircraft Type:</p>
+                <p id="preview-aircraft-type">N/A</p>
+
+                <p class="section-title">Departure:</p>
+                <p id="preview-departure">N/A</p>
+
+                <p class="section-title">Destination:</p>
+                <p id="preview-destination">N/A</p>
+
+                <p class="section-title">Altitude (ft):</p>
+                <p id="preview-altitude">N/A</p>
+
+                <p class="section-title">Route of Flight:</p>
+                <p id="preview-route">N/A</p>
+
+                <p class="section-title">ETE:</p>
+                <p id="preview-ete">N/A</p>
+
+                <p class="section-title">1st Alternate:</p>
+                <p id="preview-alternate1">N/A</p>
+
+                <p class="section-title">2nd Alternate:</p>
+                <p id="preview-alternate2">N/A</p>
+
+                <p class="section-title">Remarks:</p>
+                <p id="preview-remarks">N/A</p>
+
+                <p class="section-title">Waypoints:</p>
+                <p id="preview-waypoints">N/A</p>
             </div>
         </div>
     </div>
 
-    <!-- Leaflet.js and Custom Script -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- External JavaScript -->
     <script>
         // Initialize the map
-        var map = L.map('map').setView([51.505, -0.09], 5);  // Default coordinates (latitude, longitude)
+        const map = L.map('map').setView([51.505, -0.09], 2); // Default position: London
 
-        // Add a tile layer (background of the map)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Waypoints Array
-        var waypoints = [];
+        let waypoints = [];
 
-        // Add waypoints when the user clicks on the map
-        map.on('click', function(e) {
-            var latLng = e.latlng;
-            waypoints.push(latLng);
-            L.marker(latLng).addTo(map);
-            updateWaypointList();
+        // Update the Flight Plan Preview
+        function updateFlightPlan() {
+            document.getElementById('preview-flight-rules').textContent = document.getElementById('flight-rules').value || 'N/A';
+            document.getElementById('preview-aircraft-id').textContent = document.getElementById('aircraft-id').value || 'N/A';
+            document.getElementById('preview-aircraft-type').textContent = document.getElementById('aircraft-type').value || 'N/A';
+            document.getElementById('preview-departure').textContent = document.getElementById('departure').value || 'N/A';
+            document.getElementById('preview-destination').textContent = document.getElementById('destination').value || 'N/A';
+            document.getElementById('preview-altitude').textContent = document.getElementById('altitude').value || 'N/A';
+            document.getElementById('preview-route').textContent = document.getElementById('route').value || 'N/A';
+            document.getElementById('preview-ete').textContent = document.getElementById('ete').value || 'N/A';
+            document.getElementById('preview-alternate1').textContent = document.getElementById('alternate1').value || 'N/A';
+            document.getElementById('preview-alternate2').textContent = document.getElementById('alternate2').value || 'N/A';
+            document.getElementById('preview-remarks').textContent = document.getElementById('remarks').value || 'N/A';
+            document.getElementById('preview-waypoints').textContent = waypoints.length > 0 ? waypoints.join(', ') : 'N/A';
+        }
+
+        // Add Waypoint
+        document.getElementById('add-waypoint').addEventListener('click', function() {
+            const waypoint = prompt('Enter a waypoint:');
+            if (waypoint) {
+                waypoints.push(waypoint);
+                updateWaypointsList();
+                updateFlightPlan();
+            }
         });
 
-        // Update waypoint list below the map
-        function updateWaypointList() {
-            var list = document.getElementById('waypoints-list');
-            list.innerHTML = '';
-            waypoints.forEach(function(latLng, index) {
-                var li = document.createElement('li');
-                li.textContent = 'Waypoint ' + (index + 1) + ': ' + latLng.toString();
-                list.appendChild(li);
+        // Update the Waypoints List
+        function updateWaypointsList() {
+            const waypointsList = document.getElementById('waypoints-list');
+            waypointsList.innerHTML = '';
+            waypoints.forEach((waypoint, index) => {
+                const li = document.createElement('li');
+                li.textContent = waypoint;
+                waypointsList.appendChild(li);
             });
         }
 
         // Clear all waypoints
         function clearWaypoints() {
             waypoints = [];
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-            updateWaypointList();
+            updateWaypointsList();
+            updateFlightPlan();
         }
 
-        // Update the flight plan preview
-        function updateFlightPlan() {
-        var callsign = document.getElementById('callsign').value;
-        var departure = document.getElementById('departure').value;
-        var destination = document.getElementById('destination').value;
-        var altitude = document.getElementById('altitude').value;
-        var acft = document.getElementById('acft').value;
-        var sidstar = document.getElementById('sidstar').value;
-        var route = document.getElementById('route').value;
-        var remarks = document.getElementById('remarks').value;
-
-        document.getElementById('preview-callsign').textContent = callsign || 'N/A';
-        document.getElementById('preview-departure').textContent = departure || 'N/A';
-        document.getElementById('preview-destination').textContent = destination || 'N/A';
-        document.getElementById('preview-altitude').textContent = altitude || 'N/A';
-        document.getElementById('preview-acft').textContent = acft || 'N/A';
-        document.getElementById('preview-sidstar').textContent = sidstar || 'N/A';
-        document.getElementById('preview-route').textContent = route || 'N/A';
-        document.getElementById('preview-remarks').textContent = remarks || 'N/A';
-    }
-
+        // Initialize flight plan preview on page load
+        updateFlightPlan();
     </script>
-
 </body>
 </html>
+
+
