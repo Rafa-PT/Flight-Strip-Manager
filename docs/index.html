@@ -191,12 +191,12 @@
                     <!-- Route of Flight -->
                     <div class="form-group">
                         <label for="route">Route of Flight:</label>
-                        <textarea id="route" rows="2" placeholder="OVR V172 CID V341 BADAN" oninput="updateFlightPlan()"></textarea>
+                        <input id="route" rows="2" placeholder="OVR V172 CID V341 BADAN" oninput="updateFlightPlan()" />
                     </div>
 
                     <!-- Alternate Fields -->
                     <div class="form-group">
-                        <label for="ete">ETE (HHMM):</label>
+                        <label for="ete">Expected time of Flight (HH:MM):</label>
                         <input type="text" id="ete" placeholder="0249" oninput="updateFlightPlan()" />
                     </div>
 
