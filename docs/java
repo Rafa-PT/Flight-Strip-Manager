@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Enhanced Flight Planner Logic
+    // Flight Planner Logic
     const flightPlannerForm = document.getElementById('flight-planner-form');
     const previewPanel = document.getElementById('preview-panel');
     const previewButton = document.getElementById('preview-button');
@@ -73,22 +73,34 @@ document.addEventListener("DOMContentLoaded", () => {
         waypointsContainer.appendChild(waypointItem);
     });
 
-    // Preview Flight Plan
-    previewButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
+    // Function to generate flight plan details
+    function getFlightPlanDetails() {
         const departure = document.getElementById('departure').value;
         const destination = document.getElementById('destination').value;
         const altitude = document.getElementById('altitude').value;
         const remarks = document.getElementById('remarks').value;
         const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
 
+        return { departure, destination, altitude, remarks, waypoints };
+    }
+
+    // Preview Flight Plan
+    previewButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const { departure, destination, altitude, remarks, waypoints } = getFlightPlanDetails();
+
+        if (!departure || !destination || !altitude) {
+            previewPanel.innerHTML = `<div style="color: red;">Please fill in all required fields!</div>`;
+            return;
+        }
+
         previewPanel.innerHTML = `
             <div>
                 <strong>Preview Flight Plan:</strong><br>
                 Departure: ${departure} ➔ Destination: ${destination}<br>
                 Altitude: ${altitude} ft<br>
-                Remarks: ${remarks}<br>
+                Remarks: ${remarks || 'None'}<br>
                 Waypoints: ${waypoints.join(' → ') || 'None'}
             </div>
         `;
@@ -98,11 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
     flightPlannerForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const departure = document.getElementById('departure').value;
-        const destination = document.getElementById('destination').value;
-        const altitude = document.getElementById('altitude').value;
-        const remarks = document.getElementById('remarks').value;
-        const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
+        const { departure, destination, altitude, remarks, waypoints } = getFlightPlanDetails();
+
+        if (!departure || !destination || !altitude) {
+            alert("Please fill in all required fields!");
+            return;
+        }
 
         // Add flight plan to the list of submitted plans
         const planItem = document.createElement('div');
@@ -110,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         planItem.innerHTML = `
             <div>
                 <strong>${departure} ➔ ${destination}</strong><br>
-                Altitude: ${altitude} ft | Remarks: ${remarks}<br>
+                Altitude: ${altitude} ft | Remarks: ${remarks || 'None'}<br>
                 Waypoints: ${waypoints.join(' → ') || 'None'}
             </div>
             <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
@@ -128,4 +141,3 @@ document.addEventListener("DOMContentLoaded", () => {
         button.parentElement.remove();
     };
 });
-
