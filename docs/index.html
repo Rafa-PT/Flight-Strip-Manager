@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Planner</title>
+    <title>Flight Planner with Waypoints & DME</title>
 
     <!-- Leaflet.js CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -41,28 +41,15 @@
             padding: 15px;
             gap: 15px;
         }
-        .navbar {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        .tab-link {
-            text-decoration: none;
-            color: #495057;
-            padding: 8px 15px;
-            background-color: #e9ecef;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-        .tab-link:hover, .tab-link.active {
-            background-color: #007bff;
-            color: white;
-        }
         .content-left, .content-right {
             flex: 1;
             min-width: 270px;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 6px;
+            margin-bottom: 15px;
         }
         .form-group {
             margin-bottom: 12px;
@@ -90,34 +77,6 @@
         }
         .form-group button:hover {
             background-color: #0056b3;
-        }
-        #map {
-            width: 100%;
-            height: 400px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-        #waypoints-container {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #waypoints-container h3 {
-            margin-top: 0;
-            font-size: 16px;
-        }
-        #waypoints-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        #waypoints-list li {
-            margin-bottom: 8px;
-            font-size: 14px;
-            background-color: #f8f9fa;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
         }
         .info-panel {
             background-color: #ffffff;
@@ -151,48 +110,71 @@
         /* Flight Plan Preview Styles */
         .flight-plan-preview {
             background-color: #ffffff;
-            padding: 15px;
+            padding: 20px;
             border: 1px solid #ccc;
             border-radius: 6px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 15px;
-            font-family: "Courier New", Courier, monospace;
+            font-family: 'Courier New', Courier, monospace;
             width: 100%;
-            max-width: 550px;
-            line-height: 0.2;
+            max-width: 600px;
             white-space: pre-wrap;
             margin: 15px auto;
-            font-size: 14px;
+            line-height: 1.5;
+            font-size: 12px;
             background: #f4f4f4;
+            page-break-after: always;
         }
         .flight-plan-preview h3 {
-            margin-top: 0;
             text-align: center;
-            font-size: 18px;
-        }
-        .flight-plan-preview p {
-            font-size: 14px;
-            margin: 6px 0;
+            font-size: 16px;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
         }
         .flight-plan-preview .section-title {
             font-weight: bold;
             margin-top: 10px;
+            margin-bottom: 5px;
         }
+        .flight-plan-preview p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        .flight-plan-preview .remarks {
+            font-size: 12px;
+            font-style: italic;
+            color: #777;
+        }
+
+        /* A4 Paper Layout Simulation */
+        @media print {
+            .container {
+                display: block;
+                padding: 0;
+            }
+            .content-left, .content-right {
+                width: 100%;
+                padding: 10px;
+            }
+            .flight-plan-preview {
+                margin: 0;
+                page-break-before: always;
+                width: 100%;
+                box-shadow: none;
+            }
+        }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Flight Planner</h1>
-        <p>Plan your flight with ease and precision</p>
+        <h1>Flight Planner with Waypoints & DME</h1>
+        <p>Plan your flight with ease and precision, including waypoints and DME markers.</p>
     </header>
 
     <div class="container">
-        <!-- Navigation Bar -->
-        <nav class="navbar">
-            <a href="#" class="tab-link active" data-tab="home">Home</a>
-        </nav>
-
         <!-- Main Content -->
         <div class="content-left">
             <section id="flight-planner">
@@ -261,126 +243,79 @@
                         <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="form-group">
                         <button type="submit">Submit Flight Plan</button>
                     </div>
                 </form>
             </section>
-
-            <!-- Waypoints -->
-            <div id="waypoints-container">
-                <h3>Waypoints</h3>
-                <ul id="waypoints-list">
-                    <!-- Waypoints will be listed here -->
-                </ul>
-                <button type="button" id="add-waypoint">Add Waypoint</button>
-                <button type="button" class="clear-btn" onclick="clearWaypoints()">Clear Waypoints</button>
-            </div>
         </div>
 
         <!-- Flight Plan Preview -->
         <div class="content-right">
-            <div id="flight-plan-preview" class="flight-plan-preview">
-                <h3>Flight Plan Preview</h3>
-                <p class="section-title">Flight Rules:</p>
-                <p id="preview-flight-rules">N/A</p>
+            <div class="flight-plan-preview" id="flight-plan-preview">
+                <h3>Flight Plan</h3>
 
-                <p class="section-title">Aircraft ID:</p>
-                <p id="preview-aircraft-id">N/A</p>
+                <div class="section-title">Flight Rules</div>
+                <p id="flight-rules-preview">IFR</p>
 
-                <p class="section-title">Aircraft Type:</p>
-                <p id="preview-aircraft-type">N/A</p>
+                <div class="section-title">Aircraft ID</div>
+                <p id="aircraft-id-preview">N10SV</p>
 
-                <p class="section-title">Departure:</p>
-                <p id="preview-departure">N/A</p>
+                <div class="section-title">Aircraft Type</div>
+                <p id="aircraft-type-preview">DA40</p>
 
-                <p class="section-title">Destination:</p>
-                <p id="preview-destination">N/A</p>
+                <div class="section-title">Departure & Destination</div>
+                <p id="departure-preview">KOMA</p>
+                <p id="destination-preview">KOSH</p>
 
-                <p class="section-title">Altitude (ft):</p>
-                <p id="preview-altitude">N/A</p>
+                <div class="section-title">Altitude</div>
+                <p id="altitude-preview">050</p>
 
-                <p class="section-title">Route of Flight:</p>
-                <p id="preview-route">N/A</p>
+                <div class="section-title">Route</div>
+                <p id="route-preview">OVR V172 CID V341 BADAN</p>
 
-                <p class="section-title">ETE:</p>
-                <p id="preview-ete">N/A</p>
+                <div class="section-title">Alternates</div>
+                <p id="ete-preview">0249</p>
+                <p id="alternate1-preview">KFLD</p>
+                <p id="alternate2-preview">KPCZ</p>
 
-                <p class="section-title">1st Alternate:</p>
-                <p id="preview-alternate1">N/A</p>
-
-                <p class="section-title">2nd Alternate:</p>
-                <p id="preview-alternate2">N/A</p>
-
-                <p class="section-title">Remarks:</p>
-                <p id="preview-remarks">N/A</p>
-
-                <p class="section-title">Waypoints:</p>
-                <p id="preview-waypoints">N/A</p>
+                <div class="section-title">Remarks</div>
+                <p id="remarks-preview" class="remarks">Additional Information</p>
             </div>
+            <!-- Clear Flight Plan Button -->
+            <button class="clear-btn" onclick="clearFlightPlan()">Clear Flight Plan</button>
         </div>
     </div>
 
-    <!-- External JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Initialize the map
         const map = L.map('map').setView([51.505, -0.09], 2); // Default position: London
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        let waypoints = [];
-
         // Update the Flight Plan Preview
         function updateFlightPlan() {
-            document.getElementById('preview-flight-rules').textContent = document.getElementById('flight-rules').value || 'N/A';
-            document.getElementById('preview-aircraft-id').textContent = document.getElementById('aircraft-id').value || 'N/A';
-            document.getElementById('preview-aircraft-type').textContent = document.getElementById('aircraft-type').value || 'N/A';
-            document.getElementById('preview-departure').textContent = document.getElementById('departure').value || 'N/A';
-            document.getElementById('preview-destination').textContent = document.getElementById('destination').value || 'N/A';
-            document.getElementById('preview-altitude').textContent = document.getElementById('altitude').value || 'N/A';
-            document.getElementById('preview-route').textContent = document.getElementById('route').value || 'N/A';
-            document.getElementById('preview-ete').textContent = document.getElementById('ete').value || 'N/A';
-            document.getElementById('preview-alternate1').textContent = document.getElementById('alternate1').value || 'N/A';
-            document.getElementById('preview-alternate2').textContent = document.getElementById('alternate2').value || 'N/A';
-            document.getElementById('preview-remarks').textContent = document.getElementById('remarks').value || 'N/A';
-            document.getElementById('preview-waypoints').textContent = waypoints.length > 0 ? waypoints.join(', ') : 'N/A';
+            document.getElementById('flight-rules-preview').textContent = document.getElementById('flight-rules').value;
+            document.getElementById('aircraft-id-preview').textContent = document.getElementById('aircraft-id').value;
+            document.getElementById('aircraft-type-preview').textContent = document.getElementById('aircraft-type').value;
+            document.getElementById('departure-preview').textContent = document.getElementById('departure').value;
+            document.getElementById('destination-preview').textContent = document.getElementById('destination').value;
+            document.getElementById('altitude-preview').textContent = document.getElementById('altitude').value;
+            document.getElementById('route-preview').textContent = document.getElementById('route').value;
+            document.getElementById('ete-preview').textContent = document.getElementById('ete').value;
+            document.getElementById('alternate1-preview').textContent = document.getElementById('alternate1').value;
+            document.getElementById('alternate2-preview').textContent = document.getElementById('alternate2').value;
+            document.getElementById('remarks-preview').textContent = document.getElementById('remarks').value;
         }
 
-        // Add Waypoint
-        document.getElementById('add-waypoint').addEventListener('click', function() {
-            const waypoint = prompt('Enter a waypoint:');
-            if (waypoint) {
-                waypoints.push(waypoint);
-                updateWaypointsList();
-                updateFlightPlan();
-            }
-        });
-
-        // Update the Waypoints List
-        function updateWaypointsList() {
-            const waypointsList = document.getElementById('waypoints-list');
-            waypointsList.innerHTML = '';
-            waypoints.forEach((waypoint, index) => {
-                const li = document.createElement('li');
-                li.textContent = waypoint;
-                waypointsList.appendChild(li);
-            });
-        }
-
-        // Clear all waypoints
-        function clearWaypoints() {
-            waypoints = [];
-            updateWaypointsList();
+        // Clear Flight Plan
+        function clearFlightPlan() {
+            document.getElementById('flight-planner-form').reset();
             updateFlightPlan();
         }
-
-        // Initialize flight plan preview on page load
-        updateFlightPlan();
     </script>
 </body>
 </html>
-
 
