@@ -110,61 +110,38 @@
         /* Flight Plan Preview Styles */
         .flight-plan-preview {
             background-color: #ffffff;
-            padding: 20px;
+            padding: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 15px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: "Courier New", Courier, monospace;
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
+            line-height: 1.5;
             white-space: pre-wrap;
             margin: 15px auto;
-            line-height: 1.5;
-            font-size: 12px;
+            font-size: 14px;
             background: #f4f4f4;
-            page-break-after: always;
         }
         .flight-plan-preview h3 {
+            margin-top: 0;
             text-align: center;
-            font-size: 16px;
-            margin: 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ccc;
+            font-size: 18px;
         }
         .flight-plan-preview .section-title {
             font-weight: bold;
             margin-top: 10px;
-            margin-bottom: 5px;
         }
         .flight-plan-preview p {
-            margin: 5px 0;
-            font-size: 12px;
+            font-size: 14px;
+            margin: 6px 0;
         }
         .flight-plan-preview .remarks {
-            font-size: 12px;
+            font-size: 14px;
             font-style: italic;
             color: #777;
         }
-
-        /* A4 Paper Layout Simulation */
-        @media print {
-            .container {
-                display: block;
-                padding: 0;
-            }
-            .content-left, .content-right {
-                width: 100%;
-                padding: 10px;
-            }
-            .flight-plan-preview {
-                margin: 0;
-                page-break-before: always;
-                width: 100%;
-                box-shadow: none;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -243,6 +220,7 @@
                         <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
                     </div>
 
+                    <!-- Submit Button -->
                     <div class="form-group">
                         <button type="submit">Submit Flight Plan</button>
                     </div>
@@ -252,16 +230,15 @@
 
         <!-- Flight Plan Preview -->
         <div class="content-right">
-            <div class="flight-plan-preview" id="flight-plan-preview">
-                <h3>Flight Plan</h3>
+            <div id="map"></div>
 
+            <div class="flight-plan-preview" id="flight-plan-preview">
+                <h3>Flight Plan Preview</h3>
                 <div class="section-title">Flight Rules</div>
                 <p id="flight-rules-preview">IFR</p>
 
-                <div class="section-title">Aircraft ID</div>
+                <div class="section-title">Aircraft Information</div>
                 <p id="aircraft-id-preview">N10SV</p>
-
-                <div class="section-title">Aircraft Type</div>
                 <p id="aircraft-type-preview">DA40</p>
 
                 <div class="section-title">Departure & Destination</div>
@@ -282,6 +259,7 @@
                 <div class="section-title">Remarks</div>
                 <p id="remarks-preview" class="remarks">Additional Information</p>
             </div>
+
             <!-- Clear Flight Plan Button -->
             <button class="clear-btn" onclick="clearFlightPlan()">Clear Flight Plan</button>
         </div>
@@ -316,6 +294,6 @@
             updateFlightPlan();
         }
     </script>
+
 </body>
 </html>
-
