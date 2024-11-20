@@ -8,10 +8,10 @@
     <!-- Leaflet.js CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
-    <!-- Google Fonts for a modern look -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Main Styles -->
+    <!-- Styles -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -22,8 +22,8 @@
         header {
             background-color: #343a40;
             color: white;
-            padding: 15px 20px;
             text-align: center;
+            padding: 15px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         header h1 {
@@ -40,25 +40,6 @@
             justify-content: space-between;
             padding: 15px;
             gap: 15px;
-        }
-        .navbar {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        .tab-link {
-            text-decoration: none;
-            color: #495057;
-            padding: 8px 15px;
-            background-color: #e9ecef;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-        .tab-link:hover, .tab-link.active {
-            background-color: #007bff;
-            color: white;
         }
         .content-left, .content-right {
             flex: 1;
@@ -79,7 +60,6 @@
             font-size: 14px;
             border: 1px solid #ced4da;
             border-radius: 6px;
-            box-sizing: border-box;
         }
         .form-group button {
             background-color: #007bff;
@@ -125,151 +105,149 @@
             border-radius: 6px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .info-panel h2 {
-            font-size: 20px;
-            max-width: 300px;
-            margin-top: 0;
-        }
-        .info-panel p {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        button.clear-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-        button.clear-btn:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Flight Plan Preview Styles */
         .flight-plan-preview {
             background-color: #ffffff;
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 15px;
             font-family: "Courier New", Courier, monospace;
-            width: 100%;
-            max-width: 550px;
             white-space: pre-wrap;
-            margin: 15px auto;
-            font-size: 14px;
-            background: #f4f4f4;
-            color: #333;
-        }
-        .flight-plan-preview h3 {
-            margin-top: 0;
-            text-align: center;
-            font-size: 18px;
-        }
-        #flight-plan-text {
-            font-size: 14px;
-            line-height: 1.6;
-            margin: 0;
-            padding: 10px;
-            background: #e9ecef;
-            border-radius: 4px;
+            margin-top: 15px;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-
     <header>
         <h1>Flight Planner</h1>
         <p>Plan your flight with ease and precision</p>
     </header>
 
     <div class="container">
-        <!-- Left Side: Flight Planner Form -->
+        <!-- Left Content -->
         <div class="content-left">
-            <form id="flight-planner-form">
-                <!-- Form Inputs -->
-                <div class="form-group">
-                    <label for="callsign">Callsign:</label>
-                    <input type="text" id="callsign" placeholder="Callsign" oninput="updateFlightPlan()">
+            <section id="flight-planner">
+                <h2>Flight Planner</h2>
+                <form id="flight-planner-form">
+                    <div class="form-group">
+                        <label for="callsign">Callsign:</label>
+                        <input type="text" id="callsign" placeholder="Enter Callsign" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="departure">Departure:</label>
+                        <input type="text" id="departure" placeholder="Enter ICAO Code" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination:</label>
+                        <input type="text" id="destination" placeholder="Enter ICAO Code" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="altitude">Altitude (ft):</label>
+                        <input type="text" id="altitude" placeholder="Enter Altitude" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="acft">ACFT Type:</label>
+                        <input type="text" id="acft" placeholder="Enter Aircraft Type" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="sidstar">SID/STAR:</label>
+                        <input type="text" id="sidstar" placeholder="Enter SID/STAR" oninput="updateFlightPlan()">
+                    </div>
+                    <div class="form-group">
+                        <label for="route">Route:</label>
+                        <textarea id="route" rows="2" placeholder="Enter Route" oninput="updateFlightPlan()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks:</label>
+                        <textarea id="remarks" rows="2" placeholder="Additional Remarks" oninput="updateFlightPlan()"></textarea>
+                    </div>
+                </form>
+
+                <!-- Map -->
+                <div id="map"></div>
+
+                <!-- Waypoints List -->
+                <div id="waypoints-container">
+                    <h3>Waypoints</h3>
+                    <ul id="waypoints-list"></ul>
+                    <button type="button" onclick="clearWaypoints()">Clear Waypoints</button>
                 </div>
-                <div class="form-group">
-                    <label for="departure">Departure:</label>
-                    <input type="text" id="departure" placeholder="ICAO Code" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="destination">Destination:</label>
-                    <input type="text" id="destination" placeholder="ICAO Code" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="altitude">Altitude (ft):</label>
-                    <input type="text" id="altitude" placeholder="Cruising Altitude" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="acft">ACFT Type:</label>
-                    <input type="text" id="acft" placeholder="Aircraft Type" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="sidstar">SID/STAR:</label>
-                    <input type="text" id="sidstar" placeholder="SID/STAR" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="route">Route:</label>
-                    <input type="text" id="route" placeholder="Flight Route" oninput="updateFlightPlan()">
-                </div>
-                <div class="form-group">
-                    <label for="remarks">Remarks:</label>
-                    <textarea id="remarks" rows="2" placeholder="Additional Remarks" oninput="updateFlightPlan()"></textarea>
-                </div>
-            </form>
+            </section>
         </div>
 
-        <!-- Right Side: Flight Plan Preview -->
+        <!-- Right Content -->
         <div class="content-right">
-            <div class="flight-plan-preview">
+            <!-- Information Panel -->
+            <section class="info-panel">
+                <h2>Flight Info</h2>
+                <p><strong>Callsign:</strong> Unique identifier for your flight.</p>
+                <p><strong>Departure:</strong> Specify the ICAO code of your origin airport.</p>
+                <p><strong>Destination:</strong> Specify the ICAO code of your destination airport.</p>
+                <p><strong>SID/STAR:</strong> Standard instrument departure/arrival routes.</p>
+                <p><strong>Route:</strong> Your planned route between airports.</p>
+            </section>
+
+            <!-- Flight Plan Preview -->
+            <div class="flight-plan-preview" id="flight-plan-preview">
                 <h3>Flight Plan Preview</h3>
-                <pre id="flight-plan-text">
-Callsign: N/A
-Departure: N/A
-Destination: N/A
-Altitude: N/A ft
-ACFT Type: N/A
-SID/STAR: N/A
-Route: N/A
-Remarks: N/A
-                </pre>
+                Callsign: <span id="preview-callsign">N/A</span><br>
+                Departure: <span id="preview-departure">N/A</span><br>
+                Destination: <span id="preview-destination">N/A</span><br>
+                Altitude: <span id="preview-altitude">N/A</span> ft<br>
+                ACFT Type: <span id="preview-acft">N/A</span><br>
+                SID/STAR: <span id="preview-sidstar">N/A</span><br>
+                Route: <span id="preview-route">N/A</span><br>
+                Remarks: <span id="preview-remarks">N/A</span>
             </div>
         </div>
     </div>
 
+    <!-- Leaflet.js -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
+        // Initialize map
+        var map = L.map('map').setView([51.505, -0.09], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Waypoints array
+        var waypoints = [];
+        map.on('click', function (e) {
+            var latLng = e.latlng;
+            waypoints.push(latLng);
+            L.marker(latLng).addTo(map);
+            updateWaypointList();
+        });
+
+        function updateWaypointList() {
+            var list = document.getElementById('waypoints-list');
+            list.innerHTML = '';
+            waypoints.forEach((latLng, index) => {
+                var li = document.createElement('li');
+                li.textContent = `Waypoint ${index + 1}: ${latLng}`;
+                list.appendChild(li);
+            });
+        }
+
+        function clearWaypoints() {
+            waypoints = [];
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) map.removeLayer(layer);
+            });
+            updateWaypointList();
+        }
+
         function updateFlightPlan() {
-            const callsign = document.getElementById('callsign').value || 'N/A';
-            const departure = document.getElementById('departure').value || 'N/A';
-            const destination = document.getElementById('destination').value || 'N/A';
-            const altitude = document.getElementById('altitude').value || 'N/A';
-            const acft = document.getElementById('acft').value || 'N/A';
-            const sidstar = document.getElementById('sidstar').value || 'N/A';
-            const route = document.getElementById('route').value || 'N/A';
-            const remarks = document.getElementById('remarks').value || 'N/A';
-
-            const flightPlanText = `
-Callsign: ${callsign}
-Departure: ${departure}
-Destination: ${destination}
-Altitude: ${altitude} ft
-ACFT Type: ${acft}
-SID/STAR: ${sidstar}
-Route: ${route}
-Remarks: ${remarks}
-            `;
-
-            document.getElementById('flight-plan-text').innerText = flightPlanText.trim();
+            document.getElementById('preview-callsign').textContent = document.getElementById('callsign').value || 'N/A';
+            document.getElementById('preview-departure').textContent = document.getElementById('departure').value || 'N/A';
+            document.getElementById('preview-destination').textContent = document.getElementById('destination').value || 'N/A';
+            document.getElementById('preview-altitude').textContent = document.getElementById('altitude').value || 'N/A';
+            document.getElementById('preview-acft').textContent = document.getElementById('acft').value || 'N/A';
+            document.getElementById('preview-sidstar').textContent = document.getElementById('sidstar').value || 'N/A';
+            document.getElementById('preview-route').textContent = document.getElementById('route').value || 'N/A';
+            document.getElementById('preview-remarks').textContent = document.getElementById('remarks').value || 'N/A';
         }
     </script>
-
 </body>
 </html>
