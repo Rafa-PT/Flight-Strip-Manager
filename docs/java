@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Existing Tab Navigation Logic
+    // Tab Navigation
     const tabLinks = document.querySelectorAll('.tab-link');
     const contentSections = {
         home: document.getElementById('home'),
@@ -53,16 +53,48 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Set the initial display when the page loads (ensuring the home tab is visible by default)
-    contentSections.home.style.display = 'block'; // Show home section by default
-    contentSections.charts.style.display = 'none'; // Hide charts section
-    contentSections.contacts.style.display = 'none'; // Hide contacts section
-    contentSections.more.style.display = 'none'; // Hide more section
-    infoPanel.style.display = 'block'; // Show info panel for home tab
-    chartsAdvisory.style.display = 'none'; // Hide charts advisory initially
-
     // Enhanced Flight Planner Logic
     const flightPlannerForm = document.getElementById('flight-planner-form');
+    const previewPanel = document.getElementById('preview-panel');
+    const previewButton = document.getElementById('preview-button');
+    const plansList = document.getElementById('plans-list');
+    const waypointsContainer = document.getElementById('waypoints');
+
+    // Add Waypoint Input
+    const addWaypointButton = document.getElementById('add-waypoint');
+    addWaypointButton.addEventListener('click', () => {
+        const waypointInput = document.createElement('input');
+        waypointInput.classList.add('waypoint-input');
+        waypointInput.type = 'text';
+        waypointInput.placeholder = 'Waypoint ICAO Code';
+        const waypointItem = document.createElement('div');
+        waypointItem.classList.add('waypoint-item');
+        waypointItem.appendChild(waypointInput);
+        waypointsContainer.appendChild(waypointItem);
+    });
+
+    // Preview Flight Plan
+    previewButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const departure = document.getElementById('departure').value;
+        const destination = document.getElementById('destination').value;
+        const altitude = document.getElementById('altitude').value;
+        const remarks = document.getElementById('remarks').value;
+        const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
+
+        previewPanel.innerHTML = `
+            <div>
+                <strong>Preview Flight Plan:</strong><br>
+                Departure: ${departure} ➔ Destination: ${destination}<br>
+                Altitude: ${altitude} ft<br>
+                Remarks: ${remarks}<br>
+                Waypoints: ${waypoints.join(' → ') || 'None'}
+            </div>
+        `;
+    });
+
+    // Submit Flight Plan
     flightPlannerForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -72,16 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const remarks = document.getElementById('remarks').value;
         const waypoints = Array.from(document.querySelectorAll('.waypoint-input')).map(input => input.value);
 
-        const flightPlan = {
-            departure,
-            destination,
-            altitude,
-            remarks,
-            waypoints
-        };
-
         // Add flight plan to the list of submitted plans
-        const plansList = document.getElementById('plans-list');
         const planItem = document.createElement('div');
         planItem.classList.add('plan-item');
         planItem.innerHTML = `
@@ -94,27 +117,15 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         plansList.appendChild(planItem);
 
-        // Clear the form after submission
+        // Clear the form and preview after submission
         flightPlannerForm.reset();
-        document.getElementById('waypoints').innerHTML = '';
+        previewPanel.innerHTML = '';
+        waypointsContainer.innerHTML = '';
     });
 
     // Function to delete a flight plan
     window.deletePlan = function (button) {
         button.parentElement.remove();
     };
-
-    // Add waypoint input functionality
-    const addWaypointButton = document.getElementById('add-waypoint');
-    addWaypointButton.addEventListener('click', () => {
-        const waypointInput = document.createElement('input');
-        waypointInput.classList.add('waypoint-input');
-        waypointInput.type = 'text';
-        waypointInput.placeholder = 'Waypoint ICAO Code';
-        const waypointItem = document.createElement('div');
-        waypointItem.classList.add('waypoint-item');
-        waypointItem.appendChild(waypointInput);
-        document.getElementById('waypoints').appendChild(waypointItem);
-    });
 });
 
