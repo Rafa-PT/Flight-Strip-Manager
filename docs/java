@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Handle tab navigation
+    // Existing Tab Navigation Logic
     const tabLinks = document.querySelectorAll('.tab-link');
     const contentSections = {
         home: document.getElementById('home'),
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     infoPanel.style.display = 'block'; // Show info panel for home tab
     chartsAdvisory.style.display = 'none'; // Hide charts advisory initially
 
-    // Handle the flight planner form submission
+    // Enhanced Flight Planner Logic
     const flightPlannerForm = document.getElementById('flight-planner-form');
     flightPlannerForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Function to delete a flight plan
-    window.deletePlan = function(button) {
+    window.deletePlan = function (button) {
         button.parentElement.remove();
     };
 
@@ -117,3 +117,4 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('waypoints').appendChild(waypointItem);
     });
 });
+
