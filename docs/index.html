@@ -147,16 +147,16 @@
         <p>Plan your flight with ease and precision, including waypoints and DME markers.</p>
     </header>
 
-    <div class="container">
+        <div class="container">
         <!-- Main Content -->
         <div class="content-left">
             <section id="flight-planner">
                 <h2>Flight Planner</h2>
-                <form id="flight-planner-form">
+                <form id="flight-planner-form" onsubmit="submitFlightPlan(event)">
                     <!-- Basic Information -->
                     <div class="form-group">
                         <label for="flight-rules">Flight Rules:</label>
-                        <select id="flight-rules" oninput="updateFlightPlan()">
+                        <select id="flight-rules">
                             <option value="IFR">IFR</option>
                             <option value="VFR">VFR</option>
                         </select>
@@ -164,56 +164,56 @@
 
                     <div class="form-group">
                         <label for="aircraft-id">Aircraft ID:</label>
-                        <input type="text" id="aircraft-id" placeholder="N10SV" oninput="updateFlightPlan()" />
+                        <input type="text" id="aircraft-id" placeholder="N10SV" />
                     </div>
 
                     <div class="form-group">
                         <label for="aircraft-type">Aircraft Type:</label>
-                        <input type="text" id="aircraft-type" placeholder="DA40" oninput="updateFlightPlan()" />
+                        <input type="text" id="aircraft-type" placeholder="DA40" />
                     </div>
 
                     <!-- Departure, Destination, and Altitude -->
                     <div class="form-group">
                         <label for="departure">Departure:</label>
-                        <input type="text" id="departure" placeholder="KOMA" oninput="updateFlightPlan()" />
+                        <input type="text" id="departure" placeholder="KOMA" />
                     </div>
 
                     <div class="form-group">
                         <label for="destination">Destination:</label>
-                        <input type="text" id="destination" placeholder="KOSH" oninput="updateFlightPlan()" />
+                        <input type="text" id="destination" placeholder="KOSH" />
                     </div>
 
                     <div class="form-group">
                         <label for="altitude">Level (ft):</label>
-                        <input type="text" id="altitude" placeholder="050" oninput="updateFlightPlan()" />
+                        <input type="text" id="altitude" placeholder="050" />
                     </div>
 
                     <!-- Route of Flight -->
                     <div class="form-group">
                         <label for="route">Route of Flight:</label>
-                        <input id="route" rows="2" placeholder="OVR V172 CID V341 BADAN" oninput="updateFlightPlan()" />
+                        <input id="route" rows="2" placeholder="OVR V172 CID V341 BADAN" />
                     </div>
 
                     <!-- Alternate Fields -->
                     <div class="form-group">
                         <label for="ete">Expected time of Flight (HH:MM):</label>
-                        <input type="text" id="ete" placeholder="0249" oninput="updateFlightPlan()" />
+                        <input type="text" id="ete" placeholder="0249" />
                     </div>
 
                     <div class="form-group">
                         <label for="alternate1">1st Alternate:</label>
-                        <input type="text" id="alternate1" placeholder="KFLD" oninput="updateFlightPlan()" />
+                        <input type="text" id="alternate1" placeholder="KFLD" />
                     </div>
 
                     <div class="form-group">
                         <label for="alternate2">2nd Alternate:</label>
-                        <input type="text" id="alternate2" placeholder="KPCZ" oninput="updateFlightPlan()" />
+                        <input type="text" id="alternate2" placeholder="KPCZ" />
                     </div>
 
                     <!-- Remarks -->
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
-                        <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
+                        <textarea id="remarks" rows="2" placeholder="Additional Information"></textarea>
                     </div>
 
                     <!-- Submit Button -->
@@ -236,7 +236,7 @@
                 <div class="section-title">Aircraft Information</div>
                 <p id="aircraft-id-preview">N10SV</p>
                 <p id="aircraft-type-preview">DA40</p>
-
+    
                 <div class="section-title">Departure & Destination</div>
                 <p id="departure-preview">KOMA</p>
                 <p id="destination-preview">KOSH</p>
@@ -259,6 +259,27 @@
             <!-- Clear Flight Plan Button -->
             <button class="clear-btn" onclick="clearFlightPlan()">Clear Flight Plan</button>
         </div>
+    </div>
+
+    <!-- Submitted Flight Plans -->
+    <div id="submitted-plans" class="info-panel">
+        <h2>Submitted Flight Plans</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Aircraft ID</th>
+                    <th>Type</th>
+                    <th>Departure</th>
+                    <th>Destination</th>
+                    <th>Altitude</th>
+                    <th>Route</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody id="flight-plans-table-body">
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
