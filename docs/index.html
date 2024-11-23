@@ -283,24 +283,7 @@
 
         // Save the waypoint coordinates
         waypoints.push({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
-
-        // Update the flight plan preview or log the waypoints
-        updateWaypointsPreview();
-    });
-
-    // Function to update the flight plan preview with waypoints
-    function updateWaypointsPreview() {
-        const waypointsContainer = document.getElementById('route-preview');
-
-        // Format waypoints as a readable string
-        const formattedWaypoints = waypoints.map(
-            (wp, index) => `WP${index + 1}: ${wp.lat}, ${wp.lng}`
-        ).join('\n');
-
-        // Update the route preview with the waypoints
-        waypointsContainer.textContent = formattedWaypoints || 'No waypoints yet.';
-    }
-
+        
     // Update the Flight Plan Preview
     function updateFlightPlan() {
         document.getElementById('flight-rules-preview').textContent = document.getElementById('flight-rules').value;
