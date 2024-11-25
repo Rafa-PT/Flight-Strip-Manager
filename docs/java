@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
         more: document.getElementById('more')
     };
 
-    const infoPanel = document.getElementById('info-panel');  // Home info panel
-    const chartsAdvisory = document.getElementById('charts-advisory');  // Charts section advisory
+    const infoPanel = document.getElementById('info-panel'); // Home info panel
+    const chartsAdvisory = document.getElementById('charts-advisory'); // Charts section advisory
 
     // Initially hide all content sections except Home
     contentSections.home.style.display = 'block';
     contentSections.charts.style.display = 'none';
     contentSections.contacts.style.display = 'none';
     contentSections.more.style.display = 'none';
-    infoPanel.style.display = 'block';  // Display the info panel only on home tab
+    infoPanel.style.display = 'block'; // Display the info panel only on home tab
     chartsAdvisory.style.display = 'none'; // Hide the charts advisory initially
 
     // Tab switching logic
@@ -84,14 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const plansList = document.getElementById('plans-list');
         const planItem = document.createElement('div');
         planItem.classList.add('plan-item');
-        planItem.innerHTML = 
+        planItem.innerHTML = `
             <div>
                 <strong>${departure} ➔ ${destination}</strong><br>
                 Altitude: ${altitude} ft | Remarks: ${remarks}<br>
                 Waypoints: ${waypoints.join(' → ') || 'None'}
             </div>
             <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
-        ;
+        `;
         plansList.appendChild(planItem);
 
         // Clear the form after submission
