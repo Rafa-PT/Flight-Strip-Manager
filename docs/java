@@ -1,68 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Tab Navigation Setup
-    const tabLinks = document.querySelectorAll('.tab-link');
-    const contentSections = {
-        home: document.getElementById('home'),
-        charts: document.getElementById('charts'),
-        contacts: document.getElementById('contacts'),
-        more: document.getElementById('more')
-    };
 
-    // Initial Display Setup
-    contentSections.home.style.display = 'block';
-    contentSections.charts.style.display = 'none';
-    contentSections.contacts.style.display = 'none';
-    contentSections.more.style.display = 'none';
-
-    tabLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            // Hide all sections
-            Object.values(contentSections).forEach(section => section.style.display = 'none');
-
-            // Show the selected section
-            const targetTab = event.target.dataset.tab;
-            contentSections[targetTab].style.display = 'block';
-
-            // Update active tab style
-            tabLinks.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-        });
-    });
-
-    // Waypoint Management
-    const mapContainer = document.getElementById('map-container');
+    const mapContainer = document.getElementById('map-container');  // Map area
     const addWaypointButton = document.getElementById('add-waypoint');
 
-    // Add waypoint on the map
+    // Add waypoint to the map
     addWaypointButton.addEventListener('click', () => {
-        const waypointInput = document.createElement('input');
-        waypointInput.type = 'text';
-        waypointInput.placeholder = 'Waypoint ICAO Code';
-
-        const waypointItem = document.createElement('div');
-        waypointItem.classList.add('waypoint-item');
-        waypointItem.appendChild(waypointInput);
-
-        // Add waypoint to the map
-        createWaypointOnMap(waypointInput.value || "Unnamed Waypoint");
-        document.getElementById('waypoints').appendChild(waypointItem);
+        const waypointName = prompt("Enter waypoint ICAO Code:");
+        if (waypointName) {
+            createWaypointOnMap(waypointName);
+        }
     });
 
-    // Function to create waypoint on the map
+    // Function to create a waypoint on the map
     function createWaypointOnMap(name) {
         const waypointMarker = document.createElement('div');
         waypointMarker.classList.add('waypoint-marker');
         waypointMarker.textContent = name;
         mapContainer.appendChild(waypointMarker);
 
-        // Attach context menu for rename/delete
+        // Add click event for waypoint options
         waypointMarker.addEventListener('click', () => {
             showWaypointOptions(waypointMarker);
         });
     }
 
-    // Show Rename/Delete Options
+    // Show options to Rename or Delete the waypoint
     function showWaypointOptions(marker) {
+        // Remove any existing option menu
+        removeExistingOptions();
+
         const optionsMenu = document.createElement('div');
         optionsMenu.classList.add('waypoint-options');
         optionsMenu.innerHTML = `
@@ -74,46 +40,23 @@ document.addEventListener("DOMContentLoaded", () => {
         // Handle Rename
         optionsMenu.querySelector('.rename-btn').addEventListener('click', () => {
             const newName = prompt("Enter new waypoint name:", marker.textContent.trim());
-            if (newName) marker.textContent = newName;
-            marker.removeChild(optionsMenu); // Close menu
+            if (newName) {
+                marker.textContent = newName;
+                marker.appendChild(optionsMenu);  // Reattach options after renaming
+            }
         });
 
         // Handle Delete
         optionsMenu.querySelector('.delete-btn').addEventListener('click', () => {
-            marker.remove(); // Remove marker from map
+            marker.remove();  // Remove marker from map
         });
     }
 
-    // Flight Planner Form Submission
-    const flightPlannerForm = document.getElementById('flight-planner-form');
-    flightPlannerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const departure = document.getElementById('departure').value;
-        const destination = document.getElementById('destination').value;
-        const altitude = document.getElementById('altitude').value;
-        const remarks = document.getElementById('remarks').value;
-
-        // Create a summary without displaying waypoints
-        const plansList = document.getElementById('plans-list');
-        const planItem = document.createElement('div');
-        planItem.classList.add('plan-item');
-        planItem.innerHTML = `
-            <div>
-                <strong>${departure} ➔ ${destination}</strong><br>
-                Altitude: ${altitude} ft | Remarks: ${remarks}
-            </div>
-            <button type="button" class="delete-btn" onclick="deletePlan(this)">Delete</button>
-        `;
-        plansList.appendChild(planItem);
-
-        // Clear the form
-        flightPlannerForm.reset();
-    });
-
-    // Delete Plan Function
-    window.deletePlan = function(button) {
-        button.parentElement.remove();
-    };
+    // Remove any open options menu
+    function removeExistingOptions() {
+        const existingMenus = document.querySelectorAll('.waypoint-options');
+        existingMenus.forEach(menu => menu.remove());
+    }
 });
+
 
