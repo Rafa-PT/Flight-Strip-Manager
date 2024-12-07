@@ -257,71 +257,119 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
     // Initialize the map with a default position and zoom
-    const map = L.map('map').setView([51.505, -0.09], 2); // Default position: London
+    // Initialize the map
+const map = L.map('map').setView([51.505, -0.09], 2); // Default position: London
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+// Add OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-    // Array to store waypoints
-    const waypoints = [];
+// Store waypoints
+const waypoints = [];
 
-    // Add click event listener to the map
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng; // Get latitude and longitude of the clicked location
+// Function to create popup content
+function createPopupContent(index, name) {
+    return `
+        <div class="popup-content">
+            <strong>${name}</strong><br>
+            <button class="rename-btn" data-index="${index}">Rename</button>
+            <button class="delete-btn" data-index="${index}">Delete</button>
+        </div>
+    `;
+}
 
-        // Add a marker at the clicked position
-        const marker = L.marker([lat, lng]).addTo(map);
+// Add a waypoint on map click
+map.on('click', function (e) {
+    const { lat, lng } = e.latlng;
+    const waypointIndex = waypoints.length;
+    const markerName = `WP${waypointIndex + 1}`;
 
-        // Save the waypoint coordinates
-        waypoints.push({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
+    // Create the marker and popup
+    const marker = L.marker([lat, lng]).addTo(map)
+        .bindPopup(createPopupContent(waypointIndex, markerName));
 
-        // Update the flight plan preview or log the waypoints
-        updateWaypointsPreview();
+    // Save the waypoint data
+    waypoints.push({ lat: lat.toFixed(6), lng: lng.toFixed(6), marker, name: markerName });
+
+    // Update the flight plan preview
+    updateWaypointsPreview();
+});
+
+// Handle popup actions when opening popups
+map.on('popupopen', function (e) {
+    const marker = e.popup._source;
+    const popupContent = e.popup.getElement();
+
+    // Handle renaming the waypoint
+    popupContent.querySelector('.rename-btn').addEventListener('click', function () {
+        const index = this.getAttribute('data-index');
+        const newName = prompt("Enter new name for this waypoint:", waypoints[index].name);
+
+        if (newName && newName.trim() !== "") {
+            waypoints[index].name = newName;
+            marker.setPopupContent(createPopupContent(index, newName)).openPopup();
+            updateWaypointsPreview();
+        }
     });
 
-    // Function to update the flight plan preview with waypoints
-    function updateWaypointsPreview() {
-        const waypointsContainer = document.getElementById('route-preview');
-
-        // Format waypoints as a readable string
-        const formattedWaypoints = waypoints.map(
-            (wp, index) => `WP${index + 1}: ${wp.lat}, ${wp.lng}`
-        ).join('\n');
-
-        // Update the route preview with the waypoints
-        waypointsContainer.textContent = formattedWaypoints || 'No waypoints yet.';
-    }
-
-    // Update the Flight Plan Preview
-    function updateFlightPlan() {
-        document.getElementById('flight-rules-preview').textContent = document.getElementById('flight-rules').value;
-        document.getElementById('aircraft-id-preview').textContent = document.getElementById('aircraft-id').value;
-        document.getElementById('aircraft-type-preview').textContent = document.getElementById('aircraft-type').value;
-        document.getElementById('departure-preview').textContent = document.getElementById('departure').value;
-        document.getElementById('destination-preview').textContent = document.getElementById('destination').value;
-        document.getElementById('altitude-preview').textContent = document.getElementById('altitude').value;
-        document.getElementById('ete-preview').textContent = document.getElementById('ete').value;
-        document.getElementById('alternate1-preview').textContent = document.getElementById('alternate1').value;
-        document.getElementById('alternate2-preview').textContent = document.getElementById('alternate2').value;
-        document.getElementById('remarks-preview').textContent = document.getElementById('remarks').value;
-
-        // Update waypoints preview in case it needs syncing
+    // Handle deleting the waypoint
+    popupContent.querySelector('.delete-btn').addEventListener('click', function () {
+        const index = this.getAttribute('data-index');
+        map.removeLayer(marker);
+        waypoints.splice(index, 1);
+        reorderWaypoints(); // Reorder waypoints after deletion
         updateWaypointsPreview();
-    }
+    });
+});
 
-    // Clear Flight Plan
-    function clearFlightPlan() {
-        document.getElementById('flight-planner-form').reset();
-        waypoints.length = 0; // Clear the waypoints array
-        map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer); // Remove markers
-        });
-        updateFlightPlan(); // Reset the preview
-    }
-</script>
+// Reorder waypoint indices after deletion
+function reorderWaypoints() {
+    waypoints.forEach((wp, index) => {
+        wp.name = `WP${index + 1}`;
+        wp.marker.setPopupContent(createPopupContent(index, wp.name));
+    });
+}
 
+// Update the flight plan preview with waypoints
+function updateWaypointsPreview() {
+    const waypointsContainer = document.getElementById('route-preview');
 
-</body>
-</html>
+    // Format waypoints as a readable string
+    const formattedWaypoints = waypoints.map(
+        (wp, index) => `WP${index + 1}: ${wp.lat}, ${wp.lng} (${wp.name})`
+    ).join('\n');
+
+    // Update the route preview with the waypoints
+    waypointsContainer.textContent = formattedWaypoints || 'No waypoints yet.';
+}
+
+// Update the flight plan preview
+function updateFlightPlan() {
+    document.getElementById('flight-rules-preview').textContent = document.getElementById('flight-rules').value;
+    document.getElementById('aircraft-id-preview').textContent = document.getElementById('aircraft-id').value;
+    document.getElementById('aircraft-type-preview').textContent = document.getElementById('aircraft-type').value;
+    document.getElementById('departure-preview').textContent = document.getElementById('departure').value;
+    document.getElementById('destination-preview').textContent = document.getElementById('destination').value;
+    document.getElementById('altitude-preview').textContent = document.getElementById('altitude').value;
+    document.getElementById('ete-preview').textContent = document.getElementById('ete').value;
+    document.getElementById('alternate1-preview').textContent = document.getElementById('alternate1').value;
+    document.getElementById('alternate2-preview').textContent = document.getElementById('alternate2').value;
+    document.getElementById('remarks-preview').textContent = document.getElementById('remarks').value;
+
+    updateWaypointsPreview(); // Sync waypoints
+}
+
+// Clear flight plan and reset map
+function clearFlightPlan() {
+    document.getElementById('flight-planner-form').reset();
+    waypoints.length = 0; // Clear waypoint array
+
+    // Remove all markers from the map
+    map.eachLayer(layer => {
+        if (layer instanceof L.Marker) map.removeLayer(layer);
+    });
+
+    updateFlightPlan(); // Reset flight plan preview
+}
+
