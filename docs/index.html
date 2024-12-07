@@ -138,47 +138,6 @@
             font-weight: bold;
             margin-top: 10px;
         }
-
-        /* Tabs Styles */
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #007bff;
-            margin-bottom: 15px;
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            background-color: #f1f1f1;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        .tab.active {
-            background-color: #007bff;
-            color: white;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        .submitted-plans-list {
-            margin-top: 15px;
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .submitted-plans-list li {
-            background-color: #f9f9f9;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .submitted-plans-list li:hover {
-            background-color: #ececec;
-        }
     </style>
 </head>
 <body>
@@ -189,14 +148,9 @@
     </header>
 
     <div class="container">
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('flight-planner')">Flight Planner</div>
-            <div class="tab" onclick="showTab('submitted-plans')">Submitted Flight Plans</div>
-        </div>
-
-        <!-- Flight Planner Tab Content -->
-        <div id="flight-planner" class="tab-content active">
-            <section id="flight-planner-section">
+        <!-- Main Content -->
+        <div class="content-left">
+            <section id="flight-planner">
                 <h2>Flight Planner</h2>
                 <form id="flight-planner-form">
                     <!-- Basic Information -->
@@ -264,19 +218,40 @@
             </section>
         </div>
 
-        <!-- Submitted Flight Plans Tab Content -->
-        <div id="submitted-plans" class="tab-content">
-            <h2>Submitted Flight Plans</h2>
-            <ul class="submitted-plans-list" id="submitted-plans-list">
-                <!-- Submitted plans will be added here dynamically -->
-            </ul>
-        </div>
-    </div>
+        <div class="content-right">
+            <div id="map"></div>
 
+            <div class="flight-plan-preview" id="flight-plan-preview" style="width: 110%";>
+                <h3>Flight Plan Preview</h3>
+                <div class="section-title">Flight Rules</div>
+                <p id="flight-rules-preview">IFR</p>
+
+                <div class="section-title">Aircraft Information</div>
+                <p id="aircraft-id-preview">N10SV</p>
+                <p id="aircraft-type-preview">DA40</p>
+
+                <div class="section-title">Departure & Destination</div>
+                <p id="departure-preview">KOMA</p>
+                <p id="destination-preview">KOSH</p>
+
+                <div class="section-title">Altitude</div>
+                <p id="altitude-preview">050</p>
+
+                <div class="section-title">Time of Flight</div>
+                <p id="ete-preview">0249</p>
+
+                <div class="section-title">Alternates</div>
+                <p id="alternate1-preview">KFLD</p>
+                <p id="alternate2-preview">KPCZ</p>
+
+                <div class="section-title">Remarks</div>
+                <p id="remarks-preview" class="remarks">Additional Information</p>
+            </div>
+           
+            </div>
+    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        const submittedPlans = []; // Array to store submitted flight plans
-
         const map = L.map('map').setView([51.505, -0.09], 3);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -288,7 +263,7 @@
         map.on('click', function (e) {
             const { lat, lng } = e.latlng;
             const index = waypoints.length;
-            const name = `WP${index + 1}`;
+            const name = WP${index + 1};
 
             const marker = L.marker([lat, lng]).addTo(map)
                 .bindPopup(createPopupContent(index, name));
@@ -321,18 +296,18 @@
         });
 
         function createPopupContent(index, name) {
-            return `
+            return 
                 <div class="popup-content">
                     <strong>${name}</strong><br>
                     <button class="rename-btn" data-index="${index}">Rename</button>
                     <button class="delete-btn" data-index="${index}">Delete</button>
                 </div>
-            `;
+            ;
         }
 
         function reorderWaypoints() {
             waypoints.forEach((wp, index) => {
-                wp.name = `WP${index + 1}`;
+                wp.name = WP${index + 1};
                 wp.marker.setPopupContent(createPopupContent(index, wp.name));
             });
         }
@@ -340,7 +315,7 @@
         function updateWaypointsPreview() {
             const container = document.getElementById('route-preview');
             container.textContent = waypoints.length 
-                ? waypoints.map((wp, i) => `WP${i + 1}: ${wp.lat.toFixed(6)}, ${wp.lng.toFixed(6)} (${wp.name})`).join('\n') 
+                ? waypoints.map((wp, i) => WP${i + 1}: ${wp.lat.toFixed(6)}, ${wp.lng.toFixed(6)} (${wp.name})).join('\n') 
                 : 'No waypoints yet.';
         }
 
@@ -349,61 +324,6 @@
             waypoints.length = 0;
             map.eachLayer(layer => { if (layer instanceof L.Marker) map.removeLayer(layer); });
             updateWaypointsPreview();
-        }
-
-        function submitFlightPlan(event) {
-            event.preventDefault();
-
-            // Create a flight plan object
-            const flightPlan = {
-                flightRules: document.getElementById('flight-rules').value,
-                aircraftId: document.getElementById('aircraft-id').value,
-                aircraftType: document.getElementById('aircraft-type').value,
-                departure: document.getElementById('departure').value,
-                destination: document.getElementById('destination').value,
-                altitude: document.getElementById('altitude').value,
-                ete: document.getElementById('ete').value,
-                alternate1: document.getElementById('alternate1').value,
-                alternate2: document.getElementById('alternate2').value,
-                remarks: document.getElementById('remarks').value,
-                waypoints: waypoints.map(wp => ({ name: wp.name, lat: wp.lat, lng: wp.lng }))
-            };
-
-            // Save the flight plan to the submitted plans array
-            submittedPlans.push(flightPlan);
-
-            // Update the submitted flight plans list
-            updateSubmittedPlansList();
-
-            // Clear the current flight plan form
-            clearFlightPlan();
-        }
-
-        function updateSubmittedPlansList() {
-            const listContainer = document.getElementById('submitted-plans-list');
-            listContainer.innerHTML = ''; // Clear the current list
-
-            submittedPlans.forEach((plan, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Flight Plan #${index + 1} - ${plan.departure} to ${plan.destination}`;
-                listItem.onclick = () => displayFlightPlanDetails(index);
-                listContainer.appendChild(listItem);
-            });
-        }
-
-        function displayFlightPlanDetails(index) {
-            const plan = submittedPlans[index];
-            alert(`Flight Plan Details:\nDeparture: ${plan.departure}\nDestination: ${plan.destination}\nWaypoints: ${plan.waypoints.map(wp => wp.name).join(', ')}`);
-        }
-
-        document.getElementById('flight-planner-form').addEventListener('submit', submitFlightPlan);
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-            document.getElementById(tabName).classList.add('active');
         }
     </script>
 </body>
