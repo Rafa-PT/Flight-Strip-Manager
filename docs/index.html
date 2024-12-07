@@ -8,9 +8,10 @@
     <!-- Leaflet.js CSS for maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts for a modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
+    <!-- Main Styles -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -23,6 +24,7 @@
             color: white;
             padding: 15px 20px;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         header h1 {
             font-size: 28px;
@@ -34,6 +36,7 @@
         }
         .container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             padding: 15px;
             gap: 15px;
@@ -44,9 +47,10 @@
         }
         #map {
             width: 75%;
-            height: 500px;
+            height: 400px;
             margin: 0 auto;
             border-radius: 6px;
+            margin-bottom: 15px;
         }
         .form-group {
             margin-bottom: 12px;
@@ -56,7 +60,7 @@
             font-size: 14px;
         }
         .form-group input,
-        .form-group select,
+        .form-group textarea,
         .form-group button {
             width: 100%;
             padding: 10px;
@@ -70,59 +74,86 @@
             color: white;
             cursor: pointer;
             border: none;
+            transition: background-color 0.3s;
         }
         .form-group button:hover {
             background-color: #0056b3;
         }
+        .info-panel {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .info-panel h2 {
+            font-size: 20px;
+            max-width: 300px;
+            margin-top: 0;
+        }
+        .info-panel p {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        button.clear-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        button.clear-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Flight Plan Preview Styles */
         .flight-plan-preview {
             background-color: #ffffff;
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            font-family: "Courier New", Courier, monospace;
             width: 100%;
             max-width: 550px;
+            line-height: 0.2;
+            white-space: pre-wrap;
             margin: 15px auto;
             font-size: 14px;
             background: #f4f4f4;
-            line-height: 1.6;
-            white-space: pre-wrap;
         }
-        button.clear-btn {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button.clear-btn:hover {
-            background-color: #d32f2f;
-        }
-        .popup-content {
+        .flight-plan-preview h3 {
+            margin-top: 0;
             text-align: center;
+            font-size: 18px;
         }
-        .popup-content button {
-            display: block;
-            width: 100%;
-            margin: 5px 0;
-            padding: 5px;
-            font-size: 12px;
+        .flight-plan-preview p {
+            font-size: 14px;
+            margin: 6px 0;
+        }
+        .flight-plan-preview .section-title {
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
-
 <body>
+
     <header>
         <h1>Flight Planner with Waypoints & DME</h1>
-        <p>Plan your flight with waypoints and DME markers.</p>
+        <p>Plan your flight with ease and precision, including waypoints and DME markers.</p>
     </header>
 
     <div class="container">
+        <!-- Main Content -->
         <div class="content-left">
             <section id="flight-planner">
                 <h2>Flight Planner</h2>
                 <form id="flight-planner-form">
+                    <!-- Basic Information -->
                     <div class="form-group">
                         <label for="flight-rules">Flight Rules:</label>
                         <select id="flight-rules" oninput="updateFlightPlan()">
@@ -130,21 +161,58 @@
                             <option value="VFR">VFR</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="aircraft-id">Aircraft ID:</label>
-                        <input type="text" id="aircraft-id" placeholder="N12345" oninput="updateFlightPlan()" />
+                        <input type="text" id="aircraft-id" placeholder="N10SV" oninput="updateFlightPlan()" />
                     </div>
+
                     <div class="form-group">
                         <label for="aircraft-type">Aircraft Type:</label>
                         <input type="text" id="aircraft-type" placeholder="DA40" oninput="updateFlightPlan()" />
                     </div>
+
+                    <!-- Departure, Destination, and Altitude -->
                     <div class="form-group">
                         <label for="departure">Departure:</label>
                         <input type="text" id="departure" placeholder="KOMA" oninput="updateFlightPlan()" />
                     </div>
+
                     <div class="form-group">
                         <label for="destination">Destination:</label>
                         <input type="text" id="destination" placeholder="KOSH" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altitude">Level (ft):</label>
+                        <input type="text" id="altitude" placeholder="050" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <!-- Alternate Fields -->
+                    <div class="form-group">
+                        <label for="ete">Expected time of Flight (HH:MM):</label>
+                        <input type="text" id="ete" placeholder="0249" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alternate1">1st Alternate:</label>
+                        <input type="text" id="alternate1" placeholder="KFLD" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alternate2">2nd Alternate:</label>
+                        <input type="text" id="alternate2" placeholder="KPCZ" oninput="updateFlightPlan()" />
+                    </div>
+
+                    <!-- Remarks -->
+                    <div class="form-group">
+                        <label for="remarks">Remarks:</label>
+                        <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button type="submit">Submit Flight Plan</button>
                     </div>
                 </form>
             </section>
@@ -152,14 +220,36 @@
 
         <div class="content-right">
             <div id="map"></div>
-            <div class="flight-plan-preview" id="flight-plan-preview">
-                <h3>Flight Plan Preview</h3>
-                <pre id="route-preview">No waypoints yet.</pre>
-            </div>
-            <button class="clear-btn" onclick="clearFlightPlan()">Clear Flight Plan</button>
-        </div>
-    </div>
 
+            <div class="flight-plan-preview" id="flight-plan-preview" style="width: 110%";>
+                <h3>Flight Plan Preview</h3>
+                <div class="section-title">Flight Rules</div>
+                <p id="flight-rules-preview">IFR</p>
+
+                <div class="section-title">Aircraft Information</div>
+                <p id="aircraft-id-preview">N10SV</p>
+                <p id="aircraft-type-preview">DA40</p>
+
+                <div class="section-title">Departure & Destination</div>
+                <p id="departure-preview">KOMA</p>
+                <p id="destination-preview">KOSH</p>
+
+                <div class="section-title">Altitude</div>
+                <p id="altitude-preview">050</p>
+
+                <div class="section-title">Time of Flight</div>
+                <p id="ete-preview">0249</p>
+
+                <div class="section-title">Alternates</div>
+                <p id="alternate1-preview">KFLD</p>
+                <p id="alternate2-preview">KPCZ</p>
+
+                <div class="section-title">Remarks</div>
+                <p id="remarks-preview" class="remarks">Additional Information</p>
+            </div>
+           
+            </div>
+    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         const map = L.map('map').setView([51.505, -0.09], 3);
