@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Planner with Waypoints & DME</title>
 
-    <!-- Leaflet.js CSS for maps -->
+    <!-- Leaflet.js and Google Fonts -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
-    <!-- Google Fonts for a modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Main Styles -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -22,312 +19,205 @@
         header {
             background-color: #343a40;
             color: white;
-            padding: 15px 20px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
-        header h1 {
-            font-size: 28px;
-            margin: 0;
-        }
-        header p {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-        .container {
+        .tab-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 15px;
-            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
         }
-        .content-left, .content-right {
-            flex: 1;
-            min-width: 270px;
+        .tab-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            margin: 0 5px;
+            transition: 0.3s;
+        }
+        .tab-button.active {
+            background: #0056b3;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        .tab-content.active {
+            display: block;
         }
         #map {
-            width: 75%;
+            width: 100%;
             height: 400px;
-            margin: 0 auto;
+            margin: 15px 0;
             border-radius: 6px;
-            margin-bottom: 15px;
         }
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         .form-group label {
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: bold;
         }
-        .form-group input,
-        .form-group textarea,
-        .form-group button {
+        .form-group input, .form-group select, .form-group button {
             width: 100%;
             padding: 10px;
             font-size: 14px;
             border: 1px solid #ced4da;
-            border-radius: 6px;
-            box-sizing: border-box;
+            border-radius: 4px;
         }
         .form-group button {
-            background-color: #007bff;
+            background: #007bff;
             color: white;
             cursor: pointer;
             border: none;
-            transition: background-color 0.3s;
+            transition: 0.3s;
         }
         .form-group button:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
-        .info-panel {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .info-panel h2 {
-            font-size: 20px;
-            max-width: 300px;
-            margin-top: 0;
-        }
-        .info-panel p {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        button.clear-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-        button.clear-btn:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Flight Plan Preview Styles */
-        .flight-plan-preview {
-            background-color: #ffffff;
+        .submitted-plans {
+            background: #ffffff;
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 15px;
-            font-family: "Courier New", Courier, monospace;
-            width: 100%;
-            max-width: 550px;
-            line-height: 0.2;
-            white-space: pre-wrap;
-            margin: 15px auto;
-            font-size: 14px;
-            background: #f4f4f4;
         }
-        .flight-plan-preview h3 {
+        .submitted-plans h3 {
             margin-top: 0;
-            text-align: center;
-            font-size: 18px;
-        }
-        .flight-plan-preview p {
-            font-size: 14px;
-            margin: 6px 0;
-        }
-        .flight-plan-preview .section-title {
-            font-weight: bold;
-            margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
+<header>
+    <h1>Flight Planner with Waypoints & DME</h1>
+</header>
 
-    <header>
-        <h1>Flight Planner with Waypoints & DME</h1>
-        <p>Plan your flight with ease and precision, including waypoints and DME markers.</p>
-    </header>
+<!-- Tab Navigation -->
+<div class="tab-container">
+    <button class="tab-button active" onclick="openTab('planner')">Flight Planner</button>
+    <button class="tab-button" onclick="openTab('submitted')">Submitted Flight Plans</button>
+</div>
 
-    <div class="container">
-        <!-- Main Content -->
-        <div class="content-left">
-            <section id="flight-planner">
-                <h2>Flight Planner</h2>
-                <form id="flight-planner-form">
-                    <!-- Basic Information -->
-                    <div class="form-group">
-                        <label for="flight-rules">Flight Rules:</label>
-                        <select id="flight-rules" oninput="updateFlightPlan()">
-                            <option value="IFR">IFR</option>
-                            <option value="VFR">VFR</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="aircraft-id">Aircraft ID:</label>
-                        <input type="text" id="aircraft-id" placeholder="N10SV" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="aircraft-type">Aircraft Type:</label>
-                        <input type="text" id="aircraft-type" placeholder="DA40" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <!-- Departure, Destination, and Altitude -->
-                    <div class="form-group">
-                        <label for="departure">Departure:</label>
-                        <input type="text" id="departure" placeholder="KOMA" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="destination">Destination:</label>
-                        <input type="text" id="destination" placeholder="KOSH" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="altitude">Level (ft):</label>
-                        <input type="text" id="altitude" placeholder="050" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <!-- Alternate Fields -->
-                    <div class="form-group">
-                        <label for="ete">Expected time of Flight (HH:MM):</label>
-                        <input type="text" id="ete" placeholder="0249" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="alternate1">1st Alternate:</label>
-                        <input type="text" id="alternate1" placeholder="KFLD" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="alternate2">2nd Alternate:</label>
-                        <input type="text" id="alternate2" placeholder="KPCZ" oninput="updateFlightPlan()" />
-                    </div>
-
-                    <!-- Remarks -->
-                    <div class="form-group">
-                        <label for="remarks">Remarks:</label>
-                        <textarea id="remarks" rows="2" placeholder="Additional Information" oninput="updateFlightPlan()"></textarea>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="form-group">
-                        <button type="submit">Submit Flight Plan</button>
-                    </div>
-                </form>
-            </section>
+<!-- Flight Planner Tab -->
+<div id="planner" class="tab-content active">
+    <form id="flight-planner-form" onsubmit="submitFlightPlan(event)">
+        <div class="form-group">
+            <label for="flight-rules">Flight Rules:</label>
+            <select id="flight-rules">
+                <option value="IFR">IFR</option>
+                <option value="VFR">VFR</option>
+            </select>
         </div>
 
-        <div class="content-right">
-            <div id="map"></div>
+        <div class="form-group">
+            <label for="aircraft-id">Aircraft ID:</label>
+            <input type="text" id="aircraft-id" placeholder="N12345" required />
+        </div>
 
-            <div class="flight-plan-preview" id="flight-plan-preview" style="width: 110%";>
-                <h3>Flight Plan Preview</h3>
-                <div class="section-title">Flight Rules</div>
-                <p id="flight-rules-preview">IFR</p>
+        <div class="form-group">
+            <label for="aircraft-type">Aircraft Type:</label>
+            <input type="text" id="aircraft-type" placeholder="DA40" required />
+        </div>
 
-                <div class="section-title">Aircraft Information</div>
-                <p id="aircraft-id-preview">N10SV</p>
-                <p id="aircraft-type-preview">DA40</p>
+        <div class="form-group">
+            <label for="departure">Departure:</label>
+            <input type="text" id="departure" placeholder="KOMA" required />
+        </div>
 
-                <div class="section-title">Departure & Destination</div>
-                <p id="departure-preview">KOMA</p>
-                <p id="destination-preview">KOSH</p>
+        <div class="form-group">
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination" placeholder="KOSH" required />
+        </div>
 
-                <div class="section-title">Altitude</div>
-                <p id="altitude-preview">050</p>
+        <div id="map"></div>
 
-                <div class="section-title">Time of Flight</div>
-                <p id="ete-preview">0249</p>
+        <div class="form-group">
+            <button type="submit">Submit Flight Plan</button>
+        </div>
+    </form>
+</div>
 
-                <div class="section-title">Alternates</div>
-                <p id="alternate1-preview">KFLD</p>
-                <p id="alternate2-preview">KPCZ</p>
+<!-- Submitted Plans Tab -->
+<div id="submitted" class="tab-content">
+    <h2>Submitted Flight Plans</h2>
+    <div id="submitted-plans-list">No flight plans submitted yet.</div>
+</div>
 
-                <div class="section-title">Remarks</div>
-                <p id="remarks-preview" class="remarks">Additional Information</p>
-            </div>
-           
-            </div>
-    
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        const map = L.map('map').setView([51.505, -0.09], 3);
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    const map = L.map('map').setView([51.505, -0.09], 3);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+    const waypoints = [];
+    const submittedPlans = [];
 
-        const waypoints = [];
+    // Add Waypoints on Map Click
+    map.on('click', function (e) {
+        const { lat, lng } = e.latlng;
+        const marker = L.marker([lat, lng]).addTo(map)
+            .bindPopup(`Waypoint: ${lat.toFixed(6)}, ${lng.toFixed(6)}`).openPopup();
+        waypoints.push({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
+    });
 
-        map.on('click', function (e) {
-            const { lat, lng } = e.latlng;
-            const index = waypoints.length;
-            const name = WP${index + 1};
+    // Submit Flight Plan
+    function submitFlightPlan(event) {
+        event.preventDefault();
+        const flightPlan = {
+            flightRules: document.getElementById("flight-rules").value,
+            aircraftID: document.getElementById("aircraft-id").value,
+            aircraftType: document.getElementById("aircraft-type").value,
+            departure: document.getElementById("departure").value,
+            destination: document.getElementById("destination").value,
+            waypoints: [...waypoints]
+        };
+        submittedPlans.push(flightPlan);
+        displaySubmittedPlans();
+        alert("Flight plan submitted!");
+        event.target.reset();
+        clearWaypoints();
+    }
 
-            const marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup(createPopupContent(index, name));
-
-            waypoints.push({ lat, lng, name, marker });
-            updateWaypointsPreview();
-        });
-
-        map.on('popupopen', function (e) {
-            const marker = e.popup._source;
-            const popupContent = e.popup.getElement();
-
-            popupContent.querySelector('.rename-btn').addEventListener('click', function () {
-                const index = this.getAttribute('data-index');
-                const newName = prompt("Enter new name for this waypoint:", waypoints[index].name);
-                if (newName && newName.trim()) {
-                    waypoints[index].name = newName;
-                    marker.setPopupContent(createPopupContent(index, newName)).openPopup();
-                    updateWaypointsPreview();
-                }
-            });
-
-            popupContent.querySelector('.delete-btn').addEventListener('click', function () {
-                const index = this.getAttribute('data-index');
-                map.removeLayer(marker);
-                waypoints.splice(index, 1);
-                reorderWaypoints();
-                updateWaypointsPreview();
-            });
-        });
-
-        function createPopupContent(index, name) {
-            return 
-                <div class="popup-content">
-                    <strong>${name}</strong><br>
-                    <button class="rename-btn" data-index="${index}">Rename</button>
-                    <button class="delete-btn" data-index="${index}">Delete</button>
+    // Display Submitted Plans
+    function displaySubmittedPlans() {
+        const container = document.getElementById('submitted-plans-list');
+        container.innerHTML = submittedPlans.length 
+            ? submittedPlans.map((plan, i) => `
+                <div class="submitted-plans">
+                    <h3>Flight Plan #${i + 1}</h3>
+                    <p><strong>Flight Rules:</strong> ${plan.flightRules}</p>
+                    <p><strong>Aircraft ID:</strong> ${plan.aircraftID}</p>
+                    <p><strong>Aircraft Type:</strong> ${plan.aircraftType}</p>
+                    <p><strong>Departure:</strong> ${plan.departure}</p>
+                    <p><strong>Destination:</strong> ${plan.destination}</p>
+                    <p><strong>Waypoints:</strong></p>
+                    <ul>${plan.waypoints.map(wp => `<li>${wp.lat}, ${wp.lng}</li>`).join('')}</ul>
                 </div>
-            ;
-        }
+            `).join('') 
+            : "No flight plans submitted yet.";
+    }
 
-        function reorderWaypoints() {
-            waypoints.forEach((wp, index) => {
-                wp.name = WP${index + 1};
-                wp.marker.setPopupContent(createPopupContent(index, wp.name));
-            });
-        }
+    // Clear Waypoints
+    function clearWaypoints() {
+        waypoints.length = 0;
+        map.eachLayer(layer => {
+            if (layer instanceof L.Marker) map.removeLayer(layer);
+        });
+    }
 
-        function updateWaypointsPreview() {
-            const container = document.getElementById('route-preview');
-            container.textContent = waypoints.length 
-                ? waypoints.map((wp, i) => WP${i + 1}: ${wp.lat.toFixed(6)}, ${wp.lng.toFixed(6)} (${wp.name})).join('\n') 
-                : 'No waypoints yet.';
-        }
-
-        function clearFlightPlan() {
-            document.getElementById('flight-planner-form').reset();
-            waypoints.length = 0;
-            map.eachLayer(layer => { if (layer instanceof L.Marker) map.removeLayer(layer); });
-            updateWaypointsPreview();
-        }
-    </script>
+    // Tab Navigation
+    function openTab(tabID) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabID).classList.add('active');
+        document.querySelector(`button[onclick="openTab('${tabID}')"]`).classList.add('active');
+    }
+</script>
 </body>
 </html>
+
 
 
 
