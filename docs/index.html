@@ -356,6 +356,58 @@
 
             // Create a flight plan object
             const flightPlan = {
-             
+                flightRules: document.getElementById('flight-rules').value,
+                aircraftId: document.getElementById('aircraft-id').value,
+                aircraftType: document.getElementById('aircraft-type').value,
+                departure: document.getElementById('departure').value,
+                destination: document.getElementById('destination').value,
+                altitude: document.getElementById('altitude').value,
+                ete: document.getElementById('ete').value,
+                alternate1: document.getElementById('alternate1').value,
+                alternate2: document.getElementById('alternate2').value,
+                remarks: document.getElementById('remarks').value,
+                waypoints: waypoints.map(wp => ({ name: wp.name, lat: wp.lat, lng: wp.lng }))
+            };
+
+            // Save the flight plan to the submitted plans array
+            submittedPlans.push(flightPlan);
+
+            // Update the submitted flight plans list
+            updateSubmittedPlansList();
+
+            // Clear the current flight plan form
+            clearFlightPlan();
+        }
+
+        function updateSubmittedPlansList() {
+            const listContainer = document.getElementById('submitted-plans-list');
+            listContainer.innerHTML = ''; // Clear the current list
+
+            submittedPlans.forEach((plan, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Flight Plan #${index + 1} - ${plan.departure} to ${plan.destination}`;
+                listItem.onclick = () => displayFlightPlanDetails(index);
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        function displayFlightPlanDetails(index) {
+            const plan = submittedPlans[index];
+            alert(`Flight Plan Details:\nDeparture: ${plan.departure}\nDestination: ${plan.destination}\nWaypoints: ${plan.waypoints.map(wp => wp.name).join(', ')}`);
+        }
+
+        document.getElementById('flight-planner-form').addEventListener('submit', submitFlightPlan);
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
 
 
