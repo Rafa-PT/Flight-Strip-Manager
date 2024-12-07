@@ -138,6 +138,47 @@
             font-weight: bold;
             margin-top: 10px;
         }
+
+        /* Tabs Styles */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 15px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .tab.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .submitted-plans-list {
+            margin-top: 15px;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .submitted-plans-list li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .submitted-plans-list li:hover {
+            background-color: #ececec;
+        }
     </style>
 </head>
 <body>
@@ -148,9 +189,14 @@
     </header>
 
     <div class="container">
-        <!-- Main Content -->
-        <div class="content-left">
-            <section id="flight-planner">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('flight-planner')">Flight Planner</div>
+            <div class="tab" onclick="showTab('submitted-plans')">Submitted Flight Plans</div>
+        </div>
+
+        <!-- Flight Planner Tab Content -->
+        <div id="flight-planner" class="tab-content active">
+            <section id="flight-planner-section">
                 <h2>Flight Planner</h2>
                 <form id="flight-planner-form">
                     <!-- Basic Information -->
@@ -218,40 +264,19 @@
             </section>
         </div>
 
-        <div class="content-right">
-            <div id="map"></div>
+        <!-- Submitted Flight Plans Tab Content -->
+        <div id="submitted-plans" class="tab-content">
+            <h2>Submitted Flight Plans</h2>
+            <ul class="submitted-plans-list" id="submitted-plans-list">
+                <!-- Submitted plans will be added here dynamically -->
+            </ul>
+        </div>
+    </div>
 
-            <div class="flight-plan-preview" id="flight-plan-preview" style="width: 110%";>
-                <h3>Flight Plan Preview</h3>
-                <div class="section-title">Flight Rules</div>
-                <p id="flight-rules-preview">IFR</p>
-
-                <div class="section-title">Aircraft Information</div>
-                <p id="aircraft-id-preview">N10SV</p>
-                <p id="aircraft-type-preview">DA40</p>
-
-                <div class="section-title">Departure & Destination</div>
-                <p id="departure-preview">KOMA</p>
-                <p id="destination-preview">KOSH</p>
-
-                <div class="section-title">Altitude</div>
-                <p id="altitude-preview">050</p>
-
-                <div class="section-title">Time of Flight</div>
-                <p id="ete-preview">0249</p>
-
-                <div class="section-title">Alternates</div>
-                <p id="alternate1-preview">KFLD</p>
-                <p id="alternate2-preview">KPCZ</p>
-
-                <div class="section-title">Remarks</div>
-                <p id="remarks-preview" class="remarks">Additional Information</p>
-            </div>
-           
-            </div>
-    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
+        const submittedPlans = []; // Array to store submitted flight plans
+
         const map = L.map('map').setView([51.505, -0.09], 3);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -325,8 +350,12 @@
             map.eachLayer(layer => { if (layer instanceof L.Marker) map.removeLayer(layer); });
             updateWaypointsPreview();
         }
-    </script>
-</body>
-</html>
+
+        function submitFlightPlan(event) {
+            event.preventDefault();
+
+            // Create a flight plan object
+            const flightPlan = {
+             
 
 
