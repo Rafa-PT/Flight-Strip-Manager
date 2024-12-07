@@ -1,62 +1,68 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize the map
+    const map = L.map('map-container').setView([51.505, -0.09], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors'
+    }).addTo(map);
 
-    const mapContainer = document.getElementById('map-container');  // Map area
-    const addWaypointButton = document.getElementById('add-waypoint');
+    // Store waypoints
+    let waypoints = [];
 
-    // Add waypoint to the map
-    addWaypointButton.addEventListener('click', () => {
-        const waypointName = prompt("Enter waypoint ICAO Code:");
-        if (waypointName) {
-            createWaypointOnMap(waypointName);
-        }
-    });
-
-    // Function to create a waypoint on the map
-    function createWaypointOnMap(name) {
-        const waypointMarker = document.createElement('div');
-        waypointMarker.classList.add('waypoint-marker');
-        waypointMarker.textContent = name;
-        mapContainer.appendChild(waypointMarker);
-
-        // Add click event for waypoint options
-        waypointMarker.addEventListener('click', () => {
-            showWaypointOptions(waypointMarker);
-        });
+    // Function to add a waypoint
+    function addWaypoint(latlng, name = `WP ${waypoints.length + 1}`) {
+        const marker = L.marker(latlng, { draggable: true }).addTo(map)
+            .bindPopup(generatePopupContent(name, marker));
+        waypoints.push({ name, marker });
     }
 
-    // Show options to Rename or Delete the waypoint
-    function showWaypointOptions(marker) {
-        // Remove any existing option menu
-        removeExistingOptions();
-
-        const optionsMenu = document.createElement('div');
-        optionsMenu.classList.add('waypoint-options');
-        optionsMenu.innerHTML = `
-            <button class="rename-btn">Rename</button>
-            <button class="delete-btn">Delete</button>
+    // Function to create popup content
+    function generatePopupContent(name, marker) {
+        return `
+            <div class="waypoint-popup">
+                <strong>${name}</strong><br>
+                <button class="rename-btn">Rename</button>
+                <button class="delete-btn">Delete</button>
+            </div>
         `;
-        marker.appendChild(optionsMenu);
+    }
 
-        // Handle Rename
-        optionsMenu.querySelector('.rename-btn').addEventListener('click', () => {
-            const newName = prompt("Enter new waypoint name:", marker.textContent.trim());
+    // Add waypoint on map click
+    map.on('click', (e) => {
+        addWaypoint(e.latlng);
+    });
+
+    // Handle popup actions
+    map.on('popupopen', (e) => {
+        const marker = e.popup._source;
+        const popupContent = e.popup.getElement();
+
+        // Handle renaming
+        popupContent.querySelector('.rename-btn').addEventListener('click', () => {
+            const newName = prompt("Enter new waypoint name:", marker.getPopup().getContent());
             if (newName) {
-                marker.textContent = newName;
-                marker.appendChild(optionsMenu);  // Reattach options after renaming
+                const updatedPopup = generatePopupContent(newName, marker);
+                marker.setPopupContent(updatedPopup).openPopup();
+                updateWaypointName(marker, newName);
             }
         });
 
-        // Handle Delete
-        optionsMenu.querySelector('.delete-btn').addEventListener('click', () => {
-            marker.remove();  // Remove marker from map
+        // Handle deletion
+        popupContent.querySelector('.delete-btn').addEventListener('click', () => {
+            map.removeLayer(marker);
+            removeWaypoint(marker);
         });
+    });
+
+    // Update waypoint name in the list
+    function updateWaypointName(marker, newName) {
+        waypoints = waypoints.map(wp => 
+            wp.marker === marker ? { ...wp, name: newName } : wp
+        );
     }
 
-    // Remove any open options menu
-    function removeExistingOptions() {
-        const existingMenus = document.querySelectorAll('.waypoint-options');
-        existingMenus.forEach(menu => menu.remove());
+    // Remove waypoint from list
+    function removeWaypoint(marker) {
+        waypoints = waypoints.filter(wp => wp.marker !== marker);
     }
 });
-
 
