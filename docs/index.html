@@ -123,39 +123,20 @@
             `;
             resultsContainer.appendChild(flightCard);
 
-            // Add markers to the Leaflet map for the origin and destination
-            if (flight.from && flight.to) {
-              const origin = flight.from;
-              const destination = flight.to;
+            // Add the plane's position as a dot on the map
+            if (flight.lat && flight.lon) {
+              const lat = flight.lat;
+              const lon = flight.lon;
 
-              // Geocode the origin and destination addresses (this is a simple example, you can use a geocoding service)
-              const geocode = (address) => {
-                // Replace with your actual geocoding service, e.g., Nominatim, or use any third-party service
-                return fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
-                  .then(res => res.json())
-                  .then(data => {
-                    if (data[0]) {
-                      return [data[0].lat, data[0].lon];
-                    } else {
-                      return null;
-                    }
-                  });
-              };
-
-              // Add marker for origin
-              geocode(origin).then((coords) => {
-                if (coords) {
-                  L.marker(coords).addTo(map).bindPopup(`Origin: ${origin}`).openPopup();
-                  map.setView(coords, 5);  // Adjust zoom level and center the map
-                }
-              });
-
-              // Add marker for destination
-              geocode(destination).then((coords) => {
-                if (coords) {
-                  L.marker(coords).addTo(map).bindPopup(`Destination: ${destination}`).openPopup();
-                }
-              });
+              // Plot the plane's position as a dot (circle marker)
+              L.circleMarker([lat, lon], {
+                color: 'red',
+                radius: 6, // Size of the dot
+                fillOpacity: 0.8
+              })
+              .addTo(map)
+              .bindPopup(`Flight: ${flight.flight}<br>Aircraft Type: ${flight.type || 'N/A'}`)
+              .openPopup();
             }
           });
         } else {
@@ -168,5 +149,6 @@
   </script>
 </body>
 </html>
+
 
 
