@@ -3,77 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flight Radar</title>
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <title>Live Flight Radar</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     #map {
-      height: 80vh;
-      width: 100%;
+      height: 100vh;
     }
-    .search {
+    #search-bar {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: white;
       padding: 10px;
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-    .search input {
-      padding: 5px;
+    input {
+      padding: 8px;
       font-size: 16px;
-      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 300px;
     }
-    .search button {
-      padding: 5px;
+    button {
+      padding: 8px 16px;
       font-size: 16px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="search">
-    <input type="text" id="flightSearch" placeholder="Search flight (e.g., FL123)" />
+  <div id="search-bar">
+    <input id="flight-search" type="text" placeholder="Search for a flight (e.g., ICAO24 or Callsign)" />
     <button onclick="searchFlight()">Search</button>
   </div>
   <div id="map"></div>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Initialize map
-    const map = L.map('map').setView([0, 0], 2);
+    const API_USERNAME = "your_opensky_username"; // Replace with your OpenSky username
+    const API_PASSWORD = "your_opensky_password"; // Replace with your OpenSky password
+    const map = L.map('map').setView([20, 0], 3); // Initial map view (global)
+    const flightMarkers = new Map(); // Store flight markers by ICAO24
 
-    // Add OpenStreetMap tile layer
+    // Add map tiles (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    // Mock flight data
-    const flights = [
-      { id: 'FL123', lat: 51.5074, lon: -0.1278, destination: 'London', origin: 'New York' },
-      { id: 'FL456', lat: 40.7128, lon: -74.006, destination: 'New York', origin: 'Paris' },
-      { id: 'FL789', lat: 48.8566, lon: 2.3522, destination: 'Paris', origin: 'Berlin' },
-    ];
-
-    // Add markers to the map
-    const markers = {};
-    flights.forEach(flight => {
-      const marker = L.marker([flight.lat, flight.lon]).addTo(map);
-      marker.bindPopup(`<b>Flight:</b> ${flight.id}<br><b>Origin:</b> ${flight.origin}<br><b>Destination:</b> ${flight.destination}`);
-      markers[flight.id] = marker;
-    });
-
-    // Search for flights
-    function searchFlight() {
-      const searchValue = document.getElementById('flightSearch').value.toUpperCase();
-      if (markers[searchValue]) {
-        const flight = flights.find(f => f.id === searchValue);
-        map.setView([flight.lat, flight.lon], 6);
-        markers[searchValue].openPopup();
-      } else {
-        alert('Flight not found');
+    // Fetch live flight data
+    async function fetchLiveFlights() {
+      try {
+        const response = await fetch('https://opensky-network.org/api/states/all', {
+          headers: {
+            Authorization: `Basic ${btoa(API_USERNAME + ":" + API_PASSWORD)}`,
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch flight data");
+        const data = await response.json();
+        updateMap(data.states);
+      } catch (error) {
+        console.error(error);
+        alert("Unable to load live flight data. Check your credentials or API limits.");
       }
     }
+
+    // Update flight markers on the map
+    function updateMap(flights) {
+      flights.forEach((flight) => {
+        const [icao24, callsign, lat, lon, altitude] = flight;
+        if (!lat || !lon) return; // Skip flights without position data
+
+        // Check if the marker already exists
+        let marker = flightMarkers.get(icao24);
+        if (!marker) {
+          marker = L.marker([lat, lon]).addTo(map).bindPopup(getPopupContent(icao24, callsign, altitude));
+          flightMarkers.set(icao24, marker);
+        } else {
+          // Update marker position and popup
+          marker.setLatLng([lat, lon]);
+          marker.setPopupContent(getPopupContent(icao24, callsign, altitude));
+        }
+      });
+    }
+
+    // Generate popup content
+    function getPopupContent(icao24, callsign, altitude) {
+      return `
+        <strong>ICAO24:</strong> ${icao24}<br>
+        <strong>Callsign:</strong> ${callsign || "N/A"}<br>
+        <strong>Altitude:</strong> ${altitude ? `${altitude} m` : "N/A"}
+      `;
+    }
+
+    // Search for a flight
+    function searchFlight() {
+      const query = document.getElementById('flight-search').value.toLowerCase();
+      const marker = Array.from(flightMarkers.values()).find((marker) => {
+        const content = marker.getPopup().getContent().toLowerCase();
+        return content.includes(query);
+      });
+      if (marker) {
+        map.setView(marker.getLatLng(), 8); // Zoom in on the marker
+        marker.openPopup();
+      } else {
+        alert("No matching flight found.");
+      }
+    }
+
+    // Refresh flight data every 10 seconds
+    fetchLiveFlights();
+    setInterval(fetchLiveFlights, 10000);
   </script>
 </body>
 </html>
-
 
 
