@@ -111,6 +111,10 @@
         }
 
         const data = await response.json();
+
+        // Debug: Log the entire response to check the data structure
+        console.log('API Response:', data);
+
         if (data.ac && data.ac.length > 0) {
           data.ac.forEach((flight) => {
             const flightCard = document.createElement('div');
@@ -123,20 +127,22 @@
             `;
             resultsContainer.appendChild(flightCard);
 
-            // Add the plane's position as a dot on the map
+            // Check if lat and lon exist for the flight
             if (flight.lat && flight.lon) {
               const lat = flight.lat;
               const lon = flight.lon;
 
               // Plot the plane's position as a dot (circle marker)
-              L.circleMarker([lat, lon], {
+              const planeDot = L.circleMarker([lat, lon], {
                 color: 'red',
                 radius: 6, // Size of the dot
                 fillOpacity: 0.8
-              })
-              .addTo(map)
+              }).addTo(map)
               .bindPopup(`Flight: ${flight.flight}<br>Aircraft Type: ${flight.type || 'N/A'}`)
               .openPopup();
+
+              // Adjust the map view to center on the plane's location
+              map.setView([lat, lon], 5);  // Adjust zoom level to make sure the plane is visible
             }
           });
         } else {
@@ -149,6 +155,7 @@
   </script>
 </body>
 </html>
+
 
 
 
