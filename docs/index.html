@@ -1,223 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Planner with Waypoints & DME</title>
-
-    <!-- Leaflet.js and Google Fonts -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-        header {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .tab-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .tab-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            background: #007bff;
-            color: white;
-            border-radius: 4px;
-            margin: 0 5px;
-            transition: 0.3s;
-        }
-        .tab-button.active {
-            background: #0056b3;
-        }
-        .tab-content {
-            display: none;
-            padding: 20px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        #map {
-            width: 100%;
-            height: 400px;
-            margin: 15px 0;
-            border-radius: 6px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            font-weight: bold;
-        }
-        .form-group input, .form-group select, .form-group button {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-        .form-group button {
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            border: none;
-            transition: 0.3s;
-        }
-        .form-group button:hover {
-            background: #0056b3;
-        }
-        .submitted-plans {
-            background: #ffffff;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-top: 15px;
-        }
-        .submitted-plans h3 {
-            margin-top: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Radar</title>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 80vh;
+      width: 100%;
+    }
+    .search {
+      padding: 10px;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .search input {
+      padding: 5px;
+      font-size: 16px;
+      width: 200px;
+    }
+    .search button {
+      padding: 5px;
+      font-size: 16px;
+    }
+  </style>
 </head>
-
 <body>
-<header>
-    <h1>Flight Planner with Waypoints & DME</h1>
-</header>
+  <div class="search">
+    <input type="text" id="flightSearch" placeholder="Search flight (e.g., FL123)" />
+    <button onclick="searchFlight()">Search</button>
+  </div>
+  <div id="map"></div>
 
-<!-- Tab Navigation -->
-<div class="tab-container">
-    <button class="tab-button active" onclick="openTab('planner')">Flight Planner</button>
-    <button class="tab-button" onclick="openTab('submitted')">Submitted Flight Plans</button>
-</div>
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([0, 0], 2);
 
-<!-- Flight Planner Tab -->
-<div id="planner" class="tab-content active">
-    <form id="flight-planner-form" onsubmit="submitFlightPlan(event)">
-        <div class="form-group">
-            <label for="flight-rules">Flight Rules:</label>
-            <select id="flight-rules">
-                <option value="IFR">IFR</option>
-                <option value="VFR">VFR</option>
-            </select>
-        </div>
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        <div class="form-group">
-            <label for="aircraft-id">Aircraft ID:</label>
-            <input type="text" id="aircraft-id" placeholder="N12345" required />
-        </div>
+    // Mock flight data
+    const flights = [
+      { id: 'FL123', lat: 51.5074, lon: -0.1278, destination: 'London', origin: 'New York' },
+      { id: 'FL456', lat: 40.7128, lon: -74.006, destination: 'New York', origin: 'Paris' },
+      { id: 'FL789', lat: 48.8566, lon: 2.3522, destination: 'Paris', origin: 'Berlin' },
+    ];
 
-        <div class="form-group">
-            <label for="aircraft-type">Aircraft Type:</label>
-            <input type="text" id="aircraft-type" placeholder="DA40" required />
-        </div>
-
-        <div class="form-group">
-            <label for="departure">Departure:</label>
-            <input type="text" id="departure" placeholder="KOMA" required />
-        </div>
-
-        <div class="form-group">
-            <label for="destination">Destination:</label>
-            <input type="text" id="destination" placeholder="KOSH" required />
-        </div>
-
-        <div id="map"></div>
-
-        <div class="form-group">
-            <button type="submit">Submit Flight Plan</button>
-        </div>
-    </form>
-</div>
-
-<!-- Submitted Plans Tab -->
-<div id="submitted" class="tab-content">
-    <h2>Submitted Flight Plans</h2>
-    <div id="submitted-plans-list">No flight plans submitted yet.</div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script>
-    const map = L.map('map').setView([51.505, -0.09], 3);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    const waypoints = [];
-    const submittedPlans = [];
-
-    // Add Waypoints on Map Click
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
-        const marker = L.marker([lat, lng]).addTo(map)
-            .bindPopup(`Waypoint: ${lat.toFixed(6)}, ${lng.toFixed(6)}`).openPopup();
-        waypoints.push({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
+    // Add markers to the map
+    const markers = {};
+    flights.forEach(flight => {
+      const marker = L.marker([flight.lat, flight.lon]).addTo(map);
+      marker.bindPopup(`<b>Flight:</b> ${flight.id}<br><b>Origin:</b> ${flight.origin}<br><b>Destination:</b> ${flight.destination}`);
+      markers[flight.id] = marker;
     });
 
-    // Submit Flight Plan
-    function submitFlightPlan(event) {
-        event.preventDefault();
-        const flightPlan = {
-            flightRules: document.getElementById("flight-rules").value,
-            aircraftID: document.getElementById("aircraft-id").value,
-            aircraftType: document.getElementById("aircraft-type").value,
-            departure: document.getElementById("departure").value,
-            destination: document.getElementById("destination").value,
-            waypoints: [...waypoints]
-        };
-        submittedPlans.push(flightPlan);
-        displaySubmittedPlans();
-        alert("Flight plan submitted!");
-        event.target.reset();
-        clearWaypoints();
+    // Search for flights
+    function searchFlight() {
+      const searchValue = document.getElementById('flightSearch').value.toUpperCase();
+      if (markers[searchValue]) {
+        const flight = flights.find(f => f.id === searchValue);
+        map.setView([flight.lat, flight.lon], 6);
+        markers[searchValue].openPopup();
+      } else {
+        alert('Flight not found');
+      }
     }
-
-    // Display Submitted Plans
-    function displaySubmittedPlans() {
-        const container = document.getElementById('submitted-plans-list');
-        container.innerHTML = submittedPlans.length 
-            ? submittedPlans.map((plan, i) => `
-                <div class="submitted-plans">
-                    <h3>Flight Plan #${i + 1}</h3>
-                    <p><strong>Flight Rules:</strong> ${plan.flightRules}</p>
-                    <p><strong>Aircraft ID:</strong> ${plan.aircraftID}</p>
-                    <p><strong>Aircraft Type:</strong> ${plan.aircraftType}</p>
-                    <p><strong>Departure:</strong> ${plan.departure}</p>
-                    <p><strong>Destination:</strong> ${plan.destination}</p>
-                    <p><strong>Waypoints:</strong></p>
-                    <ul>${plan.waypoints.map(wp => `<li>${wp.lat}, ${wp.lng}</li>`).join('')}</ul>
-                </div>
-            `).join('') 
-            : "No flight plans submitted yet.";
-    }
-
-    // Clear Waypoints
-    function clearWaypoints() {
-        waypoints.length = 0;
-        map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer);
-        });
-    }
-
-    // Tab Navigation
-    function openTab(tabID) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(tabID).classList.add('active');
-        document.querySelector(`button[onclick="openTab('${tabID}')"]`).classList.add('active');
-    }
-</script>
+  </script>
 </body>
 </html>
-
 
 
 
