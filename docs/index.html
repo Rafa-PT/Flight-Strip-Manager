@@ -55,6 +55,11 @@
       margin-top: 20px;
     }
   </style>
+
+  <!-- Include Leaflet CSS and JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
 </head>
 <body>
   <h1>Flight Tracker</h1>
@@ -63,21 +68,23 @@
     <button type="submit">Search</button>
   </form>
   <div id="results"></div>
-  <div id="map"></div> <!-- Google Map Placeholder -->
-
-  <!-- Include the Google Maps JavaScript API -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"></script>
+  <div id="map"></div> <!-- Leaflet Map Placeholder -->
 
   <script>
     let map;
 
+    // Initialize the Leaflet map
     function initMap() {
-      // Initialize the map with a default location (e.g., New York)
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 40.7128, lng: -74.0060 },
-        zoom: 5,
-      });
+      map = L.map('map').setView([51.505, -0.09], 2);  // Default view set to London, you can change it
+
+      // Add OpenStreetMap tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
     }
+
+    // Call initMap when the page loads
+    window.onload = initMap;
 
     document.getElementById('search-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -95,7 +102,7 @@
           method: 'GET',
           headers: {
             'X-RapidAPI-Host': 'adsbexchange-com1.p.rapidapi.com',
-            'X-RapidAPI-Key': 'c9ff657bdaa1a2c74ea9f42191f0aaec'
+            'X-RapidAPI-Key': 'c9ff657bdaa1a2c74ea9f42191f0aaec'  // Your API Key
           }
         });
 
@@ -116,29 +123,37 @@
             `;
             resultsContainer.appendChild(flightCard);
 
-            // Add markers to the map for the origin and destination
+            // Add markers to the Leaflet map for the origin and destination
             if (flight.from && flight.to) {
-              const origin = new google.maps.Geocoder();
-              const destination = new google.maps.Geocoder();
+              const origin = flight.from;
+              const destination = flight.to;
 
-              origin.geocode({ address: flight.from }, (results, status) => {
-                if (status === 'OK') {
-                  new google.maps.Marker({
-                    map,
-                    position: results[0].geometry.location,
-                    title: 'Origin: ' + flight.from,
+              // Geocode the origin and destination addresses (this is a simple example, you can use a geocoding service)
+              const geocode = (address) => {
+                // Replace with your actual geocoding service, e.g., Nominatim, or use any third-party service
+                return fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
+                  .then(res => res.json())
+                  .then(data => {
+                    if (data[0]) {
+                      return [data[0].lat, data[0].lon];
+                    } else {
+                      return null;
+                    }
                   });
-                  map.setCenter(results[0].geometry.location); // Center the map to the origin
+              };
+
+              // Add marker for origin
+              geocode(origin).then((coords) => {
+                if (coords) {
+                  L.marker(coords).addTo(map).bindPopup(`Origin: ${origin}`).openPopup();
+                  map.setView(coords, 5);  // Adjust zoom level and center the map
                 }
               });
 
-              destination.geocode({ address: flight.to }, (results, status) => {
-                if (status === 'OK') {
-                  new google.maps.Marker({
-                    map,
-                    position: results[0].geometry.location,
-                    title: 'Destination: ' + flight.to,
-                  });
+              // Add marker for destination
+              geocode(destination).then((coords) => {
+                if (coords) {
+                  L.marker(coords).addTo(map).bindPopup(`Destination: ${destination}`).openPopup();
                 }
               });
             }
@@ -153,6 +168,5 @@
   </script>
 </body>
 </html>
-
 
 
