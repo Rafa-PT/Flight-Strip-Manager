@@ -147,6 +147,7 @@
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
 
         .chart:hover {
@@ -180,6 +181,47 @@
         .download-btn:hover {
             background-color: #57a7c0;
             transform: translateY(-3px);
+        }
+
+        /* Modal / Lightbox Styles */
+        /* Modal background */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+            padding-top: 60px;
+        }
+
+        /* Modal content (image) */
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80%;
+        }
+
+        /* Close button (X) */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ddd;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         /* Footer Section */
@@ -271,25 +313,28 @@
         <h2>Our Aviation Charts</h2>
         <div class="chart-container">
             <!-- Example chart entries using external URLs -->
-            <div class="chart">
+            <div class="chart" onclick="openModal('chart1')">
                 <h3>Chart 1: Atlanta Ground Charts</h3>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/ATL_-_FAA_airport_diagram.png" alt="Airport Approach Chart">
-                <a href="#" class="download-btn">Download</a>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/ATL_-_FAA_airport_diagram.png" alt="Airport Approach Chart" id="chart1">
             </div>
 
-            <div class="chart">
+            <div class="chart" onclick="openModal('chart2')">
                 <h3>Chart 2: Hong Kong Ground Charts</h3>
-                <img src="https://www.researchgate.net/publication/336868322/figure/fig16/AS:819156622528512@1572313566047/Hong-Kong-International-Airport.png" alt="Atlanta Ground Chart">
-                <a href="#" class="download-btn">Download</a>
+                <img src="https://www.researchgate.net/publication/336868322/figure/fig16/AS:819156622528512@1572313566047/Hong-Kong-International-Airport.png" alt="Atlanta Ground Chart" id="chart2">
             </div>
 
-            <div class="chart">
+            <div class="chart" onclick="openModal('chart3')">
                 <h3>Chart 3: Frankfurt Ground Charts</h3>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Frankfurt-Airport-Diagram.png" alt="Frankfurt Ground Charts">
-                <a href="#" class="download-btn">Download</a>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Frankfurt-Airport-Diagram.png" alt="Frankfurt Ground Charts" id="chart3">
             </div>
         </div>
     </section>
+
+    <!-- Modal for Zooming In on Images -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
 
     <!-- News Section -->
     <section id="news">
@@ -322,9 +367,35 @@
         <p>&copy; 2025 AvGeek Hub | All rights reserved</p>
     </footer>
 
+    <script>
+        // Open the modal with the clicked image
+        function openModal(chartId) {
+            var modal = document.getElementById("myModal");
+            var modalImage = document.getElementById("modalImage");
+            var chart = document.getElementById(chartId);
+            modal.style.display = "block";
+            modalImage.src = chart.src; // Set the modal image to be the clicked chart image
+        }
+
+        // Close the modal
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        // Close modal if clicked outside the image
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
 </body>
 
 </html>
+
 
 
 
