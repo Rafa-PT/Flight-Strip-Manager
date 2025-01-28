@@ -3,70 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Flight Simulator</title>
+    <title>3D Flight Simulator - Cockpit</title>
     <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2d2d2d;
+            overflow: hidden;
+        }
+
+        /* Container for the whole cockpit */
+        #cockpit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        /* Cockpit panel */
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Speedometer */
+        .speedometer, .altimeter, .heading-indicator {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .speedometer span, .altimeter span, .heading-indicator span {
+            font-size: 30px;
+        }
+
+        .indicator-text {
+            position: absolute;
+            bottom: 10px;
+            font-size: 14px;
+            color: white;
+        }
+
+        /* Controls and buttons */
+        #controls {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <div id="cockpit">
+        <!-- Speedometer Panel -->
+        <div class="panel">
+            <div class="speedometer" id="speedometer">
+                <span id="speedValue">0</span>
+                <div class="indicator-text">Speed (km/h)</div>
+            </div>
+        </div>
+
+        <!-- Altimeter Panel -->
+        <div class="panel">
+            <div class="altimeter" id="altimeter">
+                <span id="altitudeValue">0</span>
+                <div class="indicator-text">Altitude (m)</div>
+            </div>
+        </div>
+
+        <!-- Heading Indicator Panel -->
+        <div class="panel">
+            <div class="heading-indicator" id="headingIndicator">
+                <span id="headingValue">0</span>
+                <div class="indicator-text">Heading (°)</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="increaseSpeed()">Increase Speed</button>
+        <button onclick="decreaseSpeed()">Decrease Speed</button>
+        <button onclick="increaseAltitude()">Increase Altitude</button>
+        <button onclick="decreaseAltitude()">Decrease Altitude</button>
+        <button onclick="turnLeft()">Turn Left</button>
+        <button onclick="turnRight()">Turn Right</button>
+    </div>
+
     <script>
-        let scene, camera, renderer, airplane, clock;
+        // Flight variables
+        let speed = 0;           // Speed in km/h
+        let altitude = 0;        // Altitude in meters
+        let heading = 0;         // Heading in degrees
 
-        // Set up the scene
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        // Create a simple airplane model (a cube for simplicity)
-        const geometry = new THREE.BoxGeometry(1, 0.5, 0.2);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        airplane = new THREE.Mesh(geometry, material);
-        scene.add(airplane);
-
-        // Camera position
-        camera.position.z = 5;
-
-        // Handle window resizing
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Control the airplane
-        let speed = 0.1;
-        let altitude = 2;
-        let heading = 0;
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'w') speed += 0.1; // Increase speed
-            if (event.key === 's') speed -= 0.1; // Decrease speed
-            if (event.key === 'ArrowUp') altitude += 0.1; // Increase altitude
-            if (event.key === 'ArrowDown') altitude -= 0.1; // Decrease altitude
-            if (event.key === 'ArrowLeft') heading -= 1; // Turn left
-            if (event.key === 'ArrowRight') heading += 1; // Turn right
-        });
-
-        // Main animation loop
-        function animate() {
-            requestAnimationFrame(animate);
-            clock = new THREE.Clock();
-
-            // Apply basic physics to move the airplane (speed and heading)
-            airplane.position.z += speed * Math.cos(heading * Math.PI / 180);
-            airplane.position.x += speed * Math.sin(heading * Math.PI / 180);
-            airplane.position.y = altitude;
-
-            // Render the scene
-            renderer.render(scene, camera);
+        // Update cockpit UI with current values
+        function updateCockpit() {
+            document.getElementById('speedValue').innerText = speed;
+            document.getElementById('altitudeValue').innerText = altitude;
+            document.getElementById('headingValue').innerText = heading;
         }
 
-        animate();
+        // Speed control functions
+        function increaseSpeed() {
+            speed += 10;
+            updateCockpit();
+        }
+
+        function decreaseSpeed() {
+            speed = Math.max(0, speed - 10);
+            updateCockpit();
+        }
+
+        // Altitude control functions
+        function increaseAltitude() {
+            altitude += 100;
+            updateCockpit();
+        }
+
+        function decreaseAltitude() {
+            altitude = Math.max(0, altitude - 100);
+            updateCockpit();
+        }
+
+        // Heading control functions
+        function turnLeft() {
+            heading = (heading - 5 + 360) % 360;  // Keep within 0-359 degrees
+            updateCockpit();
+        }
+
+        function turnRight() {
+            heading = (heading + 5) % 360;        // Keep within 0-359 degrees
+            updateCockpit();
+        }
+
+        // Initial update to the cockpit
+        updateCockpit();
     </script>
+
 </body>
 </html>
 
