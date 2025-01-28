@@ -91,9 +91,39 @@
         }
 
         .chart-container {
-            max-width: 600px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* This ensures that the charts will wrap to the next line on smaller screens */
+            gap: 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
+
+        .chart {
+            max-width: 300px; /* Set a max width for each chart */
+            text-align: center;
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .download-btn {
+            background-color: #66ccff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    
+        .download-btn:hover {
+            background-color: #57a7c0;
 
         /* News Section */
         #news {
