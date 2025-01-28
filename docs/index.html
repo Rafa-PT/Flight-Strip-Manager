@@ -1,182 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Flight Simulator - Cockpit</title>
+    <title>AvGeek Hub - Aviation News, Charts & Forum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Global styles */
         body {
             margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        a {
+            color: #66ccff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #2c2c2c;
+            padding: 10px 20px;
+        }
+
+        #navbar ul {
+            list-style: none;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #2d2d2d;
-            overflow: hidden;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
         }
 
-        /* Container for the whole cockpit */
-        #cockpit {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 20px;
+        #navbar ul li {
+            display: inline;
         }
 
-        /* Cockpit panel */
-        .panel {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            width: 250px;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        #navbar ul li a {
             color: white;
             font-size: 18px;
-        }
-
-        /* Speedometer */
-        .speedometer, .altimeter, .heading-indicator {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px;
-        }
-
-        .speedometer span, .altimeter span, .heading-indicator span {
-            font-size: 30px;
-        }
-
-        .indicator-text {
-            position: absolute;
-            bottom: 10px;
-            font-size: 14px;
-            color: white;
-        }
-
-        /* Controls and buttons */
-        #controls {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-        }
-
-        button {
             padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin: 5px;
-            font-size: 16px;
         }
 
-        button:hover {
-            background-color: #45a049;
+        #navbar ul li a:hover {
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+        }
+
+        .cta-button {
+            background-color: #66ccff;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            background-color: #57a7c0;
+        }
+
+        /* Charts Section */
+        #charts {
+            padding: 40px;
+            background-color: #1e1e1e;
+            text-align: center;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* News Section */
+        #news {
+            padding: 40px;
+            background-color: #121212;
+        }
+
+        .news-article {
+            margin-bottom: 20px;
+        }
+
+        /* Aircraft Section */
+        #aircraft {
+            padding: 40px;
+            background-color: #1e1e1e;
+        }
+
+        /* Forum Section */
+        #forum {
+            padding: 40px;
+            background-color: #121212;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c2c2c;
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #navbar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #navbar ul li a {
+                padding: 12px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div id="cockpit">
-        <!-- Speedometer Panel -->
-        <div class="panel">
-            <div class="speedometer" id="speedometer">
-                <span id="speedValue">0</span>
-                <div class="indicator-text">Speed (km/h)</div>
-            </div>
+    <!-- Navigation Bar -->
+    <nav id="navbar">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#charts">Charts</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#aircraft">Aircraft</a></li>
+            <li><a href="#forum">Forum</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Welcome to AvGeek Hub</h1>
+        <p>Your go-to hub for aviation charts, news, and a community of aviation enthusiasts!</p>
+        <a href="#forum" class="cta-button">Join the Forum</a>
+    </section>
+
+    <!-- Charts Section -->
+    <section id="charts">
+        <h2>Flight Charts</h2>
+        <div class="chart-container">
+            <!-- Example chart placeholder -->
+            <canvas id="chart"></canvas>
         </div>
+    </section>
 
-        <!-- Altimeter Panel -->
-        <div class="panel">
-            <div class="altimeter" id="altimeter">
-                <span id="altitudeValue">0</span>
-                <div class="indicator-text">Altitude (m)</div>
-            </div>
+    <!-- News Section -->
+    <section id="news">
+        <h2>Latest Aviation News</h2>
+        <div class="news-article">
+            <h3>Title of the Article</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet dictum risus. <a href="#">Read more</a></p>
         </div>
-
-        <!-- Heading Indicator Panel -->
-        <div class="panel">
-            <div class="heading-indicator" id="headingIndicator">
-                <span id="headingValue">0</span>
-                <div class="indicator-text">Heading (°)</div>
-            </div>
+        <div class="news-article">
+            <h3>Another Article</h3>
+            <p>Aliquam erat volutpat. Suspendisse potenti. <a href="#">Read more</a></p>
         </div>
-    </div>
+    </section>
 
-    <div id="controls">
-        <button onclick="increaseSpeed()">Increase Speed</button>
-        <button onclick="decreaseSpeed()">Decrease Speed</button>
-        <button onclick="increaseAltitude()">Increase Altitude</button>
-        <button onclick="decreaseAltitude()">Decrease Altitude</button>
-        <button onclick="turnLeft()">Turn Left</button>
-        <button onclick="turnRight()">Turn Right</button>
-    </div>
+    <!-- Aircraft Section -->
+    <section id="aircraft">
+        <h2>Aircraft Database</h2>
+        <p>Explore the different aircraft types used worldwide.</p>
+        <a href="#">See Aircraft Database</a>
+    </section>
 
+    <!-- Forum Section -->
+    <section id="forum">
+        <h2>Join the Conversation</h2>
+        <p>Discuss aviation topics with fellow enthusiasts in our forum.</p>
+        <a href="forum.html" class="cta-button">Visit Forum</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AvGeek Hub | All rights reserved</p>
+    </footer>
+
+    <!-- JavaScript for dynamic chart rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Flight variables
-        let speed = 0;           // Speed in km/h
-        let altitude = 0;        // Altitude in meters
-        let heading = 0;         // Heading in degrees
-
-        // Update cockpit UI with current values
-        function updateCockpit() {
-            document.getElementById('speedValue').innerText = speed;
-            document.getElementById('altitudeValue').innerText = altitude;
-            document.getElementById('headingValue').innerText = heading;
-        }
-
-        // Speed control functions
-        function increaseSpeed() {
-            speed += 10;
-            updateCockpit();
-        }
-
-        function decreaseSpeed() {
-            speed = Math.max(0, speed - 10);
-            updateCockpit();
-        }
-
-        // Altitude control functions
-        function increaseAltitude() {
-            altitude += 100;
-            updateCockpit();
-        }
-
-        function decreaseAltitude() {
-            altitude = Math.max(0, altitude - 100);
-            updateCockpit();
-        }
-
-        // Heading control functions
-        function turnLeft() {
-            heading = (heading - 5 + 360) % 360;  // Keep within 0-359 degrees
-            updateCockpit();
-        }
-
-        function turnRight() {
-            heading = (heading + 5) % 360;        // Keep within 0-359 degrees
-            updateCockpit();
-        }
-
-        // Initial update to the cockpit
-        updateCockpit();
+        // Example of rendering a chart on the homepage
+        window.onload = function () {
+            var ctx = document.getElementById('chart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',  // Chart type
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Aircraft Movements',
+                        borderColor: '#66ccff',
+                        data: [12, 19, 3, 5, 2, 3, 10],
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        };
     </script>
-
 </body>
+
 </html>
+
 
 
