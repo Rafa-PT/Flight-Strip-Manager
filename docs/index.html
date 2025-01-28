@@ -1,95 +1,87 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.input.KeyEvent;
-import javafx.animation.AnimationTimer;
-
-public class FlightSim extends Application {
-
-    private double altitude = 1000; // Initial altitude (in feet)
-    private double speed = 250; // Initial speed (in knots)
-    private double heading = 0; // 0 degrees (North)
-
-    // Aircraft's graphical representation (a simple rectangle)
-    private Rectangle aircraft;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        StackPane root = new StackPane();
-        Scene scene = new Scene(root, 800, 600);
-        scene.setFill(Color.CYAN);  // Sky blue background
-
-        // Create a simple rectangular "aircraft"
-        aircraft = new Rectangle(40, 20, Color.RED);
-        root.getChildren().add(aircraft);
-
-        // Handle key events to control the flight
-        scene.setOnKeyPressed(this::handleKeyPress);
-
-        // Initialize the "flight" simulation timer
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                updateAircraftPosition();
-            }
-        }.start();
-
-        primaryStage.setTitle("Simple Flight Simulator");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    // Handle key press events to control speed, altitude, and heading
-    private void handleKeyPress(KeyEvent event) {
-        switch (event.getCode()) {
-            case UP: // Increase altitude
-                altitude += 100;
-                break;
-            case DOWN: // Decrease altitude
-                altitude -= 100;
-                break;
-            case LEFT: // Turn left (heading counter-clockwise)
-                heading -= 5;
-                break;
-            case RIGHT: // Turn right (heading clockwise)
-                heading += 5;
-                break;
-            case W: // Increase speed
-                speed += 10;
-                break;
-            case S: // Decrease speed
-                speed -= 10;
-                break;
-            default:
-                break;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple Java Flight Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f8ff;
+            color: #333;
         }
-    }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        section {
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 18px;
+        }
+        .code-button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .code-button:hover {
+            background-color: #007B9A;
+        }
+    </style>
+</head>
+<body>
 
-    // Update aircraft position based on speed and heading
-    private void updateAircraftPosition() {
-        // Calculate new position based on heading and speed
-        double deltaX = Math.cos(Math.toRadians(heading)) * speed / 50; // Divide speed to slow down the movement
-        double deltaY = Math.sin(Math.toRadians(heading)) * speed / 50;
+    <header>
+        <h1>Simple Java Flight Simulator</h1>
+        <p>Control the aircraft’s speed, altitude, and heading in this basic Java flight simulator built using JavaFX.</p>
+    </header>
 
-        // Update aircraft's position
-        aircraft.setX(aircraft.getX() + deltaX);
-        aircraft.setY(aircraft.getY() + deltaY);
+    <section>
+        <h2>About the Flight Simulator</h2>
+        <p>This is a simple flight simulator written in Java. It allows you to control an aircraft’s speed, altitude, and heading using keyboard controls. It’s built using JavaFX for graphical rendering.</p>
+        
+        <h3>Controls</h3>
+        <ul>
+            <li>Up Arrow - Increase altitude</li>
+            <li>Down Arrow - Decrease altitude</li>
+            <li>Left Arrow - Turn left (heading counter-clockwise)</li>
+            <li>Right Arrow - Turn right (heading clockwise)</li>
+            <li>W - Increase speed</li>
+            <li>S - Decrease speed</li>
+        </ul>
+        
+        <h3>How to Run the Flight Simulator</h3>
+        <p>To run the simulator, follow these steps:</p>
+        <ol>
+            <li>Ensure you have Java 11 or later installed.</li>
+            <li>Download and set up JavaFX.</li>
+            <li>Compile and run the <code>FlightSim.java</code> file.</li>
+        </ol>
 
-        // For simplicity, let's add a limit to the movement
-        if (aircraft.getX() > 800) aircraft.setX(0); // Wrap around horizontally
-        if (aircraft.getY() > 600) aircraft.setY(0); // Wrap around vertically
+        <a href="https://github.com/yourusername/flight-simulator-java" class="code-button" target="_blank">View and Download Code on GitHub</a>
+    </section>
 
-        // Optionally: display the altitude and speed in the console
-        System.out.println("Altitude: " + altitude + " ft, Speed: " + speed + " knots, Heading: " + heading + "°");
-    }
-}
+    <section>
+        <h3>Download the FlightSim.java File</h3>
+        <p>Click the button below to download the <code>FlightSim.java</code> file and run it on your local machine:</p>
+        <a href="https://github.com/yourusername/flight-simulator-java/raw/main/src/FlightSim.java" class="code-button" download>Download FlightSim.java</a>
+    </section>
+
+</body>
+</html>
 
 
 
