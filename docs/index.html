@@ -1,161 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flight Tracker</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    form {
-      margin-bottom: 20px;
-    }
-    input {
-      padding: 8px;
-      font-size: 14px;
-      margin-right: 8px;
-    }
-    button {
-      padding: 8px 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #results {
-      margin-top: 20px;
-    }
-    .flight-card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      background: #f9f9f9;
-    }
-    .flight-card h3 {
-      margin: 0;
-      color: #007bff;
-    }
-    .flight-card p {
-      margin: 5px 0;
-      color: #555;
-    }
-    #map {
-      height: 400px;
-      width: 100%;
-      margin-top: 20px;
-    }
-  </style>
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.input.KeyEvent;
+import javafx.animation.AnimationTimer;
 
-  <!-- Include Leaflet CSS and JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+public class FlightSim extends Application {
 
-</head>
-<body>
-  <h1>Flight Tracker</h1>
-  <form id="search-form">
-    <input type="text" id="search-input" placeholder="Enter Flight IATA Code (e.g., AA100)" required>
-    <button type="submit">Search</button>
-  </form>
-  <div id="results"></div>
-  <div id="map"></div> <!-- Leaflet Map Placeholder -->
+    private double altitude = 1000; // Initial altitude (in feet)
+    private double speed = 250; // Initial speed (in knots)
+    private double heading = 0; // 0 degrees (North)
 
-  <script>
-    let map;
+    // Aircraft's graphical representation (a simple rectangle)
+    private Rectangle aircraft;
 
-    // Initialize the Leaflet map
-    function initMap() {
-      map = L.map('map').setView([51.505, -0.09], 2);  // Default view set to London, you can change it
-
-      // Add OpenStreetMap tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+    public static void main(String[] args) {
+        launch(args);
     }
 
-    // Call initMap when the page loads
-    window.onload = initMap;
+    @Override
+    public void start(Stage primaryStage) {
+        StackPane root = new StackPane();
+        Scene scene = new Scene(root, 800, 600);
+        scene.setFill(Color.CYAN);  // Sky blue background
 
-    document.getElementById('search-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const searchInput = document.getElementById('search-input').value.trim();
-      const resultsContainer = document.getElementById('results');
-      resultsContainer.innerHTML = ''; // Clear previous results
+        // Create a simple rectangular "aircraft"
+        aircraft = new Rectangle(40, 20, Color.RED);
+        root.getChildren().add(aircraft);
 
-      if (!searchInput) {
-        resultsContainer.innerHTML = '<p>Please enter a valid flight code.</p>';
-        return;
-      }
+        // Handle key events to control the flight
+        scene.setOnKeyPressed(this::handleKeyPress);
 
-      try {
-        const response = await fetch(`https://adsbexchange-com1.p.rapidapi.com/v2/search/iata/${searchInput}`, {
-          method: 'GET',
-          headers: {
-            'X-RapidAPI-Host': 'adsbexchange-com1.p.rapidapi.com',
-            'X-RapidAPI-Key': 'c9ff657bdaa1a2c74ea9f42191f0aaec'  // Your API Key
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch flight data. Please try again.');
-        }
-
-        const data = await response.json();
-
-        // Debug: Log the entire response to check the data structure
-        console.log('API Response:', data);
-
-        if (data.ac && data.ac.length > 0) {
-          data.ac.forEach((flight) => {
-            const flightCard = document.createElement('div');
-            flightCard.className = 'flight-card';
-            flightCard.innerHTML = `
-              <h3>Flight: ${flight.flight}</h3>
-              <p>Aircraft Type: ${flight.type || 'N/A'}</p>
-              <p>Origin: ${flight.from || 'Unknown'}</p>
-              <p>Destination: ${flight.to || 'Unknown'}</p>
-            `;
-            resultsContainer.appendChild(flightCard);
-
-            // Check if lat and lon exist for the flight
-            if (flight.lat && flight.lon) {
-              const lat = flight.lat;
-              const lon = flight.lon;
-
-              // Plot the plane's position as a dot (circle marker)
-              const planeDot = L.circleMarker([lat, lon], {
-                color: 'red',
-                radius: 6, // Size of the dot
-                fillOpacity: 0.8
-              }).addTo(map)
-              .bindPopup(`Flight: ${flight.flight}<br>Aircraft Type: ${flight.type || 'N/A'}`)
-              .openPopup();
-
-              // Adjust the map view to center on the plane's location
-              map.setView([lat, lon], 5);  // Adjust zoom level to make sure the plane is visible
+        // Initialize the "flight" simulation timer
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                updateAircraftPosition();
             }
-          });
-        } else {
-          resultsContainer.innerHTML = '<p>No flights found with the given IATA code.</p>';
-        }
-      } catch (error) {
-        resultsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-      }
-    });
-  </script>
-</body>
-</html>
+        }.start();
 
+        primaryStage.setTitle("Simple Flight Simulator");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    // Handle key press events to control speed, altitude, and heading
+    private void handleKeyPress(KeyEvent event) {
+        switch (event.getCode()) {
+            case UP: // Increase altitude
+                altitude += 100;
+                break;
+            case DOWN: // Decrease altitude
+                altitude -= 100;
+                break;
+            case LEFT: // Turn left (heading counter-clockwise)
+                heading -= 5;
+                break;
+            case RIGHT: // Turn right (heading clockwise)
+                heading += 5;
+                break;
+            case W: // Increase speed
+                speed += 10;
+                break;
+            case S: // Decrease speed
+                speed -= 10;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Update aircraft position based on speed and heading
+    private void updateAircraftPosition() {
+        // Calculate new position based on heading and speed
+        double deltaX = Math.cos(Math.toRadians(heading)) * speed / 50; // Divide speed to slow down the movement
+        double deltaY = Math.sin(Math.toRadians(heading)) * speed / 50;
+
+        // Update aircraft's position
+        aircraft.setX(aircraft.getX() + deltaX);
+        aircraft.setY(aircraft.getY() + deltaY);
+
+        // For simplicity, let's add a limit to the movement
+        if (aircraft.getX() > 800) aircraft.setX(0); // Wrap around horizontally
+        if (aircraft.getY() > 600) aircraft.setY(0); // Wrap around vertically
+
+        // Optionally: display the altitude and speed in the console
+        System.out.println("Altitude: " + altitude + " ft, Speed: " + speed + " knots, Heading: " + heading + "°");
+    }
+}
 
 
 
