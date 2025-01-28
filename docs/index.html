@@ -3,85 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Simple Java Flight Simulator</title>
+    <title>3D Flight Simulator</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f8ff;
-            color: #333;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-        section {
-            margin-top: 20px;
-        }
-        h1 {
-            font-size: 24px;
-        }
-        p {
-            font-size: 18px;
-        }
-        .code-button {
-            background-color: #008CBA;
-            color: white;
-            padding: 10px 20px;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .code-button:hover {
-            background-color: #007B9A;
-        }
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, airplane, clock;
 
-    <header>
-        <h1>Simple Java Flight Simulator</h1>
-        <p>Control the aircraft’s speed, altitude, and heading in this basic Java flight simulator built using JavaFX.</p>
-    </header>
+        // Set up the scene
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-    <section>
-        <h2>About the Flight Simulator</h2>
-        <p>This is a simple flight simulator written in Java. It allows you to control an aircraft’s speed, altitude, and heading using keyboard controls. It’s built using JavaFX for graphical rendering.</p>
-        
-        <h3>Controls</h3>
-        <ul>
-            <li>Up Arrow - Increase altitude</li>
-            <li>Down Arrow - Decrease altitude</li>
-            <li>Left Arrow - Turn left (heading counter-clockwise)</li>
-            <li>Right Arrow - Turn right (heading clockwise)</li>
-            <li>W - Increase speed</li>
-            <li>S - Decrease speed</li>
-        </ul>
-        
-        <h3>How to Run the Flight Simulator</h3>
-        <p>To run the simulator, follow these steps:</p>
-        <ol>
-            <li>Ensure you have Java 11 or later installed.</li>
-            <li>Download and set up JavaFX.</li>
-            <li>Compile and run the <code>FlightSim.java</code> file.</li>
-        </ol>
+        // Create a simple airplane model (a cube for simplicity)
+        const geometry = new THREE.BoxGeometry(1, 0.5, 0.2);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        airplane = new THREE.Mesh(geometry, material);
+        scene.add(airplane);
 
-        <a href="https://github.com/yourusername/flight-simulator-java" class="code-button" target="_blank">View and Download Code on GitHub</a>
-    </section>
+        // Camera position
+        camera.position.z = 5;
 
-    <section>
-        <h3>Download the FlightSim.java File</h3>
-        <p>Click the button below to download the <code>FlightSim.java</code> file and run it on your local machine:</p>
-        <a href="https://github.com/yourusername/flight-simulator-java/raw/main/src/FlightSim.java" class="code-button" download>Download FlightSim.java</a>
-    </section>
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
+        // Control the airplane
+        let speed = 0.1;
+        let altitude = 2;
+        let heading = 0;
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'w') speed += 0.1; // Increase speed
+            if (event.key === 's') speed -= 0.1; // Decrease speed
+            if (event.key === 'ArrowUp') altitude += 0.1; // Increase altitude
+            if (event.key === 'ArrowDown') altitude -= 0.1; // Decrease altitude
+            if (event.key === 'ArrowLeft') heading -= 1; // Turn left
+            if (event.key === 'ArrowRight') heading += 1; // Turn right
+        });
+
+        // Main animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            clock = new THREE.Clock();
+
+            // Apply basic physics to move the airplane (speed and heading)
+            airplane.position.z += speed * Math.cos(heading * Math.PI / 180);
+            airplane.position.x += speed * Math.sin(heading * Math.PI / 180);
+            airplane.position.y = altitude;
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
 </body>
 </html>
-
 
 
