@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AeroSphere - Aviation News, Charts & Forum</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet"> together with that that you've just scripted 
     <style>
         /* Global styles */
         * {
@@ -260,10 +260,6 @@
                 align-items: center;
             }
 
-            .more-text {
-                display: none;
-            }
-
             .chart {
                 width: 80%;
                 margin-bottom: 20px;
@@ -285,7 +281,6 @@
             #hero p {
                 font-size: 1rem;
             }
-
         }
     </style>
 </head>
@@ -294,7 +289,7 @@
 
     <!-- Navigation Bar -->
     <header>
-        <h1>AeroSphere</h1>
+        <h1>AvGeek Hub</h1>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -314,28 +309,26 @@
     </section>
 
     <!-- Charts Section -->
-    <section id="news">
-        <h2>Latest Aviation News</h2>
+    <section id="charts">
+        <h2>Our Aviation Charts</h2>
+        <div class="chart-container">
+            <!-- Example chart entries using external URLs -->
+            <div class="chart" onclick="openModal('chart1')">
+                <h3>Chart 1: Atlanta Ground Charts</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/ATL_-_FAA_airport_diagram.png" alt="Airport Approach Chart" id="chart1">
+            </div>
 
-        <div class="news-article">
-            <h3>Boom Achieves Supersonic Flight with XB-1 Demonstrator!</h3>
-            <p>
-                Since Concorde was retired, no other commercial supersonic plane has been built...
-                <span class="more-text" id="more1">but things are about to change very soon with Boom's new prototype achieving key milestones in supersonic flight.</span>
-            </p>
-            <a href="#" class="read-more" onclick="toggleReadMore('more1', this)">Read More</a>
-        </div>
+            <div class="chart" onclick="openModal('chart2')">
+                <h3>Chart 2: Hong Kong Ground Charts</h3>
+                <img src="https://www.researchgate.net/publication/336868322/figure/fig16/AS:819156622528512@1572313566047/Hong-Kong-International-Airport.png" alt="Atlanta Ground Chart" id="chart2">
+            </div>
 
-        <div class="news-article">
-            <h3>All occupants escape Air Busan A321 after fire breaks out at Gimhae</h3>
-            <p>
-                A dramatic evacuation took place as passengers fled the aircraft...
-                <span class="more-text" id="more2">prompting investigations into the cause of the fire and a review of emergency procedures that saved lives.</span>
-            </p>
-            <a href="#" class="read-more" onclick="toggleReadMore('more2', this)">Read More</a>
+            <div class="chart" onclick="openModal('chart3')">
+                <h3>Chart 3: Frankfurt Ground Charts</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Frankfurt-Airport-Diagram.png" alt="Frankfurt Ground Charts" id="chart3">
+            </div>
         </div>
     </section>
-
 
     <!-- Modal for Zooming In on Images -->
     <div id="myModal" class="modal">
@@ -399,24 +392,8 @@
         }
     </script>
 
-    <script>
-        function toggleReadMore(id, link) {
-            var moreText = document.getElementById(id);
-    
-        if (moreText.style.display === "none" || moreText.style.display === "") {
-            moreText.style.display = "inline";
-            link.textContent = "Read Less";
-        } else {
-            moreText.style.display = "none";
-            link.textContent = "Read More";
-        }
-    }
-    </script>
-
-
 </body>
 
 </html>
-
 
 
