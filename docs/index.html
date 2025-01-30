@@ -7,6 +7,81 @@
     <title>AeroSphere - Aviation News, Charts & Forum</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Global Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: #121212; color: #fff; line-height: 1.6; }
+        a { text-decoration: none; color: #66ccff; }
+        a:hover { color: #57a7c0; }
+
+        /* Header */
+        header { background-color: #1e1e1e; padding: 20px 0; text-align: center; }
+        header h1 { font-size: 3.5rem; color: #66ccff; }
+        header nav ul { list-style: none; display: flex; justify-content: center; gap: 25px; }
+        header nav ul li a { font-size: 1.1rem; text-transform: uppercase; padding: 8px 15px; }
+        header nav ul li a:hover { background-color: #66ccff; border-radius: 5px; }
+
+        /* Hero Section */
+        #hero { background: linear-gradient(to right, #121212, #333); padding: 100px 20px; text-align: center; }
+        #hero h2 { font-size: 4rem; margin-bottom: 20px; color: #66ccff; }
+        .btn-primary { background-color: #66ccff; color: #fff; padding: 15px 30px; border-radius: 50px; display: inline-block; }
+        .btn-primary:hover { background-color: #57a7c0; }
+
+        /* Sections */
+        section { padding: 60px 20px; text-align: center; }
+        h2 { font-size: 3rem; color: #66ccff; }
+        p { font-size: 1.2rem; color: #ccc; }
+
+        /* News Section */
+        .news-article { margin-bottom: 40px; }
+        .news-article h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .read-more { color: #66ccff; font-weight: bold; }
+        .read-more:hover { color: #57a7c0; }
+
+        /* Footer */
+        footer { background-color: #121212; padding: 40px 20px; text-align: center; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <h1>AvGeek Hub</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#charts">Charts</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#aircraft">Aircraft</a></li>
+                <li><a href="#forum">Forum</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home">
+        <h2>Welcome to the Aviation World!</h2>
+        <p>Your go-to hub for aviation charts, news, and a community of aviation enthusiasts!</p>
+        <a href="#forum" class="btn-primary">Join our Forum</a>
+    </section>
+
+    <!-- News Section -->
+    <section id="news">
+        <h2>Latest Aviation News</h2>
+        <div class="news-article">
+            <h3>Boom Achieves Supersonic Flight with XB-1 Demonstrator!</h3>
+            <p>Since Concorde was retired, no other commercial supersonic plane has been built - but things are about to change very soon. 
+                <a href="your-story-page1.html" class="read-more" target="_blank">Read more</a>
+            </p>
+        </div>
+        <div class="news-article">
+            <h3>All occupants escape Air Busan A321 after fire breaks out at Gimhae</h3>
+            <p>Here lies the demonstration of some amazing procedures and the hard work of everyone to increase security during flights. 
+                <a href="your-story-page2.html" class="read-more" target="_blank">Read more</a>
+            </p>
+        </div>
+    </section>
+
         /* Global styles */
         * {
             margin: 0;
