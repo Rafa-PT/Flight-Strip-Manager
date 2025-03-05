@@ -46,14 +46,14 @@
                 
                 console.log('API Response:', data);  // Log the full response to inspect it
 
-                // Check if pilots data is available
-                if (!data.pilots || !Array.isArray(data.pilots) || data.pilots.length === 0) {
+                // Check if pilots data is available in the 'clients.pilots' array
+                if (!data.clients || !data.clients.pilots || !Array.isArray(data.clients.pilots) || data.clients.pilots.length === 0) {
                     console.log('No pilots data available');
                     return;
                 }
 
                 // Filter pilots to show only those in Portugal (latitude/longitude within Portugal boundaries)
-                const portugalPilots = data.pilots.filter(pilot => 
+                const portugalPilots = data.clients.pilots.filter(pilot => 
                     pilot.latitude >= 36 && pilot.latitude <= 43 &&
                     pilot.longitude >= -10 && pilot.longitude <= -6
                 );
@@ -70,7 +70,7 @@
                 });
 
                 // Filter controllers in Portugal (for ATC)
-                const portugalATC = data.controllers.filter(atc => atc.callsign.startsWith('LP'));
+                const portugalATC = data.clients.atcs.filter(atc => atc.callsign.startsWith('LP'));
 
                 portugalATC.forEach(atc => {
                     L.circleMarker([atc.latitude, atc.longitude], {
@@ -90,5 +90,4 @@
     </script>
 </body>
 </html>
-
 
