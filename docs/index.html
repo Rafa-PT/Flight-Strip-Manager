@@ -22,12 +22,12 @@
     </style>
 </head>
 <body>
-    <h1>IVAO Portugal Radar</h1>
+    <h1>IVAO Radar</h1>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([39.5, -8.0], 7); // Centered on Portugal
+        const map = L.map('map').setView([39.5, -8.0], 3); // Adjusted zoom level to show the entire world
         
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap & CartoDB'
@@ -52,18 +52,9 @@
                     return;
                 }
 
-                // Filter pilots to show only those in Portugal (latitude/longitude within Portugal boundaries)
-                const portugalPilots = data.clients.pilots.filter(pilot => 
-                    pilot.latitude >= 36 && pilot.latitude <= 43 &&
-                    pilot.longitude >= -10 && pilot.longitude <= -6 &&
-                    pilot.latitude && pilot.longitude // Ensure latitude and longitude are valid
-                );
-
-                console.log('Filtered pilots in Portugal:', portugalPilots);
-
-                // Add the filtered pilots to the map
-                portugalPilots.forEach(pilot => {
-                    // Check if pilot has valid latitude and longitude before adding to map
+                // Add all pilots to the map (no geographical filtering)
+                data.clients.pilots.forEach(pilot => {
+                    // Ensure pilot has valid latitude and longitude before adding to map
                     if (pilot.latitude && pilot.longitude) {
                         L.circleMarker([pilot.latitude, pilot.longitude], {
                             color: '#00ff00',
@@ -73,11 +64,9 @@
                     }
                 });
 
-                // Filter controllers in Portugal (for ATC)
-                const portugalATC = data.clients.atcs.filter(atc => atc.callsign.startsWith('LP'));
-
-                portugalATC.forEach(atc => {
-                    // Check if ATC has valid latitude and longitude before adding to map
+                // Add all ATC controllers to the map (no geographical filtering)
+                data.clients.atcs.forEach(atc => {
+                    // Ensure ATC has valid latitude and longitude before adding to map
                     if (atc.latitude && atc.longitude) {
                         L.circleMarker([atc.latitude, atc.longitude], {
                             color: '#ff0000',
