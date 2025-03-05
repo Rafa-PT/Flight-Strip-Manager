@@ -31,9 +31,35 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(map);
+
+        async function fetchIVAOData() {
+            try {
+                const response = await fetch('https://api.ivao.aero/v2/tracker/whazzup');
+                const data = await response.json();
+                
+                // Filter pilots in Portugal
+                const portugalPilots = data.pilots.filter(pilot => pilot.flight_plan && pilot.flight_plan.departure_id.startsWith('LP'));
+                
+                portugalPilots.forEach(pilot => {
+                    L.marker([pilot.latitude, pilot.longitude]).addTo(map)
+                        .bindPopup(`<b>${pilot.callsign}</b><br>${pilot.aircraft}<br>Altitude: ${pilot.altitude} ft`);
+                });
+                
+                // Filter controllers in Portugal
+                const portugalATC = data.controllers.filter(atc => atc.callsign.startsWith('LP'));
+                
+                portugalATC.forEach(atc => {
+                    L.marker([atc.latitude, atc.longitude], { icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/201/201623.png', iconSize: [25, 25] }) })
+                        .addTo(map)
+                        .bindPopup(`<b>${atc.callsign}</b><br>Frequency: ${atc.frequency}`);
+                });
+            } catch (error) {
+                console.error('Error fetching IVAO data:', error);
+            }
+        }
+
+        fetchIVAOData();
     </script>
 </body>
 </html>
-
-
 
