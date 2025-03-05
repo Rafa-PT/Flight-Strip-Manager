@@ -48,23 +48,21 @@
     <script>
         async function fetchIVAOData() {
             try {
+                // Fetch the data from the API
                 const response = await fetch('https://api.ivao.aero/v2/tracker/whazzup');
                 
+                // Check if the response was successful
                 if (!response.ok) {
-                    console.error('Failed to fetch data:', response.status, response.statusText);
-                    return;
+                    throw new Error('Network response was not ok');
                 }
 
+                // Parse the JSON response
                 const data = await response.json();
-                
-                console.log('API Response:', data);  // Log the full response to inspect it
 
-                // Check if the 'clients' field exists
-                if (!data.clients) {
-                    console.error('No "clients" data found in the API response');
-                    return;
-                }
+                // Log the full data to inspect its structure
+                console.log('API Response:', data);
 
+                // Get references to the HTML elements where we'll display the data
                 const pilotsList = document.getElementById('pilots-list');
                 const atcList = document.getElementById('atc-list');
                 
@@ -72,8 +70,8 @@
                 pilotsList.innerHTML = '';
                 atcList.innerHTML = '';
 
-                // Check if pilots data is available in the 'clients.pilots' array
-                if (data.clients.pilots && Array.isArray(data.clients.pilots) && data.clients.pilots.length > 0) {
+                // Handle Pilots Data
+                if (data.clients && data.clients.pilots && Array.isArray(data.clients.pilots)) {
                     data.clients.pilots.forEach(pilot => {
                         if (pilot.callsign && pilot.latitude && pilot.longitude) {
                             const pilotDiv = document.createElement('div');
@@ -86,8 +84,8 @@
                     pilotsList.innerHTML = '<p>No pilots data available</p>';
                 }
 
-                // Check if ATC data is available in the 'clients.atcs' array
-                if (data.clients.atcs && Array.isArray(data.clients.atcs) && data.clients.atcs.length > 0) {
+                // Handle ATC Data
+                if (data.clients && data.clients.atcs && Array.isArray(data.clients.atcs)) {
                     data.clients.atcs.forEach(atc => {
                         if (atc.callsign && atc.latitude && atc.longitude) {
                             const atcDiv = document.createElement('div');
@@ -110,3 +108,4 @@
     </script>
 </body>
 </html>
+
