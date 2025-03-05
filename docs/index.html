@@ -55,29 +55,36 @@
                 // Filter pilots to show only those in Portugal (latitude/longitude within Portugal boundaries)
                 const portugalPilots = data.clients.pilots.filter(pilot => 
                     pilot.latitude >= 36 && pilot.latitude <= 43 &&
-                    pilot.longitude >= -10 && pilot.longitude <= -6
+                    pilot.longitude >= -10 && pilot.longitude <= -6 &&
+                    pilot.latitude && pilot.longitude // Ensure latitude and longitude are valid
                 );
 
                 console.log('Filtered pilots in Portugal:', portugalPilots);
 
                 // Add the filtered pilots to the map
                 portugalPilots.forEach(pilot => {
-                    L.circleMarker([pilot.latitude, pilot.longitude], {
-                        color: '#00ff00',
-                        radius: 5
-                    }).addTo(map)
-                    .bindPopup(`<b>${pilot.callsign}</b><br>${pilot.aircraft}<br>Altitude: ${pilot.altitude} ft`);
+                    // Check if pilot has valid latitude and longitude before adding to map
+                    if (pilot.latitude && pilot.longitude) {
+                        L.circleMarker([pilot.latitude, pilot.longitude], {
+                            color: '#00ff00',
+                            radius: 5
+                        }).addTo(map)
+                        .bindPopup(`<b>${pilot.callsign}</b><br>${pilot.aircraft}<br>Altitude: ${pilot.altitude} ft`);
+                    }
                 });
 
                 // Filter controllers in Portugal (for ATC)
                 const portugalATC = data.clients.atcs.filter(atc => atc.callsign.startsWith('LP'));
 
                 portugalATC.forEach(atc => {
-                    L.circleMarker([atc.latitude, atc.longitude], {
-                        color: '#ff0000',
-                        radius: 7
-                    }).addTo(map)
-                    .bindPopup(`<b>${atc.callsign}</b><br>Frequency: ${atc.frequency}`);
+                    // Check if ATC has valid latitude and longitude before adding to map
+                    if (atc.latitude && atc.longitude) {
+                        L.circleMarker([atc.latitude, atc.longitude], {
+                            color: '#ff0000',
+                            radius: 7
+                        }).addTo(map)
+                        .bindPopup(`<b>${atc.callsign}</b><br>Frequency: ${atc.frequency}`);
+                    }
                 });
             } catch (error) {
                 console.error('Error fetching IVAO data:', error);
@@ -90,4 +97,5 @@
     </script>
 </body>
 </html>
+
 
