@@ -59,6 +59,12 @@
                 
                 console.log('API Response:', data);  // Log the full response to inspect it
 
+                // Check if the 'clients' field exists
+                if (!data.clients) {
+                    console.error('No "clients" data found in the API response');
+                    return;
+                }
+
                 const pilotsList = document.getElementById('pilots-list');
                 const atcList = document.getElementById('atc-list');
                 
@@ -67,7 +73,7 @@
                 atcList.innerHTML = '';
 
                 // Check if pilots data is available in the 'clients.pilots' array
-                if (data.clients && data.clients.pilots && Array.isArray(data.clients.pilots) && data.clients.pilots.length > 0) {
+                if (data.clients.pilots && Array.isArray(data.clients.pilots) && data.clients.pilots.length > 0) {
                     data.clients.pilots.forEach(pilot => {
                         if (pilot.callsign && pilot.latitude && pilot.longitude) {
                             const pilotDiv = document.createElement('div');
@@ -81,7 +87,7 @@
                 }
 
                 // Check if ATC data is available in the 'clients.atcs' array
-                if (data.clients && data.clients.atcs && Array.isArray(data.clients.atcs) && data.clients.atcs.length > 0) {
+                if (data.clients.atcs && Array.isArray(data.clients.atcs) && data.clients.atcs.length > 0) {
                     data.clients.atcs.forEach(atc => {
                         if (atc.callsign && atc.latitude && atc.longitude) {
                             const atcDiv = document.createElement('div');
@@ -104,5 +110,3 @@
     </script>
 </body>
 </html>
-
-
