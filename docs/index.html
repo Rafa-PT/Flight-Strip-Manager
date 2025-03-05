@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IVAO Portugal Radar</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>IVAO Data</title>
     <style>
         body {
             background-color: #000;
@@ -12,27 +11,41 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
-        #map {
-            height: 90vh;
-            width: 95vw;
-            margin: auto;
-            border: 2px solid #00ff00;
-            border-radius: 10px;
+        .container {
+            margin-top: 20px;
+        }
+        .pilot, .atc {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .pilot {
+            background-color: #2a2a2a;
+        }
+        .atc {
+            background-color: #3a3a3a;
+        }
+        h2 {
+            color: #00ff00;
+        }
+        p {
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <h1>IVAO Radar</h1>
-    <div id="map"></div>
+    <h1>IVAO Data</h1>
+    <div class="container" id="pilots-container">
+        <h2>Pilots</h2>
+        <div id="pilots-list"></div>
+    </div>
+    <div class="container" id="atc-container">
+        <h2>ATC Controllers</h2>
+        <div id="atc-list"></div>
+    </div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([39.5, -8.0], 3); // Adjusted zoom level to show the entire world
-        
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap & CartoDB'
-        }).addTo(map);
-
         async function fetchIVAOData() {
             try {
                 const response = await fetch('https://api.ivao.aero/v2/tracker/whazzup');
@@ -46,35 +59,40 @@
                 
                 console.log('API Response:', data);  // Log the full response to inspect it
 
+                const pilotsList = document.getElementById('pilots-list');
+                const atcList = document.getElementById('atc-list');
+                
+                // Clear any existing content
+                pilotsList.innerHTML = '';
+                atcList.innerHTML = '';
+
                 // Check if pilots data is available in the 'clients.pilots' array
-                if (!data.clients || !data.clients.pilots || !Array.isArray(data.clients.pilots) || data.clients.pilots.length === 0) {
-                    console.log('No pilots data available');
-                    return;
+                if (data.clients && data.clients.pilots && Array.isArray(data.clients.pilots) && data.clients.pilots.length > 0) {
+                    data.clients.pilots.forEach(pilot => {
+                        if (pilot.callsign && pilot.latitude && pilot.longitude) {
+                            const pilotDiv = document.createElement('div');
+                            pilotDiv.classList.add('pilot');
+                            pilotDiv.innerHTML = `<strong>${pilot.callsign}</strong><br>Aircraft: ${pilot.aircraft}<br>Altitude: ${pilot.altitude} ft<br>Location: (${pilot.latitude}, ${pilot.longitude})`;
+                            pilotsList.appendChild(pilotDiv);
+                        }
+                    });
+                } else {
+                    pilotsList.innerHTML = '<p>No pilots data available</p>';
                 }
 
-                // Add all pilots to the map (no geographical filtering)
-                data.clients.pilots.forEach(pilot => {
-                    // Ensure pilot has valid latitude and longitude before adding to map
-                    if (pilot.latitude && pilot.longitude) {
-                        L.circleMarker([pilot.latitude, pilot.longitude], {
-                            color: '#00ff00',
-                            radius: 5
-                        }).addTo(map)
-                        .bindPopup(`<b>${pilot.callsign}</b><br>${pilot.aircraft}<br>Altitude: ${pilot.altitude} ft`);
-                    }
-                });
-
-                // Add all ATC controllers to the map (no geographical filtering)
-                data.clients.atcs.forEach(atc => {
-                    // Ensure ATC has valid latitude and longitude before adding to map
-                    if (atc.latitude && atc.longitude) {
-                        L.circleMarker([atc.latitude, atc.longitude], {
-                            color: '#ff0000',
-                            radius: 7
-                        }).addTo(map)
-                        .bindPopup(`<b>${atc.callsign}</b><br>Frequency: ${atc.frequency}`);
-                    }
-                });
+                // Check if ATC data is available in the 'clients.atcs' array
+                if (data.clients && data.clients.atcs && Array.isArray(data.clients.atcs) && data.clients.atcs.length > 0) {
+                    data.clients.atcs.forEach(atc => {
+                        if (atc.callsign && atc.latitude && atc.longitude) {
+                            const atcDiv = document.createElement('div');
+                            atcDiv.classList.add('atc');
+                            atcDiv.innerHTML = `<strong>${atc.callsign}</strong><br>Frequency: ${atc.frequency}<br>Location: (${atc.latitude}, ${atc.longitude})`;
+                            atcList.appendChild(atcDiv);
+                        }
+                    });
+                } else {
+                    atcList.innerHTML = '<p>No ATC data available</p>';
+                }
             } catch (error) {
                 console.error('Error fetching IVAO data:', error);
             }
